@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
 <head>
-  <meta charset="utf-8">
-  
-  
-  <title>BUUCTF pwn刷题记录 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="爆破爆破算法iscc2018_final_pwn1最开始这个题目我也没太弄懂具体算法，那么我们就爆破 12345678910111213141516171819ch&#x3D;&quot;qagvCYiheXulrpszNLwMtodbVx&quot;ta&#x3D;&quot;rqzzepiwMLepiwYsLYtpqpvzLsYeM&quot;tar&#x3D;&quot;&quot;import itertoolsfor">
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="John Doe">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="John Doe">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="爆破爆破算法iscc2018_final_pwn1最开始这个题目我也没太弄懂具体算法，那么我们就爆破 12345678910111213141516171819ch&#x3D;&quot;qagvCYiheXulrpszNLwMtodbVx&quot;ta&#x3D;&quot;rqzzepiwMLepiwYsLYtpqpvzLsYeM&quot;tar&#x3D;&quot;&quot;import itertoolsfor">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BUUCTF pwn刷题记录">
 <meta property="og:url" content="http://example.com/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/index.html">
@@ -191,86 +205,465 @@
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/29417415/1662712073965-28b14169-d0b9-4272-bad9-8ed60605a0a2.png#averageHue=%23fefefe&clientId=uf7ad92e3-44e8-4&from=paste&height=182&id=u66776bf9&originHeight=456&originWidth=1121&originalType=binary&ratio=1&rotation=0&showTitle=false&size=36132&status=done&style=none&taskId=uba721f3e-5d44-4421-a032-c64858980aa&title=&width=448.4">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
     
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+    <title>BUUCTF pwn刷题记录 · fi3ework&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
 
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
 
-  
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
     
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+    <!-- 百度统计  -->
+    
+    <!-- Google tag (gtag.js) -->
+    
 
-  
-  
 <meta name="generator" content="Hexo 7.0.0"></head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+    <!-- sidebar menu button -->
+    <div class="header-element">
         
-          <a class="main-nav-link" href="/">Home</a>
+            <div class="header-sidebar-menu">
         
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
     </div>
-  </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>fi3ework's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">fi3ework&#39;s Studio.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">BUUCTF pwn刷题记录</a>
+            </div>
+        </div>
+    
 </header>
 
-      <div class="outer">
-        <section id="main"><article id="post-BUUCTF刷题" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/" class="article-date">
-  <time class="dt-published" datetime="2023-11-15T05:51:34.000Z" itemprop="datePublished">2023-11-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
         
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      BUUCTF pwn刷题记录
-    </h1>
-  
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
 
-      </header>
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
     
-    <div class="e-content article-entry" itemprop="articleBody">
-      
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                BUUCTF pwn刷题记录
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/11/15</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
         <h1 id="爆破"><a href="#爆破" class="headerlink" title="爆破"></a>爆破</h1><h2 id="爆破算法"><a href="#爆破算法" class="headerlink" title="爆破算法"></a>爆破算法</h2><h3 id="iscc2018-final-pwn1"><a href="#iscc2018-final-pwn1" class="headerlink" title="iscc2018_final_pwn1"></a>iscc2018_final_pwn1</h3><p>最开始这个题目我也没太弄懂具体算法，那么我们就爆破</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ch=&quot;qagvCYiheXulrpszNLwMtodbVx&quot;</span><br><span class="line">ta=&quot;rqzzepiwMLepiwYsLYtpqpvzLsYeM&quot;</span><br><span class="line">tar=&quot;&quot;</span><br><span class="line">import itertools</span><br><span class="line">for i in ta:</span><br><span class="line">    tar+=chr(ch.index(i)+97)</span><br><span class="line">for i in itertools.product(&quot;0123&quot;,repeat=7):</span><br><span class="line">    io.close()</span><br><span class="line">    io = process(parm)</span><br><span class="line"></span><br><span class="line">    sla(b&quot;Give me a number!\n&quot;,b&quot;8584&quot;)</span><br><span class="line">    sla(b&quot;Give me an array of numbers!\n&quot;,b&quot;[1, 1, 3, 5, 11, 21]&quot;)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    sla(b&quot;phase 3... right?\n&quot;,tar)</span><br><span class="line">    sla(b&quot;time for phase 4.\n&quot;,&quot; &quot;.join(i))</span><br><span class="line">    if b&quot;Congratulations, you won! Here&#x27;s the flag:&quot; in rl():</span><br><span class="line">        print(&quot; &quot;.join(i))</span><br><span class="line">        exit(0)</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ch=&quot;qagvCYiheXulrpszNLwMtodbVx&quot;</span><br><span class="line">ta=&quot;rqzzepiwMLepiwYsLYtpqpvzLsYeM&quot;</span><br><span class="line">tar=&quot;&quot;</span><br><span class="line"></span><br><span class="line">sla(b&quot;Give me a number!\n&quot;,b&quot;8584&quot;)</span><br><span class="line">sla(b&quot;Give me an array of numbers!\n&quot;,b&quot;[1, 1, 3, 5, 11, 21]&quot;)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">sla(b&quot;phase 3... right?\n&quot;,tar)</span><br><span class="line">sla(b&quot;time for phase 4.\n&quot;,b&quot;0 0 0 1 1 2 1&quot;)</span><br><span class="line">it()</span><br></pre></td></tr></table></figure>
@@ -998,126 +1391,308 @@
 
 <h1 id="old-edition"><a href="#old-edition" class="headerlink" title="old edition"></a>old edition</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">it = lambda: io.interactive()</span><br><span class="line">ru = lambda x: io.recvuntil(x)</span><br><span class="line">rud = lambda x: io.recvuntil(x, drop=True)</span><br><span class="line">r = lambda x: io.recv(x)</span><br><span class="line">rl = lambda: io.recvline()</span><br><span class="line">rld = lambda: io.recvline(keepends=False)</span><br><span class="line">s = lambda x: io.send(x)</span><br><span class="line">sa = lambda x, y: io.sendafter(x, y)</span><br><span class="line">sl = lambda x: io.sendline(x)</span><br><span class="line">sla = lambda x, y: io.sendlineafter(x, y)</span><br><span class="line"></span><br><span class="line">elf_path = <span class="string">&quot;./pwn200_debug&quot;</span></span><br><span class="line">elf = ELF(elf_path)</span><br><span class="line">context(arch=elf.arch, log_level=<span class="string">&quot;debug&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="string">&quot;debug&quot;</span> in elf_path:</span><br><span class="line">    libc_path = elf.linker.decode().replace(<span class="string">&quot;ld&quot;</span>, <span class="string">&quot;./libc&quot;</span>)</span><br><span class="line">    libc = ELF(libc_path)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;2.23&quot;</span> in libc_path:</span><br><span class="line">        one_gadget = [<span class="number">0x45216</span>, <span class="number">0x4526A</span>, <span class="number">0xF02A4</span>, <span class="number">0xF1147</span>]</span><br><span class="line">    elif <span class="string">&quot;2.27&quot;</span> in libc_path:</span><br><span class="line">        one_gadget = [<span class="number">0x4F2C5</span>, <span class="number">0x4F322</span>, <span class="number">0x10A38C</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        one_gadget = []</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    libc_path = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span>:</span><br><span class="line">    remote_ip = <span class="string">&quot;node4.buuoj.cn&quot;</span></span><br><span class="line">    remote_port = <span class="number">29413</span></span><br><span class="line">    io = remote(remote_ip, remote_port)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">if</span> libc_path != <span class="string">&quot;&quot;</span>:</span><br><span class="line">        io = process(elf_path, env=&#123;<span class="string">&quot;LD_PRELOAD&quot;</span>: libc_path&#125;)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        io = process(elf_path)</span><br><span class="line"></span><br><span class="line">def debug():</span><br><span class="line">    gdbscript = <span class="string">&quot;&quot;</span><span class="string">&quot;</span></span><br><span class="line"><span class="string">    b *0x400A72</span></span><br><span class="line"><span class="string">    b *0x400a8c</span></span><br><span class="line"><span class="string">    c</span></span><br><span class="line"><span class="string">    &quot;</span><span class="string">&quot;&quot;</span></span><br><span class="line">    gdb.attach(io, gdbscript=gdbscript)</span><br></pre></td></tr></table></figure>
 
-      
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="http://example.com">John Doe</a>
+            <p>Link：<a href="http://example.com/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/">http://example.com/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/</a>
+            <p>Publish date：<a href="http://example.com/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/">November 15th 2023, 1:51:34 pm</a>
+            <p>Update date：<a href="http://example.com/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/">November 15th 2023, 2:39:43 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2023/11/15/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" title="容器逃逸 All in One">
+                    <div class="nextTitle">容器逃逸 All in One</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/index.html" title="Welcome">
+                    <div class="prevTitle">Welcome</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:12345@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/fi3ework" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
     </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/" data-id="cloze77vh0000b86s9b6s1jlp" data-title="BUUCTF pwn刷题记录" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
+    <!-- website approve for Chinese user -->
     
-<nav id="article-nav">
-  
-    <a href="/2023/11/15/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          容器逃逸 All in One
-        
-      </div>
-    </a>
-  
-  
-    <a href="/index.html" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Welcome</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
+    <!-- 不蒜子  -->
     
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2023/11/15/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">容器逃逸 All in One</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/">BUUCTF pwn刷题记录</a>
-          </li>
-        
-          <li>
-            <a href="/index.html">Welcome</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2023 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
 </footer>
 
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%88%86%E7%A0%B4"><span class="toc-number">1.</span> <span class="toc-text">爆破</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%88%86%E7%A0%B4%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">爆破算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#iscc2018-final-pwn1"><span class="toc-number">1.1.1.</span> <span class="toc-text">iscc2018_final_pwn1</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BC%AA%E9%9A%8F%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">伪随机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%95%B0%E9%A2%84%E6%B5%8B"><span class="toc-number">2.1.</span> <span class="toc-text">随机数预测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bitsctf-2017-random-game"><span class="toc-number">2.1.1.</span> <span class="toc-text">bitsctf_2017_random_game</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">3.</span> <span class="toc-text">虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#seccon2018-kindvm"><span class="toc-number">3.1.</span> <span class="toc-text">seccon2018_kindvm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wdb-2018-2nd-hvm"><span class="toc-number">3.2.</span> <span class="toc-text">wdb_2018_2nd_hvm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#C-S%E6%9E%B6%E6%9E%84%E9%A2%98%E7%9B%AE"><span class="toc-number">4.</span> <span class="toc-text">C&#x2F;S架构题目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GKCTF-2021-demo-catRoom"><span class="toc-number">4.1.</span> <span class="toc-text">[GKCTF 2021]demo_catRoom</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A5%BD%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">好题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E5%8F%98%E9%87%8F"><span class="toc-number">5.1.</span> <span class="toc-text">利用初始化变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hitb-2017-1000levels"><span class="toc-number">5.1.1.</span> <span class="toc-text">hitb-2017 1000levels</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2dlresolve"><span class="toc-number">5.2.</span> <span class="toc-text">ret2dlresolve</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HITCON-2015-blinkroot"><span class="toc-number">5.2.1.</span> <span class="toc-text">HITCON 2015 -blinkroot</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BYPASS-PIE"><span class="toc-number">5.3.</span> <span class="toc-text">BYPASS PIE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unexplitable"><span class="toc-number">5.3.1.</span> <span class="toc-text">unexplitable</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E4%B8%8D%E6%98%8E%E6%98%BE"><span class="toc-number">5.4.</span> <span class="toc-text">漏洞不明显</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#inndy-notepad"><span class="toc-number">5.4.1.</span> <span class="toc-text">inndy_notepad</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8A%B1%E5%BC%8Funlink"><span class="toc-number">5.5.</span> <span class="toc-text">花式unlink</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-en-5"><span class="toc-number">5.5.1.</span> <span class="toc-text">ciscn_2019_en_5</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E5%88%86%E9%85%8D%E5%9C%B0%E5%9D%80%E5%8F%97%E9%99%90"><span class="toc-number">5.6.</span> <span class="toc-text">堆分配地址受限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#qwb2019-one"><span class="toc-number">5.6.1.</span> <span class="toc-text">qwb2019_one</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A5%87%E5%A5%87%E6%80%AA%E6%80%AA%E7%9A%84%E9%A2%98%E7%9B%AE"><span class="toc-number">6.</span> <span class="toc-text">奇奇怪怪的题目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E5%90%88bypass"><span class="toc-number">6.1.</span> <span class="toc-text">综合bypass</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-final-10"><span class="toc-number">6.1.1.</span> <span class="toc-text">ciscn_2019_final_10</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8"><span class="toc-number">6.2.</span> <span class="toc-text">异常</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#itcon-2018-hackergame-2018-calc"><span class="toc-number">6.2.1.</span> <span class="toc-text">itcon_2018_hackergame_2018_calc</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ulimit"><span class="toc-number">6.3.</span> <span class="toc-text">ulimit</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-otp"><span class="toc-number">6.3.1.</span> <span class="toc-text">pwnable_otp</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="toc-number">7.</span> <span class="toc-text">解释器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#wdb-2018-final-pwn1"><span class="toc-number">7.1.</span> <span class="toc-text">wdb_2018_final_pwn1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pwnable-bf"><span class="toc-number">7.2.</span> <span class="toc-text">pwnable_bf</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#exit"><span class="toc-number">8.</span> <span class="toc-text">exit</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#elf-set-libc-atexit-elementIO-cleanup"><span class="toc-number">8.1.</span> <span class="toc-text">elf_set___libc_atexit_elementIO_cleanup</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#newest-note"><span class="toc-number">8.1.1.</span> <span class="toc-text">newest_note</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IO"><span class="toc-number">9.</span> <span class="toc-text">IO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#flush"><span class="toc-number">9.1.</span> <span class="toc-text">flush</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#seccon2022-babyfile"><span class="toc-number">9.1.1.</span> <span class="toc-text">seccon2022-babyfile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scanf"><span class="toc-number">9.2.</span> <span class="toc-text">scanf</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#espcially-tu-2016"><span class="toc-number">9.2.1.</span> <span class="toc-text">espcially_tu_2016</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fclose"><span class="toc-number">9.3.</span> <span class="toc-text">fclose</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xman%E5%A4%8F%E4%BB%A4%E8%90%A5%E9%80%89%E6%8E%92%E4%BD%8D%E8%B5%9B-2018-challenge1"><span class="toc-number">9.3.1.</span> <span class="toc-text">xman夏令营选排位赛_2018_challenge1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#close"><span class="toc-number">9.4.</span> <span class="toc-text">close</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#d3ctf-2019-unprintablev"><span class="toc-number">9.4.1.</span> <span class="toc-text">d3ctf_2019_unprintablev</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stdin%E4%BB%BB%E6%84%8F%E5%9C%B0%E5%9D%80%E5%86%99"><span class="toc-number">9.5.</span> <span class="toc-text">stdin任意地址写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#whctf2017-stackoverflow"><span class="toc-number">9.5.1.</span> <span class="toc-text">whctf2017_stackoverflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn2018-echo-back"><span class="toc-number">9.5.2.</span> <span class="toc-text">ciscn2018_echo_back</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%AB%E6%8C%81-rtld-global%E5%87%BD%E6%95%B0"><span class="toc-number">10.</span> <span class="toc-text">劫持_rtld_global函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dl-rtld-unlock-recursive"><span class="toc-number">10.1.</span> <span class="toc-text">_dl_rtld_unlock_recursive</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hctf2018-the-end"><span class="toc-number">10.1.1.</span> <span class="toc-text">hctf2018_the_end</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%88"><span class="toc-number">11.</span> <span class="toc-text">栈</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#alloca"><span class="toc-number">11.1.</span> <span class="toc-text">alloca</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#secconctf2016-cheer-msg"><span class="toc-number">11.1.1.</span> <span class="toc-text">secconctf2016_cheer_msg</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%A2%E5%87%BA%E8%A6%86%E7%9B%96%E5%85%B3%E9%94%AE%E5%86%85%E5%AE%B9"><span class="toc-number">11.2.</span> <span class="toc-text">溢出覆盖关键内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#canary%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">11.2.1.</span> <span class="toc-text">canary异常处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#checker-seccon-2016"><span class="toc-number">11.2.1.1.</span> <span class="toc-text">checker_seccon_2016</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%A6%E4%B8%80%E7%A7%8D"><span class="toc-number">11.2.2.</span> <span class="toc-text">另一种</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#pwnable-loveletter"><span class="toc-number">11.2.2.1.</span> <span class="toc-text">pwnable_loveletter</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E5%96%B7"><span class="toc-number">11.3.</span> <span class="toc-text">栈喷</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#metasequoia-2020-snow-mountain"><span class="toc-number">11.3.1.</span> <span class="toc-text">metasequoia_2020_snow_mountain</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#picoctf-2018-gps"><span class="toc-number">11.3.2.</span> <span class="toc-text">picoctf_2018_gps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E8%B6%8A%E7%95%8C"><span class="toc-number">11.4.</span> <span class="toc-text">数组越界</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#wdb-2022-main"><span class="toc-number">11.4.1.</span> <span class="toc-text">wdb-2022-main</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arr-sun-2016"><span class="toc-number">11.4.2.</span> <span class="toc-text">arr_sun_2016</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#canary%E7%88%86%E7%A0%B4"><span class="toc-number">11.5.</span> <span class="toc-text">canary爆破</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#starctf2018-babystack"><span class="toc-number">11.5.1.</span> <span class="toc-text">starctf2018_babystack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bctf-2018-bugstore"><span class="toc-number">11.5.2.</span> <span class="toc-text">bctf_2018_bugstore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#picoctf-2018-buffer-overflow-3"><span class="toc-number">11.5.3.</span> <span class="toc-text">picoctf_2018_buffer overflow 3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fini-array"><span class="toc-number">11.6.</span> <span class="toc-text">fini_array</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-317"><span class="toc-number">11.6.1.</span> <span class="toc-text">pwnable_317</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-sw-1"><span class="toc-number">11.6.2.</span> <span class="toc-text">ciscn_2019_sw_1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROP"><span class="toc-number">11.7.</span> <span class="toc-text">ROP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#asis-finals-2019-rop13"><span class="toc-number">11.7.1.</span> <span class="toc-text">asis_finals_2019_rop13</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#microwave-ins-2016"><span class="toc-number">11.7.2.</span> <span class="toc-text">microwave_ins_2016</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#seccon2022-koncha"><span class="toc-number">11.7.3.</span> <span class="toc-text">seccon2022-koncha</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wdb-2018-final-pwn3"><span class="toc-number">11.7.4.</span> <span class="toc-text">wdb_2018_final_pwn3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-silverbullet"><span class="toc-number">11.7.5.</span> <span class="toc-text">pwnable_silverbullet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xm-2019-awd-pwn1"><span class="toc-number">11.7.6.</span> <span class="toc-text">xm_2019_awd_pwn1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#roarctf-2019-easyrop"><span class="toc-number">11.7.7.</span> <span class="toc-text">roarctf_2019_easyrop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-ne-3"><span class="toc-number">11.7.8.</span> <span class="toc-text">ciscn_2019_ne_3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xp0intctf-2018-gameserver"><span class="toc-number">11.7.9.</span> <span class="toc-text">xp0intctf_2018_gameserver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inndy-very-overflow"><span class="toc-number">11.7.10.</span> <span class="toc-text">inndy_very_overflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inndy-homework"><span class="toc-number">11.7.11.</span> <span class="toc-text">inndy_homework</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inndy-stack"><span class="toc-number">11.7.12.</span> <span class="toc-text">inndy_stack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cscctf-2019-qual-babystack"><span class="toc-number">11.7.13.</span> <span class="toc-text">cscctf_2019_qual_babystack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E7%BD%91%E6%9D%AF2019-%E6%8B%9F%E6%80%81-STKOF"><span class="toc-number">11.7.14.</span> <span class="toc-text">强网杯2019 拟态 STKOF</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2shellcode"><span class="toc-number">11.8.</span> <span class="toc-text">ret2shellcode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%81%E4%BA%BA%E4%B8%89%E9%A1%B9-%E7%AC%AC%E4%BA%94%E8%B5%9B%E5%8C%BA-2018-seven"><span class="toc-number">11.8.1.</span> <span class="toc-text">铁人三项(第五赛区)_2018_seven</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-echo1"><span class="toc-number">11.8.2.</span> <span class="toc-text">pwnable_echo1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xman-2019-nooocall"><span class="toc-number">11.8.3.</span> <span class="toc-text">xman_2019_nooocall</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tiny-backdoor-v1-hackover-2016"><span class="toc-number">11.8.4.</span> <span class="toc-text">tiny_backdoor_v1_hackover_2016</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inndy-onepunch"><span class="toc-number">11.8.5.</span> <span class="toc-text">inndy_onepunch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inndy-leave-msg"><span class="toc-number">11.8.6.</span> <span class="toc-text">inndy_leave_msg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#csaw2018-shell-code"><span class="toc-number">11.8.7.</span> <span class="toc-text">csaw2018_shell_code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rctf-2019-shellcoder"><span class="toc-number">11.8.8.</span> <span class="toc-text">rctf_2019_shellcoder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xp0intctf-2018-bof"><span class="toc-number">11.8.9.</span> <span class="toc-text">xp0intctf_2018_bof</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%A9%E7%9F%ADshellcode"><span class="toc-number">11.8.9.1.</span> <span class="toc-text">缩短shellcode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#syscall%E9%87%8C%E9%9D%A2rax%E8%B5%8B%E5%80%BC"><span class="toc-number">11.8.9.2.</span> <span class="toc-text">syscall里面rax赋值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#xor"><span class="toc-number">11.8.9.3.</span> <span class="toc-text">xor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mov-rdi-rsp"><span class="toc-number">11.8.9.4.</span> <span class="toc-text">mov rdi,rsp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#execve-bin-sh-%E6%9C%80%E7%9F%AD%E7%9A%84shellcode"><span class="toc-number">11.8.9.5.</span> <span class="toc-text">execve(&#x2F;bin&#x2F;sh)最短的shellcode</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#starctf-2019-babyshell"><span class="toc-number">11.8.10.</span> <span class="toc-text">starctf_2019_babyshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lctf2016-pwn200"><span class="toc-number">11.8.11.</span> <span class="toc-text">lctf2016_pwn200</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">12.</span> <span class="toc-text">格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bss%E4%B8%8A%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">12.1.</span> <span class="toc-text">bss上格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-nw-6"><span class="toc-number">12.1.1.</span> <span class="toc-text">ciscn_2019_nw_6</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#printf%E8%A7%A6%E5%8F%91malloc"><span class="toc-number">12.2.</span> <span class="toc-text">printf触发malloc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cscctf-2019-final-babyprintf"><span class="toc-number">12.2.1.</span> <span class="toc-text">cscctf_2019_final_babyprintf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0ctf2017-easiestprintf"><span class="toc-number">12.2.2.</span> <span class="toc-text">0ctf2017_easiestprintf</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">12.3.</span> <span class="toc-text">栈上的格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#watevr-2019-voting-machine-2"><span class="toc-number">12.3.1.</span> <span class="toc-text">watevr_2019_voting_machine_2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wustctf2020-babyfmt"><span class="toc-number">12.3.2.</span> <span class="toc-text">wustctf2020_babyfmt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bbctf-2020-fmt-me"><span class="toc-number">12.3.3.</span> <span class="toc-text">bbctf_2020_fmt_me</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%A5%E9%94%99"><span class="toc-number">12.3.3.1.</span> <span class="toc-text">报错</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#snprintf"><span class="toc-number">12.3.3.2.</span> <span class="toc-text">snprintf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-p"><span class="toc-number">12.3.3.3.</span> <span class="toc-text">%1$p</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-p"><span class="toc-number">12.3.3.4.</span> <span class="toc-text">%2$p</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-p"><span class="toc-number">12.3.3.5.</span> <span class="toc-text">%3$p</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-p"><span class="toc-number">12.3.3.6.</span> <span class="toc-text">%4$p</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-p"><span class="toc-number">12.3.3.7.</span> <span class="toc-text">%5$p</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#got-plt%E8%A1%A8%E5%8E%9F%E7%90%86"><span class="toc-number">12.3.3.8.</span> <span class="toc-text">got,plt表原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81"><span class="toc-number">12.3.3.9.</span> <span class="toc-text">测试代码</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A0%86"><span class="toc-number">13.</span> <span class="toc-text">堆</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#off-by-null"><span class="toc-number">13.1.</span> <span class="toc-text">off by null</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#asis2016-b00ks"><span class="toc-number">13.1.1.</span> <span class="toc-text">asis2016_b00ks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%99%E7%9B%92"><span class="toc-number">13.2.</span> <span class="toc-text">沙盒</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ycb-2020-easy-heap"><span class="toc-number">13.2.1.</span> <span class="toc-text">ycb_2020_easy_heap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E6%BA%A2%E5%87%BA"><span class="toc-number">13.3.</span> <span class="toc-text">堆溢出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#others-pwn1"><span class="toc-number">13.3.1.</span> <span class="toc-text">others_pwn1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#realloc"><span class="toc-number">13.4.</span> <span class="toc-text">realloc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#roarctf-2019-realloc-magic"><span class="toc-number">13.4.1.</span> <span class="toc-text">roarctf_2019_realloc_magic</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#house-of-force"><span class="toc-number">13.5.</span> <span class="toc-text">house of force</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bcloud-bctf-2016"><span class="toc-number">13.5.1.</span> <span class="toc-text">bcloud_bctf_2016</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#house-of-orange"><span class="toc-number">13.6.</span> <span class="toc-text">house of orange</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#houseoforange-hitcon-2016"><span class="toc-number">13.6.1.</span> <span class="toc-text">houseoforange_hitcon_2016</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">13.6.1.1.</span> <span class="toc-text">漏洞点分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%89%8D%E6%8F%90"><span class="toc-number">13.6.1.2.</span> <span class="toc-text">攻击前提</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E8%AF%95"><span class="toc-number">13.6.1.3.</span> <span class="toc-text">调试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2libc%E5%92%8C%E5%A0%86%E5%9C%B0%E5%9D%80"><span class="toc-number">13.6.1.4.</span> <span class="toc-text">泄露libc和堆地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%BB%E5%87%BBmalloc-printrr"><span class="toc-number">13.6.1.5.</span> <span class="toc-text">攻击malloc_printrr</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%8Ammap%E5%87%BA%E6%9D%A5%E7%9A%84%E5%9D%97%E7%94%A8top-chunk%E5%88%86%E9%85%8D"><span class="toc-number">13.7.</span> <span class="toc-text">把mmap出来的块用top chunk分配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#secretHolder-hitcon-2016"><span class="toc-number">13.7.1.</span> <span class="toc-text">secretHolder_hitcon_2016</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#top-chunk%E4%B8%8A%E7%A7%BB"><span class="toc-number">13.8.</span> <span class="toc-text">top chunk上移</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#actf-2019-actfnote"><span class="toc-number">13.8.1.</span> <span class="toc-text">actf_2019_actfnote</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unsorted-bin-attack"><span class="toc-number">13.9.</span> <span class="toc-text">unsorted bin attack</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cscctf-2019-final-childrenheap"><span class="toc-number">13.9.1.</span> <span class="toc-text">cscctf_2019_final_childrenheap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rctf-2019-babyheap"><span class="toc-number">13.9.2.</span> <span class="toc-text">rctf_2019_babyheap</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#init"><span class="toc-number">13.9.2.1.</span> <span class="toc-text">init</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#add"><span class="toc-number">13.9.2.2.</span> <span class="toc-text">add</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#free"><span class="toc-number">13.9.2.3.</span> <span class="toc-text">free</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#show"><span class="toc-number">13.9.2.4.</span> <span class="toc-text">show</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#edit"><span class="toc-number">13.9.2.5.</span> <span class="toc-text">edit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">13.9.2.6.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%BB%E5%87%BB"><span class="toc-number">13.9.2.7.</span> <span class="toc-text">攻击</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2libc"><span class="toc-number">13.9.2.8.</span> <span class="toc-text">泄露libc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#chunk%E4%BC%AA%E9%80%A0"><span class="toc-number">13.9.2.9.</span> <span class="toc-text">chunk伪造</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%88%E5%B9%B6"><span class="toc-number">13.9.2.10.</span> <span class="toc-text">合并</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%84%E9%9C%B2libc-1"><span class="toc-number">13.9.2.11.</span> <span class="toc-text">泄露libc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%8D%E4%B8%80%E6%AC%A1%E5%A0%86%E5%9D%97%E9%87%8D%E5%8F%A0"><span class="toc-number">13.9.2.12.</span> <span class="toc-text">再一次堆块重叠</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%B6%E5%9B%9E%E5%90%8E%E7%BB%AD%E7%9A%84%E5%86%85%E5%AD%98"><span class="toc-number">13.9.2.13.</span> <span class="toc-text">收回后续的内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E5%8F%A0"><span class="toc-number">13.9.2.14.</span> <span class="toc-text">重叠</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#unsorted-bin-attack-1"><span class="toc-number">13.9.2.15.</span> <span class="toc-text">unsorted bin attack</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9unsorted-bin%E7%9A%84bk%E4%B8%BA%E6%8C%87%E5%AE%9A%E5%9C%B0%E5%9D%80"><span class="toc-number">13.9.2.16.</span> <span class="toc-text">修改unsorted bin的bk为指定地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#unsorted-bin-attack-2"><span class="toc-number">13.9.2.17.</span> <span class="toc-text">unsorted bin attack</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%9F%E8%B8%AA%E6%BA%90%E7%A0%81"><span class="toc-number">13.9.2.18.</span> <span class="toc-text">跟踪源码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#int-malloc"><span class="toc-number">13.9.2.19.</span> <span class="toc-text">_int_malloc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BD%93%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81%E5%88%86%E9%85%8D%E7%9A%84size%E5%B0%8F%E4%BA%8Eunsorted-bin%E5%A4%A7%E5%B0%8F"><span class="toc-number">13.9.2.20.</span> <span class="toc-text">当我们需要分配的size小于unsorted bin大小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%81%A2%E5%A4%8Dunsorted-bin"><span class="toc-number">13.9.2.21.</span> <span class="toc-text">恢复unsorted bin</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#uaf"><span class="toc-number">13.10.</span> <span class="toc-text">uaf</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jmper-seccon-2016"><span class="toc-number">13.10.1.</span> <span class="toc-text">jmper_seccon_2016</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wdb-2018-2nd-Fgo"><span class="toc-number">13.10.2.</span> <span class="toc-text">wdb_2018_2nd_Fgo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-echo2"><span class="toc-number">13.10.3.</span> <span class="toc-text">pwnable_echo2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isitdtu2019-iz-heap-lv1"><span class="toc-number">13.10.4.</span> <span class="toc-text">isitdtu2019_iz_heap_lv1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gyctf-2020-document"><span class="toc-number">13.10.5.</span> <span class="toc-text">gyctf_2020_document</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#double-free"><span class="toc-number">13.11.</span> <span class="toc-text">double free</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#actf-2020-scp-foundation-secret"><span class="toc-number">13.11.1.</span> <span class="toc-text">actf_2020_scp_foundation_secret</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HarekazeCTF2019-Harekaze-Note"><span class="toc-number">13.11.2.</span> <span class="toc-text">[HarekazeCTF2019]Harekaze Note</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rctf2018-rnote3"><span class="toc-number">13.11.3.</span> <span class="toc-text">rctf2018_rnote3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qwb2018-slient2"><span class="toc-number">13.11.4.</span> <span class="toc-text">qwb2018_slient2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-nw-4"><span class="toc-number">13.11.5.</span> <span class="toc-text">ciscn_2019_nw_4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-s-2"><span class="toc-number">13.11.6.</span> <span class="toc-text">ciscn_2019_s_2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hitb2018-gundam"><span class="toc-number">13.11.7.</span> <span class="toc-text">hitb2018_gundam</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-final-2"><span class="toc-number">13.11.8.</span> <span class="toc-text">ciscn_2019_final_2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#starctf2019-girlfriend"><span class="toc-number">13.11.9.</span> <span class="toc-text">starctf2019_girlfriend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#huxiangbei-2019-namesystem"><span class="toc-number">13.11.10.</span> <span class="toc-text">huxiangbei_2019_namesystem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rootersctf-2019-heaaaappppp"><span class="toc-number">13.11.11.</span> <span class="toc-text">rootersctf_2019_heaaaappppp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ycb-2020-easypwn"><span class="toc-number">13.11.12.</span> <span class="toc-text">ycb_2020_easypwn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gyctf-2020-some-thing-interesting"><span class="toc-number">13.11.13.</span> <span class="toc-text">gyctf_2020_some_thing_interesting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ciscn-2019-en-3"><span class="toc-number">13.11.14.</span> <span class="toc-text">ciscn_2019_en_3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#calloc"><span class="toc-number">13.12.</span> <span class="toc-text">calloc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rctf2018-babyheap"><span class="toc-number">13.12.1.</span> <span class="toc-text">rctf2018_babyheap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gyctf-2020-signin"><span class="toc-number">13.12.2.</span> <span class="toc-text">gyctf_2020_signin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unlink"><span class="toc-number">13.13.</span> <span class="toc-text">unlink</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sctf-2019-easy-heap"><span class="toc-number">13.13.1.</span> <span class="toc-text">sctf_2019_easy_heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-unlink"><span class="toc-number">13.13.2.</span> <span class="toc-text">pwnable_unlink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#t3sec2018-hero"><span class="toc-number">13.13.3.</span> <span class="toc-text">t3sec2018_hero</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sctf2019-easy-heap"><span class="toc-number">13.13.4.</span> <span class="toc-text">sctf2019_easy_heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gwctf-2019-chunk"><span class="toc-number">13.13.5.</span> <span class="toc-text">gwctf_2019_chunk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jarvisoj-level6"><span class="toc-number">13.13.6.</span> <span class="toc-text">jarvisoj_level6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jarvisoj-guestbook2"><span class="toc-number">13.13.7.</span> <span class="toc-text">jarvisoj_guestbook2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zctf-2016-note3"><span class="toc-number">13.13.8.</span> <span class="toc-text">zctf_2016_note3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zctf2016-note2"><span class="toc-number">13.13.9.</span> <span class="toc-text">zctf2016_note2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pwnable-secret-of-my-heart"><span class="toc-number">13.13.10.</span> <span class="toc-text">pwnable_secret_of_my_heart</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qctf-2018-babyheap"><span class="toc-number">13.13.11.</span> <span class="toc-text">qctf_2018_babyheap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cscctf-2019-qual-babyheap"><span class="toc-number">13.13.12.</span> <span class="toc-text">cscctf_2019_qual_babyheap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sitdtu2019-iz-heap-lv2"><span class="toc-number">13.13.13.</span> <span class="toc-text">sitdtu2019_iz_heap_lv2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#suctf2018-heap"><span class="toc-number">13.13.14.</span> <span class="toc-text">suctf2018_heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qctf-2018-noleak"><span class="toc-number">13.13.15.</span> <span class="toc-text">qctf_2018_noleak</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hitcon-2018-children-tcache"><span class="toc-number">13.13.16.</span> <span class="toc-text">hitcon_2018_children_tcache</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#old-edition"><span class="toc-number">14.</span> <span class="toc-text">old edition</span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 3
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span>
+            <a class="archive-post-title" href="/2023/11/15/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">容器逃逸 All in One</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span>
+            <a class="archive-post-title" href="/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/">BUUCTF pwn刷题记录</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span>
+            <a class="archive-post-title" href="/index.html">Welcome</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "http://example.com",
+        root: siteMetaRoot,
+        author: "John Doe"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
 
 
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
 </html>
