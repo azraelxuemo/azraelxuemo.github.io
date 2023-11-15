@@ -445,25 +445,20 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2023/11/15/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
+            <a class="abstract-title" href="/2023/11/14/k8s/">
                 
-                <span class="abstract-title-text">容器逃逸 All in One</span>
+                <span class="abstract-title-text">k8s攻防</span>
             </a>
             <div class="abstract-content">
-                CAP权限配置不当privileged,特权容器提权测试环境配置1docker run -it --privileged ubuntu:18.04
-实际环境利用如果查看到CapEff为0000003fffffffff代表为特权容器，可以逃逸
-12cat /proc/1/status|grep CapEffCapEff:	0000003fffffffff
-逃逸方法，挂载宿主机根目录
-1234fdisk -l|grep Linuxmkdir /hostmount /dev/vda1 /hostchroot /host
-这个时候只是文件系统层面逃逸，还没有彻底逃逸,需要用到接下来的方法
-计划任...
+                前言以前一有RCE的漏洞可能大家都会精神高度紧绷，但由于容器技术的成熟，很多时候可能RCE的并不是一个主机，而只是一个单独的业务pod。特别是像函数计算，流水线等等场景，你可以直接获得容器的权限，这也导致我们的安全边界有所划分。在我看来，我们可以完全把所有的业务容器当作外部攻击者可以随意控制，把安全边界划分到业务容器和我们企业内部这个边界这里。所以做好容器层面以及容器编排就十分重要。这篇文章主要是以攻击者的角度来分析当攻击者获取了容器的权限，如何进一步把自己的攻击影响范围扩大。如果您是云安全的爱好者，希望您可以从这篇文章里面有所收获。
+攻击面分析一般当我获取到了容器权限，我会以纵向和横向...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/15</span>
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/14</span>
                 </div>
                 <!-- tags -->
                 
@@ -478,7 +473,45 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/">
+            <a class="abstract-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
+                
+                <span class="abstract-title-text">容器逃逸 All in One</span>
+            </a>
+            <div class="abstract-content">
+                前言容器逃逸技术没有一尘不变的，很多旧的方法会随着新的内核特性，新的标准而改变，同时新的标准也会带来新的逃逸思路，这篇文章可能称不上标题所说的all in one，实际环境也千变万化。希望这篇文章可以给大家带来思路，可能在某一天的容器环境里发现可以利用的点，然后escape。
+危险的Capabilityprivileged实验环境配置1docker run -it --privileged ubuntu:18.04
+实际利用如果查看CapEff为0000003fffffffff代表为特权容器，可以逃逸
+12cat /proc/1/status|grep CapEffCapEff:	000...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/11/15">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/13</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="云安全">云安全</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">
                 
                 <span class="abstract-title-text">BUUCTF pwn刷题记录</span>
             </a>
@@ -491,9 +524,17 @@
             <div class="abstract-post-meta">
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/15</span>
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/12</span>
                 </div>
                 <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="pwn">pwn</a>
+    
+</div>
+
                 
             </div>
         </article>
@@ -512,6 +553,7 @@
             </a>
             <div class="abstract-content">
                 欢迎来到我的安全杂货铺
+一个来自AAA战队的退役老人旧的博客链接https://blog.csdn.net/azraelxuemo/
 
             </div>
             <!-- read more -->
@@ -519,7 +561,7 @@
             <div class="abstract-post-meta">
                 <!-- date -->
                 <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/13</span>
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/11</span>
                 </div>
                 <!-- tags -->
                 
@@ -730,7 +772,16 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
         
         
         
@@ -745,7 +796,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 3
+        Total : 4
         </div>
         <!-- search  -->
         
@@ -761,19 +812,25 @@
             
         
         <li class="archive-post-item">
-            <span class="archive-post-date">11/15</span>
-            <a class="archive-post-title" href="/2023/11/15/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">容器逃逸 All in One</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
-            <span class="archive-post-date">11/15</span>
-            <a class="archive-post-title" href="/2023/11/15/BUUCTF%E5%88%B7%E9%A2%98/">BUUCTF pwn刷题记录</a>
+            <span class="archive-post-date">11/14</span>
+            <a class="archive-post-title" href="/2023/11/14/k8s/">k8s攻防</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">11/13</span>
+            <a class="archive-post-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">容器逃逸 All in One</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">BUUCTF pwn刷题记录</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/11</span>
             <a class="archive-post-title" href="/index.html">Welcome</a>
         </li>
     
@@ -782,6 +839,16 @@
 
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="云安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                云安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
         
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
