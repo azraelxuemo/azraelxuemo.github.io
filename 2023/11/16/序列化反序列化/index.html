@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="azraelxuemo">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="azraelxuemo">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="因为大多数场景对象是不需要序列化的，所以如果这个对象要求是可以序列化的，那么就让他继承Serializable同时java允许继承Serializable的类的父类是非Serializable的，因为Object是非Serializable的，java如果要求子类的父类也必须Serializable，那么就相当于需要两个大的继承树，一边是Serializable的继承树，一边是非Serializa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java序列化\反序列化流程分析">
+<meta property="og:url" content="https://azraelxuemo.github.io/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="因为大多数场景对象是不需要序列化的，所以如果这个对象要求是可以序列化的，那么就让他继承Serializable同时java允许继承Serializable的类的父类是非Serializable的，因为Object是非Serializable的，java如果要求子类的父类也必须Serializable，那么就相当于需要两个大的继承树，一边是Serializable的继承树，一边是非Serializa">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884425134-7d921a59-682e-483a-8c2e-456acf317e64.png#averageHue=%23eeeeee&clientId=u410585c1-92f0-4&from=drop&id=u7ab82ef8&originHeight=712&originWidth=1752&originalType=binary&ratio=2&rotation=0&showTitle=false&size=792947&status=done&style=none&taskId=u9b23a3ef-be0b-4a99-91b5-1eeb35bf186&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884531397-d1777d5a-d5c0-4f8f-a63e-341555611053.png#averageHue=%23ebebeb&clientId=u410585c1-92f0-4&from=drop&id=uaa9bbd82&originHeight=896&originWidth=1736&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1032411&status=done&style=none&taskId=u9bf3b32d-6bb0-4af5-bf87-0bc2f3caf23&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699768303737-7bc433ee-a2de-4fd3-9bbe-cc106e0c4a7a.png#averageHue=%2328292c&clientId=ub3f17c7a-08a8-4&from=drop&id=u2e0385ba&originHeight=156&originWidth=482&originalType=binary&ratio=2&rotation=0&showTitle=false&size=59605&status=done&style=none&taskId=u615f6085-9b81-4ce2-9bf0-d87d1cc91e5&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699768378519-323af95f-148c-4686-8a8b-01108d0e847f.png#averageHue=%232b2c2f&clientId=ub3f17c7a-08a8-4&from=drop&id=ud740f432&originHeight=198&originWidth=688&originalType=binary&ratio=2&rotation=0&showTitle=false&size=103506&status=done&style=none&taskId=ud9b12640-c1d2-423a-94a9-83621cbc371&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699759965868-e978ead9-7ea9-4323-9124-6efe5e26910d.png#averageHue=%23fbf9f9&clientId=ub3f17c7a-08a8-4&from=paste&height=957&id=u6c4b26d5&originHeight=1914&originWidth=11770&originalType=binary&ratio=2&rotation=0&showTitle=false&size=2765592&status=done&style=none&taskId=u7d3118a0-bd92-4afd-aaa4-7b654fac63f&title=&width=5885">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699760297749-1c1ca6e5-340d-4d51-8e1b-4b4733303722.png#averageHue=%23282c33&clientId=ub3f17c7a-08a8-4&from=drop&id=u58b5911f&originHeight=636&originWidth=1034&originalType=binary&ratio=2&rotation=0&showTitle=false&size=431781&status=done&style=none&taskId=u635f7304-6f03-4994-9853-fe1775942bc&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699767829678-dcf82948-c3a8-43f6-af54-bd530398f057.png#averageHue=%23292f3c&clientId=ub3f17c7a-08a8-4&from=drop&id=u44782fc8&originHeight=234&originWidth=1074&originalType=binary&ratio=2&rotation=0&showTitle=false&size=173974&status=done&style=none&taskId=uae8ce971-1a93-482e-a2c2-303e3864251&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699760494208-43d91c01-bd08-4374-872a-d2ce3cb28fd9.png#averageHue=%23272a30&clientId=ub3f17c7a-08a8-4&from=drop&id=u52763ceb&originHeight=700&originWidth=1380&originalType=binary&ratio=2&rotation=0&showTitle=false&size=600871&status=done&style=none&taskId=ue46239b8-f0b0-42c6-99c2-ceb7df3981d&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699752956849-2e6c42a6-b6c6-49d0-84dd-0dccdd4da8ca.png#averageHue=%23343639&clientId=ub3f17c7a-08a8-4&from=drop&id=u60adad65&originHeight=576&originWidth=1480&originalType=binary&ratio=2&rotation=0&showTitle=false&size=572858&status=done&style=none&taskId=u35bb6f4e-0f09-4fa3-836f-ecc52bca489&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699781793630-64a726e5-3718-4f5c-8724-7d39a8143cef.png#averageHue=%23303236&clientId=u294a2b4f-f12a-4&from=drop&id=u6202f010&originHeight=980&originWidth=2810&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1904167&status=done&style=none&taskId=u3fa4c977-c1f5-4084-a7b7-25249543bd2&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699789400031-6a9cb5a9-9e69-4a24-83d2-0b5271a9344e.png#averageHue=%23292a2d&clientId=ufcbbc555-1571-4&from=drop&id=u62ac2642&originHeight=612&originWidth=1228&originalType=binary&ratio=2&rotation=0&showTitle=false&size=496496&status=done&style=none&taskId=u36748758-f201-42fe-8c24-3e232d465b7&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699840996548-19402095-69a7-484b-8c88-8fcd51203201.png#averageHue=%23282c32&clientId=u3b778a98-290c-4&from=drop&id=u41675657&originHeight=398&originWidth=1112&originalType=binary&ratio=2&rotation=0&showTitle=false&size=286436&status=done&style=none&taskId=u0882574d-1086-46d9-ba36-7185e5ef334&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699841184221-6aef8d6b-a962-4cc3-b3ae-2a6d3e8e0a51.png#averageHue=%23343639&clientId=u3b778a98-290c-4&from=drop&id=qUKW8&originHeight=596&originWidth=926&originalType=binary&ratio=2&rotation=0&showTitle=false&size=404336&status=done&style=none&taskId=udfa01967-7313-4b7d-ab67-6430f03f469&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699753666744-a028f598-fce4-40ef-ab81-5f65cf88ae46.png#averageHue=%23343e56&clientId=ub3f17c7a-08a8-4&from=drop&id=u68e8c138&originHeight=124&originWidth=658&originalType=binary&ratio=2&rotation=0&showTitle=false&size=69038&status=done&style=none&taskId=udbe7436c-1ac6-480a-ba5d-b3076957217&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699753752318-b2cd55ea-9ec8-4ae7-a210-52b330ec8902.png#averageHue=%232a2e36&clientId=ub3f17c7a-08a8-4&from=drop&id=u7fa81f04&originHeight=448&originWidth=1036&originalType=binary&ratio=2&rotation=0&showTitle=false&size=311309&status=done&style=none&taskId=ud5e4c347-240d-4ec2-85ab-c8cfc32226a&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699753452148-3430cf14-60c4-43fa-9fd8-e6c4cae83a53.png#averageHue=%23373a40&clientId=ub3f17c7a-08a8-4&from=drop&id=WAzmN&originHeight=250&originWidth=878&originalType=binary&ratio=2&rotation=0&showTitle=false&size=193055&status=done&style=none&taskId=u7e1c9ce5-465e-435a-b05b-7cdefd3297f&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699782242080-69fcb8f5-400e-4bf7-8ca2-fc07c416701a.png#averageHue=%232d313a&clientId=u294a2b4f-f12a-4&from=drop&id=Ki8jc&originHeight=334&originWidth=892&originalType=binary&ratio=2&rotation=0&showTitle=false&size=216467&status=done&style=none&taskId=ua80416a9-946d-4261-ab15-e0da2707b86&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699788612616-52fe0313-0238-4d32-abed-f06fae578da9.png#averageHue=%23292b2e&clientId=ufcbbc555-1571-4&from=drop&id=u3937695c&originHeight=318&originWidth=1134&originalType=binary&ratio=2&rotation=0&showTitle=false&size=228721&status=done&style=none&taskId=uf047af42-e958-4a3b-a994-e3d31b5b028&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699759829007-52a0452b-9806-4782-8b0a-fa3e1a6bbc4f.png#averageHue=%23f9f9f9&clientId=ub3f17c7a-08a8-4&from=paste&height=373&id=ub5971a3b&originHeight=746&originWidth=376&originalType=binary&ratio=2&rotation=0&showTitle=false&size=103875&status=done&style=none&taskId=u9cc43f57-db76-48a5-986a-0169b688826&title=&width=188">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699789455667-8a771859-0b38-45b1-b5f9-f8684224f150.png#averageHue=%23292c33&clientId=ufcbbc555-1571-4&from=drop&id=ud0d72399&originHeight=502&originWidth=1454&originalType=binary&ratio=2&rotation=0&showTitle=false&size=485860&status=done&style=none&taskId=u454962f2-8aa6-438a-a4b1-a92b82ad6ea&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700055149297-556247b6-dc73-46be-bbf0-95fdecb9db1c.png#averageHue=%23242528&clientId=u9b3dd37e-1063-4&from=drop&id=u6a0308c2&originHeight=516&originWidth=906&originalType=binary&ratio=2&rotation=0&showTitle=false&size=274794&status=done&style=none&taskId=u69676c8e-9598-4769-a80f-86e07f171e3&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884786086-29ed247a-712c-4eb2-80d0-1d543aab943f.png#averageHue=%2356796f&clientId=u410585c1-92f0-4&from=drop&id=u68693926&originHeight=1278&originWidth=2718&originalType=binary&ratio=2&rotation=0&showTitle=false&size=2137161&status=done&style=none&taskId=u43550a4a-5d1b-4bcb-bd1b-2e5664d0a6e&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884809767-6729cdd2-880b-44d7-a348-2793cf897a7b.png#averageHue=%2327282c&clientId=u410585c1-92f0-4&from=drop&id=u5b7f35ed&originHeight=720&originWidth=858&originalType=binary&ratio=2&rotation=0&showTitle=false&size=438663&status=done&style=none&taskId=u469e8cdb-cd85-4f21-a1f3-054aa24a0f8&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884870210-13e60c0d-742c-4d93-94b9-80a9e25d3675.png#averageHue=%232a2d33&clientId=u410585c1-92f0-4&from=drop&id=ua41e9cfa&originHeight=1062&originWidth=1890&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1342665&status=done&style=none&taskId=uf6db7e00-4e9a-4d6c-8a0f-2dd520d1fbc&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699885062570-4ec5210a-9289-48ba-a668-c9c8183528aa.png#averageHue=%2328292c&clientId=u410585c1-92f0-4&from=drop&id=u56110f4b&originHeight=930&originWidth=1434&originalType=binary&ratio=2&rotation=0&showTitle=false&size=916229&status=done&style=none&taskId=ua09dac1e-6539-4f35-880b-c7c68245936&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700056231036-1babe830-2b0b-4e5f-a69a-b6f54b1b800e.png#averageHue=%23242528&clientId=u9b3dd37e-1063-4&from=drop&id=u9e37d0b9&originHeight=470&originWidth=598&originalType=binary&ratio=2&rotation=0&showTitle=false&size=181283&status=done&style=none&taskId=uc001a597-6436-46d4-bb5f-6863e186ca8&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700056428994-dff2723e-b080-4962-9bd0-6c6e48e69e83.png#averageHue=%232c313d&clientId=u9b3dd37e-1063-4&from=drop&id=u0fb16a83&originHeight=228&originWidth=888&originalType=binary&ratio=2&rotation=0&showTitle=false&size=138226&status=done&style=none&taskId=u5d4504bd-52b7-476d-96d3-ba576b76538&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700056277559-6dd10656-2641-407f-b919-93ee14a95724.png#averageHue=%23282a2d&clientId=u9b3dd37e-1063-4&from=drop&id=u920e14bf&originHeight=666&originWidth=680&originalType=binary&ratio=2&rotation=0&showTitle=false&size=287607&status=done&style=none&taskId=u0defdc37-54b9-4fbf-9f5d-18062875447&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790287468-dcbd533f-9fb7-49ea-8a4c-64fe9028a806.png#averageHue=%23242527&clientId=ufcbbc555-1571-4&from=drop&id=u2ec90e39&originHeight=1212&originWidth=1316&originalType=binary&ratio=2&rotation=0&showTitle=false&size=890447&status=done&style=none&taskId=u3b496dc6-bdf3-44d1-baac-f65b5dfa804&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790471419-643dd5a8-44b1-44df-a185-2b2ed163fda1.png#averageHue=%2333353b&clientId=ufcbbc555-1571-4&from=drop&id=u1a59381b&originHeight=820&originWidth=2134&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1262809&status=done&style=none&taskId=ued6b9ff1-d423-42d3-9c78-2a38ef31812&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790515283-dc75d1f5-2185-456e-8399-66bc92f9ffb5.png#averageHue=%2328292d&clientId=ufcbbc555-1571-4&from=drop&id=u8b826051&originHeight=578&originWidth=1196&originalType=binary&ratio=2&rotation=0&showTitle=false&size=427818&status=done&style=none&taskId=u2b63aa38-2f3b-4f88-a594-560e874814d&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790569974-4d28f1fa-75dd-4f07-9f68-b6d59c4b70eb.png#averageHue=%23252628&clientId=ufcbbc555-1571-4&from=drop&id=u35146bb2&originHeight=466&originWidth=1396&originalType=binary&ratio=2&rotation=0&showTitle=false&size=341996&status=done&style=none&taskId=u374479c4-50ca-4e39-aa49-8c2dcb826ed&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790769877-03f3cc86-a31c-42c4-be1e-e29463cd58ab.png#averageHue=%23292c33&clientId=ufcbbc555-1571-4&from=drop&id=u696775be&originHeight=482&originWidth=1176&originalType=binary&ratio=2&rotation=0&showTitle=false&size=332182&status=done&style=none&taskId=ubfd28260-3b44-44dd-8ea3-f876c4f9055&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700057536072-fe74762e-c32e-485e-bc08-1d292d5b1a9a.png#averageHue=%2327282c&clientId=u9b3dd37e-1063-4&from=drop&id=ud4dbe761&originHeight=1352&originWidth=1320&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1155685&status=done&style=none&taskId=u8e7526c8-abbf-47e3-a5d1-3589d20a3ea&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700057654057-a2c4ef40-a5a1-4044-93e8-404a36b50800.png#averageHue=%23292d35&clientId=u9b3dd37e-1063-4&from=drop&id=u7dae8d54&originHeight=466&originWidth=1050&originalType=binary&ratio=2&rotation=0&showTitle=false&size=330761&status=done&style=none&taskId=u2a68ac47-3eca-484d-a6ea-b4870c109d4&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700057680144-de643faa-dc6c-4e41-b8d3-6caba1d1a94f.png#averageHue=%232a2e38&clientId=u9b3dd37e-1063-4&from=drop&id=ufa65db6a&originHeight=312&originWidth=1234&originalType=binary&ratio=2&rotation=0&showTitle=false&size=266385&status=done&style=none&taskId=u771d14a7-2e4f-4ee4-afcc-8adec14c9f9&title=">
+<meta property="article:published_time" content="2023-11-16T05:51:34.000Z">
+<meta property="article:modified_time" content="2023-11-16T11:17:28.448Z">
+<meta property="article:author" content="azraelxuemo">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884425134-7d921a59-682e-483a-8c2e-456acf317e64.png#averageHue=%23eeeeee&clientId=u410585c1-92f0-4&from=drop&id=u7ab82ef8&originHeight=712&originWidth=1752&originalType=binary&ratio=2&rotation=0&showTitle=false&size=792947&status=done&style=none&taskId=u9b23a3ef-be0b-4a99-91b5-1eeb35bf186&title=">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    
+    <title>java序列化\反序列化流程分析 · azraelxuemo&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- Google tag (gtag.js) -->
+    
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>azraelxuemo's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">azraelxuemo&#39;s Studio.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">java序列化\反序列化流程分析</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                java序列化\反序列化流程分析
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/11/16</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884425134-7d921a59-682e-483a-8c2e-456acf317e64.png#averageHue=%23eeeeee&clientId=u410585c1-92f0-4&from=drop&id=u7ab82ef8&originHeight=712&originWidth=1752&originalType=binary&ratio=2&rotation=0&showTitle=false&size=792947&status=done&style=none&taskId=u9b23a3ef-be0b-4a99-91b5-1eeb35bf186&title=" alt="截屏2023-11-13 22.06.51.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884531397-d1777d5a-d5c0-4f8f-a63e-341555611053.png#averageHue=%23ebebeb&clientId=u410585c1-92f0-4&from=drop&id=uaa9bbd82&originHeight=896&originWidth=1736&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1032411&status=done&style=none&taskId=u9bf3b32d-6bb0-4af5-bf87-0bc2f3caf23&title=" alt="截屏2023-11-13 22.08.46.png"><br>因为大多数场景对象是不需要序列化的，所以如果这个对象要求是可以序列化的，那么就让他继承Serializable<br>同时java允许继承Serializable的类的父类是非Serializable的，因为Object是非Serializable的，java如果要求子类的父类也必须Serializable，那么就相当于需要两个大的继承树，一边是Serializable的继承树，一边是非Serializable的继承树，这会造成复用性降低</p>
+<h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><p><a target="_blank" rel="noopener" href="https://www.cnpanda.net/sec/893.html">https://www.cnpanda.net/sec/893.html</a><br>这篇文章不错，不过中间有一些遗漏和小错误</p>
+<h2 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h2><h3 id="引用机制"><a href="#引用机制" class="headerlink" title="引用机制"></a>引用机制</h3><p>默认情况下unshared为False,代表允许shared，即存在共享引用机制<br>在序列化的过程中，已经被序列化的对象会被加入到handles里<br>handles obj -&gt; wire   用来记录从对象到引用的映射<br>如果发现某个对象已经存在于handles里，那么会把此处记成TC_REFERENCE，即记为对同一个对象的引用<br>比如说，一个对象他的两个字段都是同一个字符串，那么后被序列化的字段将变成引用<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699768303737-7bc433ee-a2de-4fd3-9bbe-cc106e0c4a7a.png#averageHue=%2328292c&clientId=ub3f17c7a-08a8-4&from=drop&id=u2e0385ba&originHeight=156&originWidth=482&originalType=binary&ratio=2&rotation=0&showTitle=false&size=59605&status=done&style=none&taskId=u615f6085-9b81-4ce2-9bf0-d87d1cc91e5&title=" alt="截屏2023-11-12 13.51.40.png"><br>下面这种场景也会出现引用的现象<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699768378519-323af95f-148c-4686-8a8b-01108d0e847f.png#averageHue=%232b2c2f&clientId=ub3f17c7a-08a8-4&from=drop&id=ud740f432&originHeight=198&originWidth=688&originalType=binary&ratio=2&rotation=0&showTitle=false&size=103506&status=done&style=none&taskId=ud9b12640-c1d2-423a-94a9-83621cbc371&title=" alt="截屏2023-11-12 13.52.54.png"></p>
+<h3 id="处理机制"><a href="#处理机制" class="headerlink" title="处理机制"></a>处理机制</h3><p>他先将所有成员变量的基本信息，如name，Type等输出到输出流,writeClassDesc<br>然后再统一把成员变量的实际值输出到输出流,writeSerialData</p>
+<h3 id="继承机制"><a href="#继承机制" class="headerlink" title="继承机制"></a>继承机制</h3><p>如果某个实例他存在父类<br>那么writeSerialData时，会先处理父类，再处理当前类</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699759965868-e978ead9-7ea9-4323-9124-6efe5e26910d.png#averageHue=%23fbf9f9&clientId=ub3f17c7a-08a8-4&from=paste&height=957&id=u6c4b26d5&originHeight=1914&originWidth=11770&originalType=binary&ratio=2&rotation=0&showTitle=false&size=2765592&status=done&style=none&taskId=u7d3118a0-bd92-4afd-aaa4-7b654fac63f&title=&width=5885" alt="image.png"></p>
+<ol>
+<li>预处理：如果对象值是null，那么writeNull，如果handles里已经有当前对象，那么直接记为引用对象</li>
+<li>信息获取：获取当前序列化对象对应类的基本信息,保存为ObjectStreamClass实例–desc<ol>
+<li>如果对应类有继承关系，那么也会把super类的基本信息获取，直到遇见非Serializable的类，然后返回null</li>
+</ol>
+</li>
+<li>输出：把序列化对象变成输出流<ol>
+<li>把对象的基本字段变成输出流 writeClassDesc<ol>
+<li>按照从subclass-&gt;superclass的顺序递归处理,直到遇见非Serializable的类，然后返回null</li>
+</ol>
+</li>
+<li>非unshared的时候把当前序列化对象加入到handles(大多数情况都是非unshared)</li>
+<li>把对象的序列化数据变成输出流，writeSerialData<ol>
+<li>按照从最后一个继承Serializable的superclass-&gt;subclass的顺序处理，先处理父类的字段，再处理子类的字段，如果重写了WriteObject，那么就调用重写的WriteObject，不然就调用默认的defaultWriteFields</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699760297749-1c1ca6e5-340d-4d51-8e1b-4b4733303722.png#averageHue=%23282c33&clientId=ub3f17c7a-08a8-4&from=drop&id=u58b5911f&originHeight=636&originWidth=1034&originalType=binary&ratio=2&rotation=0&showTitle=false&size=431781&status=done&style=none&taskId=u635f7304-6f03-4994-9853-fe1775942bc&title=" alt="截屏2023-11-12 11.38.14.png"><br>subs obj -&gt; replacement 的映射，如果没有找到，就返回obj<br>如果实例某个成员变量为NULL，那么就会在这里writeNull</p>
+<p>如果发现obj之前已经被添加到handles里了，那么就设置为引用<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699767829678-dcf82948-c3a8-43f6-af54-bd530398f057.png#averageHue=%23292f3c&clientId=ub3f17c7a-08a8-4&from=drop&id=u44782fc8&originHeight=234&originWidth=1074&originalType=binary&ratio=2&rotation=0&showTitle=false&size=173974&status=done&style=none&taskId=uae8ce971-1a93-482e-a2c2-303e3864251&title=" alt="截屏2023-11-12 13.43.44.png"></p>
+<h3 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h3><p>查找并返回给定类的类描述符,这个desc包含了类序列化的时候需要的一些基本信息，比如说非transient的fields信息和readObject\writeObject等信息<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699760494208-43d91c01-bd08-4374-872a-d2ce3cb28fd9.png#averageHue=%23272a30&clientId=ub3f17c7a-08a8-4&from=drop&id=u52763ceb&originHeight=700&originWidth=1380&originalType=binary&ratio=2&rotation=0&showTitle=false&size=600871&status=done&style=none&taskId=ue46239b8-f0b0-42c6-99c2-ceb7df3981d&title=" alt="截屏2023-11-12 11.41.30.png"><br>下面是一个示例<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699752956849-2e6c42a6-b6c6-49d0-84dd-0dccdd4da8ca.png#averageHue=%23343639&clientId=ub3f17c7a-08a8-4&from=drop&id=u60adad65&originHeight=576&originWidth=1480&originalType=binary&ratio=2&rotation=0&showTitle=false&size=572858&status=done&style=none&taskId=u35bb6f4e-0f09-4fa3-836f-ecc52bca489&title=" alt="截屏2023-11-12 09.35.53.png"></p>
+<h4 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h4><p>在lookup里面会创造ObjectStreamClass的实例，同时在实例的构造函数会进行判断，如果存在父类，那么会尝试lookup父类，直到遇见非Serializable的类，进而把所有可序列化父类的desc获取出来<img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699781793630-64a726e5-3718-4f5c-8724-7d39a8143cef.png#averageHue=%23303236&clientId=u294a2b4f-f12a-4&from=drop&id=u6202f010&originHeight=980&originWidth=2810&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1904167&status=done&style=none&taskId=u3fa4c977-c1f5-4084-a7b7-25249543bd2&title=" alt="截屏2023-11-12 17.36.28.png"></p>
+<h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><p>在这里获取Fields时候会进行一个排序<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699789400031-6a9cb5a9-9e69-4a24-83d2-0b5271a9344e.png#averageHue=%23292a2d&clientId=ufcbbc555-1571-4&from=drop&id=u62ac2642&originHeight=612&originWidth=1228&originalType=binary&ratio=2&rotation=0&showTitle=false&size=496496&status=done&style=none&taskId=u36748758-f201-42fe-8c24-3e232d465b7&title=" alt="截屏2023-11-12 19.42.20.png"><br>Field的类型是ObjectStreamField，调用对应的compareTo方法<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699840996548-19402095-69a7-484b-8c88-8fcd51203201.png#averageHue=%23282c32&clientId=u3b778a98-290c-4&from=drop&id=u41675657&originHeight=398&originWidth=1112&originalType=binary&ratio=2&rotation=0&showTitle=false&size=286436&status=done&style=none&taskId=u0882574d-1086-46d9-ba36-7185e5ef334&title=" alt="截屏2023-11-13 10.03.12.png"><br>最后调用name的compareTo，也就是String.compareTo,按照fields.name来排序(这里的name不包含fields的type)<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699841184221-6aef8d6b-a962-4cc3-b3ae-2a6d3e8e0a51.png#averageHue=%23343639&clientId=u3b778a98-290c-4&from=drop&id=qUKW8&originHeight=596&originWidth=926&originalType=binary&ratio=2&rotation=0&showTitle=false&size=404336&status=done&style=none&taskId=udfa01967-7313-4b7d-ab67-6430f03f469&title=" alt="截屏2023-11-13 10.06.18.png"></p>
+<h3 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h3><h4 id="writeClassDesc"><a href="#writeClassDesc" class="headerlink" title="writeClassDesc"></a>writeClassDesc</h4><p>Writes representation of given class descriptor to stream<br>把类的描述信息输出到stream里<br>在writeClassDesc里大多数是调用writeNonProxyDesc，因为太多数类都是non-proxy<br>这里因为我们序列化版本是2，所以会调用writeClassDescriptor然后调用writeNonProxy函数</p>
+<h5 id="writeNonProxy"><a href="#writeNonProxy" class="headerlink" title="writeNonProxy"></a>writeNonProxy</h5><p>在writeNonProxy里首先写上类名等信息<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699753666744-a028f598-fce4-40ef-ab81-5f65cf88ae46.png#averageHue=%23343e56&clientId=ub3f17c7a-08a8-4&from=drop&id=u68e8c138&originHeight=124&originWidth=658&originalType=binary&ratio=2&rotation=0&showTitle=false&size=69038&status=done&style=none&taskId=udbe7436c-1ac6-480a-ba5d-b3076957217&title=" alt="截屏2023-11-12 09.47.43.png"><br>把之前lookup出的类描述符里的fields字段也write出来<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699753752318-b2cd55ea-9ec8-4ae7-a210-52b330ec8902.png#averageHue=%232a2e36&clientId=ub3f17c7a-08a8-4&from=drop&id=u7fa81f04&originHeight=448&originWidth=1036&originalType=binary&ratio=2&rotation=0&showTitle=false&size=311309&status=done&style=none&taskId=ud5e4c347-240d-4ec2-85ab-c8cfc32226a&title=" alt="截屏2023-11-12 09.49.07.png"><br>包含TypeCode,Name和TypeString</p>
+<h5 id="处理继承"><a href="#处理继承" class="headerlink" title="处理继承"></a>处理继承</h5><p>在writeNonProxyDesc和writeProxyDesc处理的最后都会去调用<br>writeClassDesc(desc.getSuperDesc(), false)来把父类的desc也输出到输出里，如果不存在父类desc，那么会writeNull，如果存在那么就重复执行上述的流程<br>下图是简单的内容展示<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699753452148-3430cf14-60c4-43fa-9fd8-e6c4cae83a53.png#averageHue=%23373a40&clientId=ub3f17c7a-08a8-4&from=drop&id=WAzmN&originHeight=250&originWidth=878&originalType=binary&ratio=2&rotation=0&showTitle=false&size=193055&status=done&style=none&taskId=u7e1c9ce5-465e-435a-b05b-7cdefd3297f&title=" alt="截屏2023-11-12 09.44.06.png"></p>
+<h4 id="handles-assign"><a href="#handles-assign" class="headerlink" title="handles.assign"></a>handles.assign</h4><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699782242080-69fcb8f5-400e-4bf7-8ca2-fc07c416701a.png#averageHue=%232d313a&clientId=u294a2b4f-f12a-4&from=drop&id=Ki8jc&originHeight=334&originWidth=892&originalType=binary&ratio=2&rotation=0&showTitle=false&size=216467&status=done&style=none&taskId=ua80416a9-946d-4261-ab15-e0da2707b86&title=" alt="截屏2023-11-12 17.43.58.png"><br>如果使用的模式不是unshared模式，则将当前处理的obj插入到handles对象的映射表中<br>继承了Serializable的对象都是在这里插入handles里的</p>
+<h4 id="writeSerialData"><a href="#writeSerialData" class="headerlink" title="writeSerialData"></a>writeSerialData</h4><p>Writes instance data for each serializable class of given object, from superclass to subclass.<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699788612616-52fe0313-0238-4d32-abed-f06fae578da9.png#averageHue=%23292b2e&clientId=ufcbbc555-1571-4&from=drop&id=u3937695c&originHeight=318&originWidth=1134&originalType=binary&ratio=2&rotation=0&showTitle=false&size=228721&status=done&style=none&taskId=uf047af42-e958-4a3b-a994-e3d31b5b028&title=" alt="截屏2023-11-12 19.30.07.png"><br>返回的slots，按照superclass-&gt;subclass的顺序依次处理<br>如果重写了writeObject，那么就调用对应的方法，如果没有就调用defaultWriteFields<br>在defaultWriteFields，首先会对基础数据类型的成员变量进行赋值，具体类型入下图所示<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699759829007-52a0452b-9806-4782-8b0a-fa3e1a6bbc4f.png#averageHue=%23f9f9f9&clientId=ub3f17c7a-08a8-4&from=paste&height=373&id=ub5971a3b&originHeight=746&originWidth=376&originalType=binary&ratio=2&rotation=0&showTitle=false&size=103875&status=done&style=none&taskId=u9cc43f57-db76-48a5-986a-0169b688826&title=&width=188" alt="image.png"><br>然后再对当前类的Fields进行处理，调用writeObject0把对应fileds的值进行序列化<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699789455667-8a771859-0b38-45b1-b5f9-f8684224f150.png#averageHue=%23292c33&clientId=ufcbbc555-1571-4&from=drop&id=ud0d72399&originHeight=502&originWidth=1454&originalType=binary&ratio=2&rotation=0&showTitle=false&size=485860&status=done&style=none&taskId=u454962f2-8aa6-438a-a4b1-a92b82ad6ea&title=" alt="截屏2023-11-12 19.44.11.png"></p>
+<h1 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h1><p><a target="_blank" rel="noopener" href="https://www.cnpanda.net/sec/928.html">https://www.cnpanda.net/sec/928.html</a><br>在Java中，反序列化是将之前使用序列化机制写入到文件或者传输过程中的二进制流重新构建为Java对象的过程。这个过程是通过ObjectInputStream类实现的。<br>在反序列化过程中，Java不会调用对象的构造方法来构造对象。相反，它会直接使用Java虚拟机（JVM）的特殊机制(ASM)来构造对象。这个机制直接在堆中创建对象实例，而不调用任何构造方法。<br>这样做的原因是，序列化机制的目的在于能够完全恢复对象的状态，包括那些通过构造方法设置的私有字段。如果在反序列化时调用构造方法，那么对象可能会被初始化为不一致的状态，因为构造方法可能会执行一些不仅仅是设置字段值的逻辑。<br>反序列化过程如下：<br>如果一个类实现了Serializable接口，当它的对象被反序列化时，JVM会跳过构造方法的调用，直接在内存中创建对象。<br>如果对象的类有一个可访问的无参数的构造方法（包括私有的），并且该类实现了Externalizable接口，则会调用无参数的构造方法来创建对象实例，然后再从流中读取数据以恢复对象状态。<br>反序列化时，如果涉及到对象图中有父类没有实现Serializable接口，那么在反序列化子类时，会调用没有实现Serializable接口的最近的父类的无参数构造方法，用以正确构造对象的继承结构。<br>为了正确恢复对象的状态，Java的序列化机制通常要求类的所有序列化字段都要在序列化时被保存，然后在反序列化时被完全恢复。如果有特殊需求，可以通过实现readObject和writeObject方法来自定义序列化和反序列化的行为。</p>
+<h2 id="机制-1"><a href="#机制-1" class="headerlink" title="机制"></a>机制</h2><h3 id="恢复机制"><a href="#恢复机制" class="headerlink" title="恢复机制"></a>恢复机制</h3><p>反序列化恢复对象主要是通过输入流中的数据恢复的，构造当前对象也只是为了开辟内存空间，所以通过asm来做，避免操作构造函数</p>
+<h3 id="构造机制"><a href="#构造机制" class="headerlink" title="构造机制"></a>构造机制</h3><h4 id="父类没有继承Serializable"><a href="#父类没有继承Serializable" class="headerlink" title="父类没有继承Serializable"></a>父类没有继承Serializable</h4><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700055149297-556247b6-dc73-46be-bbf0-95fdecb9db1c.png#averageHue=%23242528&clientId=u9b3dd37e-1063-4&from=drop&id=u6a0308c2&originHeight=516&originWidth=906&originalType=binary&ratio=2&rotation=0&showTitle=false&size=274794&status=done&style=none&taskId=u69676c8e-9598-4769-a80f-86e07f171e3&title=" alt="截屏2023-11-15 21.32.23.png"><br>这里的var3就是我们动态生成的构造函数<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884786086-29ed247a-712c-4eb2-80d0-1d543aab943f.png#averageHue=%2356796f&clientId=u410585c1-92f0-4&from=drop&id=u68693926&originHeight=1278&originWidth=2718&originalType=binary&ratio=2&rotation=0&showTitle=false&size=2137161&status=done&style=none&taskId=u43550a4a-5d1b-4bcb-bd1b-2e5664d0a6e&title=" alt="截屏2023-11-13 22.12.58.png"><br>使用了asm<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884809767-6729cdd2-880b-44d7-a348-2793cf897a7b.png#averageHue=%2327282c&clientId=u410585c1-92f0-4&from=drop&id=u5b7f35ed&originHeight=720&originWidth=858&originalType=binary&ratio=2&rotation=0&showTitle=false&size=438663&status=done&style=none&taskId=u469e8cdb-cd85-4f21-a1f3-054aa24a0f8&title=" alt="截屏2023-11-13 22.13.24.png"><br>在这里可以把动态生成的class写出来<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699884870210-13e60c0d-742c-4d93-94b9-80a9e25d3675.png#averageHue=%232a2d33&clientId=u410585c1-92f0-4&from=drop&id=ua41e9cfa&originHeight=1062&originWidth=1890&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1342665&status=done&style=none&taskId=uf6db7e00-4e9a-4d6c-8a0f-2dd520d1fbc&title=" alt="截屏2023-11-13 22.14.23.png"><br>查看bytecode可以看到，他只是分配了aa这个对象的内存空间，同时调用了bbb这个最近的不可序列化类的构造函数<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699885062570-4ec5210a-9289-48ba-a668-c9c8183528aa.png#averageHue=%2328292c&clientId=u410585c1-92f0-4&from=drop&id=u56110f4b&originHeight=930&originWidth=1434&originalType=binary&ratio=2&rotation=0&showTitle=false&size=916229&status=done&style=none&taskId=ua09dac1e-6539-4f35-880b-c7c68245936&title=" alt="截屏2023-11-13 22.17.37.png"></p>
+<h4 id="父类继承了Serializable"><a href="#父类继承了Serializable" class="headerlink" title="父类继承了Serializable"></a>父类继承了Serializable</h4><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700056231036-1babe830-2b0b-4e5f-a69a-b6f54b1b800e.png#averageHue=%23242528&clientId=u9b3dd37e-1063-4&from=drop&id=u9e37d0b9&originHeight=470&originWidth=598&originalType=binary&ratio=2&rotation=0&showTitle=false&size=181283&status=done&style=none&taskId=uc001a597-6436-46d4-bb5f-6863e186ca8&title=" alt="截屏2023-11-15 21.50.23.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700056428994-dff2723e-b080-4962-9bd0-6c6e48e69e83.png#averageHue=%232c313d&clientId=u9b3dd37e-1063-4&from=drop&id=u0fb16a83&originHeight=228&originWidth=888&originalType=binary&ratio=2&rotation=0&showTitle=false&size=138226&status=done&style=none&taskId=u5d4504bd-52b7-476d-96d3-ba576b76538&title=" alt="截屏2023-11-15 21.53.17.png"><br>这种情况只需要先把子类内存空间分配出来，后面再通过输入流把对应的字段填写进来<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700056277559-6dd10656-2641-407f-b919-93ee14a95724.png#averageHue=%23282a2d&clientId=u9b3dd37e-1063-4&from=drop&id=u920e14bf&originHeight=666&originWidth=680&originalType=binary&ratio=2&rotation=0&showTitle=false&size=287607&status=done&style=none&taskId=u0defdc37-54b9-4fbf-9f5d-18062875447&title=" alt="截屏2023-11-15 21.51.07.png"></p>
+<h2 id="流程-1"><a href="#流程-1" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>判断当前类型，走到对应处理逻辑</li>
+<li>把输入流变成反序列化对象<ol>
+<li>把对象的基本字段从输入流恢复 readClassDesc<ol>
+<li>按照从subclass-&gt;superclass的顺序递归处理</li>
+</ol>
+</li>
+<li>创造对象的实例</li>
+<li>把对象的数据从输入流中恢复出来 readSerialData<ol>
+<li>按照从superclass-&gt;subclass的顺序递归处理，先处理父类的字段，再处理子类的字段，如果重写了ReadObject，那么就调用重写的ReadObject，不然就调用默认的defaultReadFields</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="判断类型"><a href="#判断类型" class="headerlink" title="判断类型"></a>判断类型</h3><p>根据不同类型走不同逻辑<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790287468-dcbd533f-9fb7-49ea-8a4c-64fe9028a806.png#averageHue=%23242527&clientId=ufcbbc555-1571-4&from=drop&id=u2ec90e39&originHeight=1212&originWidth=1316&originalType=binary&ratio=2&rotation=0&showTitle=false&size=890447&status=done&style=none&taskId=u3b496dc6-bdf3-44d1-baac-f65b5dfa804&title=" alt="截屏2023-11-12 19.58.02.png"></p>
+<h3 id="把输入流变成对象"><a href="#把输入流变成对象" class="headerlink" title="把输入流变成对象"></a>把输入流变成对象</h3><h4 id="readClassDesc"><a href="#readClassDesc" class="headerlink" title="readClassDesc"></a>readClassDesc</h4><p>首先调用到readNonProxy去将序列化的内容恢复成desc<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790471419-643dd5a8-44b1-44df-a185-2b2ed163fda1.png#averageHue=%2333353b&clientId=ufcbbc555-1571-4&from=drop&id=u1a59381b&originHeight=820&originWidth=2134&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1262809&status=done&style=none&taskId=ued6b9ff1-d423-42d3-9c78-2a38ef31812&title=" alt="截屏2023-11-12 20.01.03.png"><br>在这中间会调用resolveClass，而代码往往通过重写resolveClass来进行过滤<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790515283-dc75d1f5-2185-456e-8399-66bc92f9ffb5.png#averageHue=%2328292d&clientId=ufcbbc555-1571-4&from=drop&id=u8b826051&originHeight=578&originWidth=1196&originalType=binary&ratio=2&rotation=0&showTitle=false&size=427818&status=done&style=none&taskId=u2b63aa38-2f3b-4f88-a594-560e874814d&title=" alt="截屏2023-11-12 20.01.51.png"><br>在后面可以看到他会尝试在调用一次readClassDesc，这里会按照输入流进行解析，如果输入流还能读出来内容，那就代码还有Serializable的父类的字段，那么继续解析，如果读出来的是null，那就代表结束了，那么直接会writeNull,同时会调用initNonProxy把desc的一些基本信息都填入<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790569974-4d28f1fa-75dd-4f07-9f68-b6d59c4b70eb.png#averageHue=%23252628&clientId=ufcbbc555-1571-4&from=drop&id=u35146bb2&originHeight=466&originWidth=1396&originalType=binary&ratio=2&rotation=0&showTitle=false&size=341996&status=done&style=none&taskId=u374479c4-50ca-4e39-aa49-8c2dcb826ed&title=" alt="截屏2023-11-12 20.02.46.png"></p>
+<h4 id="实例化对象"><a href="#实例化对象" class="headerlink" title="实例化对象"></a>实例化对象</h4><p>在把desc获取出来之后，就会实例化出对应实例，注意这里本身目的只是分配空间，为后面从输入流里面读取数据并赋值做铺垫<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699790769877-03f3cc86-a31c-42c4-be1e-e29463cd58ab.png#averageHue=%23292c33&clientId=ufcbbc555-1571-4&from=drop&id=u696775be&originHeight=482&originWidth=1176&originalType=binary&ratio=2&rotation=0&showTitle=false&size=332182&status=done&style=none&taskId=ubfd28260-3b44-44dd-8ea3-f876c4f9055&title=" alt="截屏2023-11-12 20.06.04.png"></p>
+<h4 id="readSerialData"><a href="#readSerialData" class="headerlink" title="readSerialData"></a>readSerialData</h4><p>大概逻辑也很简单，从superclass-&gt;subclass,如果重写了readObject，那么调用readObject，如果没有那么就调用defaultReadFields<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700057536072-fe74762e-c32e-485e-bc08-1d292d5b1a9a.png#averageHue=%2327282c&clientId=u9b3dd37e-1063-4&from=drop&id=ud4dbe761&originHeight=1352&originWidth=1320&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1155685&status=done&style=none&taskId=u8e7526c8-abbf-47e3-a5d1-3589d20a3ea&title=" alt="截屏2023-11-15 22.12.12.png"><br>恢复基础类型数据<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700057654057-a2c4ef40-a5a1-4044-93e8-404a36b50800.png#averageHue=%23292d35&clientId=u9b3dd37e-1063-4&from=drop&id=u7dae8d54&originHeight=466&originWidth=1050&originalType=binary&ratio=2&rotation=0&showTitle=false&size=330761&status=done&style=none&taskId=u2a68ac47-3eca-484d-a6ea-b4870c109d4&title=" alt="截屏2023-11-15 22.14.11.png"><br>恢复当前类的字段,因为在序列化的时候已经对字段进行排序，后面反序列化的时候也是按照这个顺序来的<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700057680144-de643faa-dc6c-4e41-b8d3-6caba1d1a94f.png#averageHue=%232a2e38&clientId=u9b3dd37e-1063-4&from=drop&id=ufa65db6a&originHeight=312&originWidth=1234&originalType=binary&ratio=2&rotation=0&showTitle=false&size=266385&status=done&style=none&taskId=u771d14a7-2e4f-4ee4-afcc-8adec14c9f9&title=" alt="截屏2023-11-15 22.14.34.png"></p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1>
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="https://azraelxuemo.github.io">azraelxuemo</a>
+            <p>Link：<a href="https://azraelxuemo.github.io/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">https://azraelxuemo.github.io/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</a>
+            <p>Publish date：<a href="https://azraelxuemo.github.io/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">November 16th 2023, 1:51:34 pm</a>
+            <p>Update date：<a href="https://azraelxuemo.github.io/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">November 16th 2023, 7:17:28 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/11/15/java%E5%88%9B%E9%80%A0%E5%AF%B9%E8%B1%A1/" title="java创造对象">
+                    <div class="prevTitle">java创造对象</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:12345@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/azraelxuemo" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">序列化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E5%88%B6"><span class="toc-number">1.1.</span> <span class="toc-text">机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E6%9C%BA%E5%88%B6"><span class="toc-number">1.1.1.</span> <span class="toc-text">引用机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6"><span class="toc-number">1.1.2.</span> <span class="toc-text">处理机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%A7%E6%89%BF%E6%9C%BA%E5%88%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">继承机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">预处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96"><span class="toc-number">1.2.2.</span> <span class="toc-text">信息获取</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%92%E5%BD%92"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">递归</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">排序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%87%BA"><span class="toc-number">1.2.3.</span> <span class="toc-text">输出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#writeClassDesc"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">writeClassDesc</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#writeNonProxy"><span class="toc-number">1.2.3.1.1.</span> <span class="toc-text">writeNonProxy</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E7%BB%A7%E6%89%BF"><span class="toc-number">1.2.3.1.2.</span> <span class="toc-text">处理继承</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#handles-assign"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">handles.assign</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#writeSerialData"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">writeSerialData</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">反序列化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%BA%E5%88%B6-1"><span class="toc-number">2.1.</span> <span class="toc-text">机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D%E6%9C%BA%E5%88%B6"><span class="toc-number">2.1.1.</span> <span class="toc-text">恢复机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E6%9C%BA%E5%88%B6"><span class="toc-number">2.1.2.</span> <span class="toc-text">构造机制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%B6%E7%B1%BB%E6%B2%A1%E6%9C%89%E7%BB%A7%E6%89%BFSerializable"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">父类没有继承Serializable</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%88%B6%E7%B1%BB%E7%BB%A7%E6%89%BF%E4%BA%86Serializable"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">父类继承了Serializable</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-1"><span class="toc-number">2.2.</span> <span class="toc-text">流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.2.1.</span> <span class="toc-text">判断类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%8A%E8%BE%93%E5%85%A5%E6%B5%81%E5%8F%98%E6%88%90%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.2.2.</span> <span class="toc-text">把输入流变成对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#readClassDesc"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">readClassDesc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%AF%B9%E8%B1%A1"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">实例化对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#readSerialData"><span class="toc-number">2.2.2.3.</span> <span class="toc-text">readSerialData</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text"></span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 6
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/16</span>
+            <a class="archive-post-title" href="/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">java序列化\反序列化流程分析</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span>
+            <a class="archive-post-title" href="/2023/11/15/java%E5%88%9B%E9%80%A0%E5%AF%B9%E8%B1%A1/">java创造对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/14</span>
+            <a class="archive-post-title" href="/2023/11/14/k8s/">k8s攻防</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span>
+            <a class="archive-post-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">容器逃逸 All in One</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">BUUCTF pwn刷题记录</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/11</span>
+            <a class="archive-post-title" href="/index.html">Welcome</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="云安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                云安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="java">
+                <span class="iconfont-archer">&#xe606;</span>
+                java
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://azraelxuemo.github.io",
+        root: siteMetaRoot,
+        author: "azraelxuemo"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
