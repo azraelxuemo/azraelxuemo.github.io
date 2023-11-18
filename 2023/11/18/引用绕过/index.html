@@ -20,22 +20,35 @@
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
-    <meta name="description" content="欢迎来到我的安全杂货铺 一个来自AAA战队的退役老人旧的博客链接https:&#x2F;&#x2F;blog.csdn.net&#x2F;azraelxuemo&#x2F;">
+    <meta name="description" content="安全的反序列化下面是一个常用的黑名单检测，利用resolveClass对反序列化的类进行过滤 123456789101112131415161718192021222324252627282930public class MyObjectInputStream extends ObjectInputStream &#123;    private static final String[] bla">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Welcome">
-<meta property="og:url" content="https://azraelxuemo.github.io/index.html">
+<meta property="og:title" content="java反序列化引用绕过">
+<meta property="og:url" content="https://azraelxuemo.github.io/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="欢迎来到我的安全杂货铺 一个来自AAA战队的退役老人旧的博客链接https:&#x2F;&#x2F;blog.csdn.net&#x2F;azraelxuemo&#x2F;">
+<meta property="og:description" content="安全的反序列化下面是一个常用的黑名单检测，利用resolveClass对反序列化的类进行过滤 123456789101112131415161718192021222324252627282930public class MyObjectInputStream extends ObjectInputStream &#123;    private static final String[] bla">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-11-11T06:27:39.000Z">
-<meta property="article:modified_time" content="2023-11-15T11:29:19.913Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700058883695-7e1bae53-832b-4723-9f27-f8523502fe3b.png#averageHue=%2326272a&clientId=u9b3dd37e-1063-4&from=drop&id=u8f4cf295&originHeight=1170&originWidth=1422&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1044087&status=done&style=none&taskId=u16fa1def-5434-4d4b-a3e1-eb54b068a55&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700184044764-f4ba4422-872b-47ba-bda5-54330c2c8034.png#averageHue=%232d3036&clientId=udd95f3a8-8b8f-4&from=drop&id=u3a4b394b&originHeight=1288&originWidth=1918&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1493417&status=done&style=none&taskId=u788b1105-c05c-43cc-a24f-c02b355afac&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700267538086-c6ea369d-9f52-49de-855c-b50394fc402f.png#averageHue=%23282a2e&clientId=ua36f076a-5821-4&from=drop&id=ua3b790ef&originHeight=346&originWidth=1760&originalType=binary&ratio=2&rotation=0&showTitle=false&size=389566&status=done&style=none&taskId=u034e685e-f305-43e9-85d7-b9efb77e51f&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700268206327-963d0583-6044-475b-8538-8281e2fb2745.png#averageHue=%23282a2e&clientId=ua36f076a-5821-4&from=drop&id=u3b356cb0&originHeight=722&originWidth=1256&originalType=binary&ratio=2&rotation=0&showTitle=false&size=596173&status=done&style=none&taskId=uf250debf-6385-430f-848e-4bd7dadcbce&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700268037042-5228f86e-8666-4946-8623-e87e5971c44d.png#averageHue=%2328292d&clientId=ua36f076a-5821-4&from=drop&id=u4947ee07&originHeight=106&originWidth=756&originalType=binary&ratio=2&rotation=0&showTitle=false&size=56216&status=done&style=none&taskId=uf9d9a12b-4a3c-445d-9d9a-116740d767e&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278315890-e281d24d-65ab-4297-b5e2-02e38f180331.png#averageHue=%23282a2e&clientId=ua36f076a-5821-4&from=drop&id=u5cdedb42&originHeight=170&originWidth=724&originalType=binary&ratio=2&rotation=0&showTitle=false&size=91635&status=done&style=none&taskId=u5ef0fff9-d254-4ab2-8a07-3c4c62dec53&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278350784-2b7c3f6e-b58e-48f1-b1cc-ed25d43d942f.png#averageHue=%2325272a&clientId=ua36f076a-5821-4&from=drop&id=u0abccfd6&originHeight=1134&originWidth=1170&originalType=binary&ratio=2&rotation=0&showTitle=false&size=869266&status=done&style=none&taskId=u6b519fd6-430e-4058-ab68-99063195f23&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278752124-59a031ba-0020-4fd4-9b81-d9d3a3b736e0.png#averageHue=%232b3345&clientId=ua36f076a-5821-4&from=drop&id=ufa07c7d0&originHeight=646&originWidth=2044&originalType=binary&ratio=2&rotation=0&showTitle=false&size=803947&status=done&style=none&taskId=ub0863091-a703-442d-9fbe-72d77fa13b6&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278883904-2f158015-40ac-49e2-9a13-cc79a915765d.png#averageHue=%232a2d31&clientId=ua36f076a-5821-4&from=drop&id=ue7a310ec&originHeight=196&originWidth=618&originalType=binary&ratio=2&rotation=0&showTitle=false&size=88805&status=done&style=none&taskId=ua49856c5-cf2a-4305-bb94-a38b5bcd58b&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278947607-9f1c4dca-4084-49d6-8113-11c74b8ec368.png#averageHue=%232b2f33&clientId=ua36f076a-5821-4&from=drop&id=uc806b16d&originHeight=170&originWidth=584&originalType=binary&ratio=2&rotation=0&showTitle=false&size=74018&status=done&style=none&taskId=udb8624de-fe47-4263-8e6d-0e6a4a90f39&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700280694880-f7342359-8dff-46b2-b8e5-f319b59cb2d7.png#averageHue=%2330343b&clientId=ua36f076a-5821-4&from=drop&id=ub7d5d697&originHeight=616&originWidth=1502&originalType=binary&ratio=2&rotation=0&showTitle=false&size=570397&status=done&style=none&taskId=u9ad47d12-6572-43dc-b1ff-f5059e58e80&title=">
+<meta property="article:published_time" content="2023-11-18T03:51:34.000Z">
+<meta property="article:modified_time" content="2023-11-18T04:18:56.487Z">
 <meta property="article:author" content="azraelxuemo">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700058883695-7e1bae53-832b-4723-9f27-f8523502fe3b.png#averageHue=%2326272a&clientId=u9b3dd37e-1063-4&from=drop&id=u8f4cf295&originHeight=1170&originWidth=1422&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1044087&status=done&style=none&taskId=u16fa1def-5434-4d4b-a3e1-eb54b068a55&title=">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/favicon.ico">
     
-    <title>Welcome · azraelxuemo&#39;s Studio</title>
+    <title>java反序列化引用绕过 · azraelxuemo&#39;s Studio</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -261,7 +274,7 @@
                 <a href="/">azraelxuemo&#39;s Studio.</a>
             </div>
             <div class="post-title header-element">
-                <a href="#" class="post-name">Welcome</a>
+                <a href="#" class="post-name">java反序列化引用绕过</a>
             </div>
         </div>
     
@@ -307,7 +320,7 @@
         <h1 class="intro-title">
             <!-- 主页  -->
             
-                Welcome
+                java反序列化引用绕过
             <!-- 404 -->
             
         </h1>
@@ -327,6 +340,8 @@
                     <div class= post-intro-tags >
     
     
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
+    
 </div>
 
                 
@@ -335,7 +350,7 @@
                 <div class="post-intro-meta">
                     <!-- 撰写日期 -->
                     <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2023/11/11</span>
+                    <span class="post-intro-time">2023/11/18</span>
                     <!-- busuanzi -->
                     
                         <span id="busuanzi_container_page_pv" class="busuanzi-pv">
@@ -490,17 +505,26 @@
             <div class="container container-unloaded">
                 <main class="main post-page">
     <article class="article-entry">
-        <p>欢迎来到我的安全杂货铺</p>
-<p>一个来自AAA战队的退役老人<br>旧的博客链接<a target="_blank" rel="noopener" href="https://blog.csdn.net/azraelxuemo/">https://blog.csdn.net/azraelxuemo/</a></p>
+        <h1 id="安全的反序列化"><a href="#安全的反序列化" class="headerlink" title="安全的反序列化"></a>安全的反序列化</h1><p>下面是一个常用的黑名单检测，利用resolveClass对反序列化的类进行过滤</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyObjectInputStream</span> <span class="title">extends</span> <span class="title">ObjectInputStream</span> &#123;</span></span><br><span class="line">    private <span class="type">static</span> final String[] blacklist = new String[]&#123;<span class="string">&quot;java\\.security.*&quot;</span>, <span class="string">&quot;java\\.rmi.*&quot;</span>, <span class="string">&quot;com\\.fasterxml.*&quot;</span>, <span class="string">&quot;com\\.ctf\\.*&quot;</span>, <span class="string">&quot;org\\.springframework.*&quot;</span>, <span class="string">&quot;org\\.yaml.*&quot;</span>, <span class="string">&quot;javax\\.management\\.remote.*&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line">    public <span class="title function_">MyObjectInputStream</span><span class="params">(InputStream inputStream)</span> throws IOException &#123;</span><br><span class="line">        super(inputStream);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    protected Class <span class="title function_">resolveClass</span><span class="params">(ObjectStreamClass cls)</span> throws IOException, ClassNotFoundException &#123;</span><br><span class="line">        <span class="keyword">if</span> (!contains(cls.getName())) &#123;</span><br><span class="line">            <span class="keyword">return</span> super.resolveClass(cls);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            throw new InvalidClassException(<span class="string">&quot;Unexpected serialized class&quot;</span>, cls.getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public <span class="type">static</span> boolean <span class="title function_">contains</span><span class="params">(String targetValue)</span> &#123;</span><br><span class="line">        String[] var1 = blacklist;</span><br><span class="line">        <span class="type">int</span> var2 = var1.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> var3 = <span class="number">0</span>; var3 &lt; var2; ++var3) &#123;</span><br><span class="line">            String forbiddenPackage = var1[var3];</span><br><span class="line">            <span class="keyword">if</span> (targetValue.matches(forbiddenPackage)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>重写了resolveClass，在readNonProxyDesc里调用了resolveClass<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700058883695-7e1bae53-832b-4723-9f27-f8523502fe3b.png#averageHue=%2326272a&clientId=u9b3dd37e-1063-4&from=drop&id=u8f4cf295&originHeight=1170&originWidth=1422&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1044087&status=done&style=none&taskId=u16fa1def-5434-4d4b-a3e1-eb54b068a55&title=" alt="截屏2023-11-15 22.34.36.png"><br>大概的调用栈<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700184044764-f4ba4422-872b-47ba-bda5-54330c2c8034.png#averageHue=%232d3036&clientId=udd95f3a8-8b8f-4&from=drop&id=u3a4b394b&originHeight=1288&originWidth=1918&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1493417&status=done&style=none&taskId=u788b1105-c05c-43cc-a24f-c02b355afac&title=" alt="截屏2023-11-17 09.20.38.png"><br>在使用时我们也要保证，我们这个安全的ObjectInputStream也必须是反序列化的起始输入流，这样才能保证整个反序列化过程中的安全</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ObjectInputStream objectInputStream = new MyObjectInputStream(new FileInputStream(<span class="string">&quot;test.bin&quot;</span>));</span><br><span class="line">        objectInputStream.readObject();</span><br></pre></td></tr></table></figure>
+<h1 id="不安全的反序列化"><a href="#不安全的反序列化" class="headerlink" title="不安全的反序列化"></a>不安全的反序列化</h1><p>由于默认的ObjectInputStream没有相应的安全处理机制，任何类都可以被反序列化，所以存在安全隐患<br>而只要让ObjectInputStream作为反序列化的起始输入流，那么这个反序列化流很大程度上是不安全的。<br>这个场景其实很多地方都是存在的，对于我们自定义的一个反序列化类来说，我们无法控制用户在反序列化的时候使用的是安全还是非安全的ObjectInputStream，所以我们想做的就是在我们自己这个类里面增加一些安全机制，对应的就是Fastjson和我们的CC3.2.2之后的版本，对于CC来说，他通过重写了readObject来让默认情况下InvokeTransform这种不能被反序列化，这个机制来说是很安全的，但是对于Fastjson来说，实现的稍微有一点缺陷。<br>对于Fastjson来说，他相当于在readObject里面定义了一个安全的反序列化流<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700267538086-c6ea369d-9f52-49de-855c-b50394fc402f.png#averageHue=%23282a2e&clientId=ua36f076a-5821-4&from=drop&id=ua3b790ef&originHeight=346&originWidth=1760&originalType=binary&ratio=2&rotation=0&showTitle=false&size=389566&status=done&style=none&taskId=u034e685e-f305-43e9-85d7-b9efb77e51f&title=" alt="截屏2023-11-18 08.32.14.png"><br>他重写了resolveClass和resolveProxyClass<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700268206327-963d0583-6044-475b-8538-8281e2fb2745.png#averageHue=%23282a2e&clientId=ua36f076a-5821-4&from=drop&id=u3b356cb0&originHeight=722&originWidth=1256&originalType=binary&ratio=2&rotation=0&showTitle=false&size=596173&status=done&style=none&taskId=uf250debf-6385-430f-848e-4bd7dadcbce&title=" alt="截屏2023-11-18 08.43.21.png"><br>readOrdinaryObject-&gt;readClassDesc-&gt;readNonProxyDesc-&gt;resolveClass<br>              -&gt;readProxyDesc-&gt;resolveProxyClass<br>这个反序列化流的目的就是来检测JSONObject里面map里面保存的Object的安全性（String以及其他基础类型有自己对应的处理逻辑，不会进入readOrdinaryObject进而走到resolveCLass的逻辑）<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700268037042-5228f86e-8666-4946-8623-e87e5971c44d.png#averageHue=%2328292d&clientId=ua36f076a-5821-4&from=drop&id=u4947ee07&originHeight=106&originWidth=756&originalType=binary&ratio=2&rotation=0&showTitle=false&size=56216&status=done&style=none&taskId=uf9d9a12b-4a3c-445d-9d9a-116740d767e&title=" alt="截屏2023-11-18 08.40.33.png"><br>表明上看起来这个方案确实天衣无缝，但是因为TC_REFERENCE的存在导致存在被绕过的可能<br>如果此时map里面的value是一个引用类型<img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278315890-e281d24d-65ab-4297-b5e2-02e38f180331.png#averageHue=%23282a2e&clientId=ua36f076a-5821-4&from=drop&id=u5cdedb42&originHeight=170&originWidth=724&originalType=binary&ratio=2&rotation=0&showTitle=false&size=91635&status=done&style=none&taskId=u5ef0fff9-d254-4ab2-8a07-3c4c62dec53&title=" alt="截屏2023-11-18 11.31.39.png"><br>那么他会在readHandle里面进行处理，通过反序列化里的输入流，读出对应引用对象位于handles里的下标–passHandle,然后把对象直接取出来返回（这个过程中我没有找到可以Override的函数，所以我个人觉得无法处理这种引用类型）<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278350784-2b7c3f6e-b58e-48f1-b1cc-ed25d43d942f.png#averageHue=%2325272a&clientId=ua36f076a-5821-4&from=drop&id=u0abccfd6&originHeight=1134&originWidth=1170&originalType=binary&ratio=2&rotation=0&showTitle=false&size=869266&status=done&style=none&taskId=u6b519fd6-430e-4058-ab68-99063195f23&title=" alt="截屏2023-11-18 11.32.23.png"></p>
+<h1 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h1><p>既然我们知道JSONObject这种是有缺陷的，那么怎么绕过呢<br>首先肯定要利用引用机制</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">emplatesImpl templates = new TemplatesImpl();</span><br><span class="line">        JSONObject jsonObject = new JSONObject();</span><br><span class="line">        jsonObject.put(<span class="string">&quot;a&quot;</span>,templates);</span><br><span class="line">        serialize(jsonObject);</span><br><span class="line">        deserialize();</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278752124-59a031ba-0020-4fd4-9b81-d9d3a3b736e0.png#averageHue=%232b3345&clientId=ua36f076a-5821-4&from=drop&id=ufa07c7d0&originHeight=646&originWidth=2044&originalType=binary&ratio=2&rotation=0&showTitle=false&size=803947&status=done&style=none&taskId=ub0863091-a703-442d-9fbe-72d77fa13b6&title=" alt="截屏2023-11-18 11.39.07.png"><br>直接这样肯定会被拦截，因为我们这样写他不是一个引用值，那么我们要保证templates要在JSONObject之前就已经被反序列化出来了，那么我们需要利用到其他类，比如说ArrayList<br>先看一下他的序列化逻辑，他是按照elementData的下标，按照顺序进行序列化处理的<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278883904-2f158015-40ac-49e2-9a13-cc79a915765d.png#averageHue=%232a2d31&clientId=ua36f076a-5821-4&from=drop&id=ue7a310ec&originHeight=196&originWidth=618&originalType=binary&ratio=2&rotation=0&showTitle=false&size=88805&status=done&style=none&taskId=ua49856c5-cf2a-4305-bb94-a38b5bcd58b&title=" alt="截屏2023-11-18 11.41.20.png"><br>那么反序列化的时候，他也会按照顺序取出来<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700278947607-9f1c4dca-4084-49d6-8113-11c74b8ec368.png#averageHue=%232b2f33&clientId=ua36f076a-5821-4&from=drop&id=uc806b16d&originHeight=170&originWidth=584&originalType=binary&ratio=2&rotation=0&showTitle=false&size=74018&status=done&style=none&taskId=udb8624de-fe47-4263-8e6d-0e6a4a90f39&title=" alt="截屏2023-11-18 11.42.21.png"><br>所以只要我们保证templates在JSONObject之前被add进ArrayList即可<br>（后面我把JSONObject换成JSONArray了，看起来跟ArrayList更贴合一点，但是处理逻辑都是类似的）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TemplatesImpl templates = new TemplatesImpl();</span><br><span class="line">        ArrayList arrayList = new ArrayList();</span><br><span class="line">        JSONArray jsonArray = new JSONArray();</span><br><span class="line">        jsonArray.add(templates);</span><br><span class="line">        arrayList.add(templates);</span><br><span class="line">        arrayList.add(jsonArray);</span><br><span class="line">        serialize(arrayList);</span><br><span class="line">        deserialize();</span><br></pre></td></tr></table></figure>
+<p>在JSONArray去处理templates的时候，直接从readHandle里读出了templates，进而绕过check<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700280694880-f7342359-8dff-46b2-b8e5-f319b59cb2d7.png#averageHue=%2330343b&clientId=ua36f076a-5821-4&from=drop&id=ub7d5d697&originHeight=616&originWidth=1502&originalType=binary&ratio=2&rotation=0&showTitle=false&size=570397&status=done&style=none&taskId=u9ad47d12-6572-43dc-b1ff-f5059e58e80&title=" alt="截屏2023-11-18 12.11.31.png"></p>
+<h1 id="根因"><a href="#根因" class="headerlink" title="根因"></a>根因</h1><p>总结一下，为什么会出现这种引用绕过呢，我觉得有两个原因<br>1.因为java反序列化是从ObjectInputStream开始的，我们如果自定义一个ObjectInputStream，并设置自定义的ObjectInputStream为反序列化的入口，那么我们是可以获取到全部反序列化的过程,但是如果我们只是一个实现了Serializable的类，相当于我们只是反序列化的一个中间环节，我们无法控制那些在我们之前被反序列化出来的对象<br>2.ObjectInputStream没有提供可以Override方法来处理TC_REFERENCE这类情况</p>
 
     </article>
     <!-- license -->
     
         <div class="license-wrapper">
             <p>Author：<a href="https://azraelxuemo.github.io">azraelxuemo</a>
-            <p>Link：<a href="https://azraelxuemo.github.io/index.html">https://azraelxuemo.github.io/index.html</a>
-            <p>Publish date：<a href="https://azraelxuemo.github.io/index.html">November 11th 2023, 2:27:39 pm</a>
-            <p>Update date：<a href="https://azraelxuemo.github.io/index.html">November 15th 2023, 7:29:19 pm</a>
+            <p>Link：<a href="https://azraelxuemo.github.io/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/">https://azraelxuemo.github.io/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/</a>
+            <p>Publish date：<a href="https://azraelxuemo.github.io/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/">November 18th 2023, 11:51:34 am</a>
+            <p>Update date：<a href="https://azraelxuemo.github.io/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/">November 18th 2023, 12:18:56 pm</a>
             <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -508,13 +532,13 @@
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/" title="BUUCTF pwn刷题记录">
-                    <div class="nextTitle">BUUCTF pwn刷题记录</div>
-                </a>
-            
         </li>
         <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/11/17/CVE-2023-4357/" title="Chrome任意文件读->外带">
+                    <div class="prevTitle">Chrome任意文件读->外带</div>
+                </a>
             
         </li>
     </ul>
@@ -653,7 +677,7 @@
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">安全的反序列化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">不安全的反序列化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A9%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B9%E5%9B%A0"><span class="toc-number">4.</span> <span class="toc-text">根因</span></a></li></ol>
             </div>
         
         <!-- sidebar -->
