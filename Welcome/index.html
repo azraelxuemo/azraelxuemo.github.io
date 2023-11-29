@@ -445,6 +445,46 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2023/11/29/CVE-2022-21701%20yaml%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/">
+                
+                <span class="abstract-title-text">CVE-2022-21701 yaml解析漏洞</span>
+            </a>
+            <div class="abstract-content">
+                前言之前一直有过这样的想法服务端使用snakeyaml去解析字符串的时候，但是我们能控制的只是其中的一个value,类似于有一个这样的json格式的数据
+123&#123;    &quot;a&quot;:payload&#125;
+他解析成yaml应该就是类似的结构
+1a: payload
+一般的snakeyaml反序列化要求都是控制整个yaml文件，这种是无法利用的。但我经常也在想，能不能利用换行来达到注入的效果呢,比如说我们希望输入test\n!!javax.script.ScriptEngineManager来达到破坏yaml解析的效果
+12a: test!!javax.scr...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/11/29">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/29</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="云安全">云安全</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2023/11/26/jndi/">
                 
                 <span class="abstract-title-text">jndi注入</span>
@@ -781,42 +821,6 @@ NE...
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">
-                
-                <span class="abstract-title-text">BUUCTF pwn刷题记录</span>
-            </a>
-            <div class="abstract-content">
-                爆破爆破算法iscc2018_final_pwn1最开始这个题目我也没太弄懂具体算法，那么我们就爆破
-12345678910111213141516171819ch=&quot;qagvCYiheXulrpszNLwMtodbVx&quot;ta=&quot;rqzzepiwMLepiwYsLYtpqpvzLsYeM&quot;tar=&quot;&quot;import itertoolsfor i in ta:    tar+=chr(ch.index(i)+97)for i in itertools.product(&quot;0123&quot;,repeat=7):    io...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/12</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="pwn">pwn</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
@@ -1064,7 +1068,20 @@ NE...
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1131,7 +1148,7 @@ NE...
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 11
+        Total : 12
         </div>
         <!-- search  -->
         
@@ -1145,6 +1162,12 @@ NE...
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/29</span>
+            <a class="archive-post-title" href="/2023/11/29/CVE-2022-21701%20yaml%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/">CVE-2022-21701 yaml解析漏洞</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">11/26</span>
