@@ -445,6 +445,44 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
+                
+                <span class="abstract-title-text">容器逃逸 All in One</span>
+            </a>
+            <div class="abstract-content">
+                前言容器逃逸技术没有一尘不变的，很多旧的方法会随着新的内核特性，新的标准而改变，同时新的标准也会带来新的逃逸思路，这篇文章可能称不上标题所说的all in one，实际环境也千变万化。希望这篇文章可以给大家带来思路，可能在某一天的容器环境里发现可以利用的点，然后escape。
+危险的Capabilityprivileged实验环境配置1docker run -it --privileged ubuntu:18.04
+实际利用如果查看CapEff为0000003fffffffff代表为特权容器，可以逃逸
+12cat /proc/1/status|grep CapEffCapEff:	000...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/11/28">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/13</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="云安全">云安全</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">
                 
                 <span class="abstract-title-text">BUUCTF pwn刷题记录</span>
@@ -755,7 +793,20 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -830,7 +881,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 12
+        Total : 13
         </div>
         <!-- search  -->
         
@@ -844,6 +895,12 @@
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span>
+            <a class="archive-post-title" href="/2023/12/03/JNI/">JNI</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">11/29</span>

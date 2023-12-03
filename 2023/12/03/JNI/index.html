@@ -20,18 +20,28 @@
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://azraelxuemo.github.io/archives/page/2/index.html">
+    <meta name="description" content="Java是基于C实现的，Java底层的很多API都是通过JNI(Java Native Interface)来实现的。通过JNI接口C&#x2F;C++和Java可以互相调用。 加载动态链接库JNI需要把c编写的动态链接库加载进来，然后进行调用，那么这里加载的时候可以在动态链接库里加上恶意代码 1234#include &lt;stdlib.h&gt;__attribute__((destruct">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JNI">
+<meta property="og:url" content="https://azraelxuemo.github.io/2023/12/03/JNI/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java是基于C实现的，Java底层的很多API都是通过JNI(Java Native Interface)来实现的。通过JNI接口C&#x2F;C++和Java可以互相调用。 加载动态链接库JNI需要把c编写的动态链接库加载进来，然后进行调用，那么这里加载的时候可以在动态链接库里加上恶意代码 1234#include &lt;stdlib.h&gt;__attribute__((destruct">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701504164719-ab47118e-62cd-4542-a2eb-b0c9e4a962db.png#averageHue=%23050504&clientId=u3ece3606-6ad6-4&from=drop&id=uf2894488&originHeight=736&originWidth=1050&originalType=binary&ratio=2&rotation=0&showTitle=false&size=828491&status=done&style=none&taskId=ub2d7111e-5509-49c9-947a-40adf040f97&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701479630624-bbe0a6e1-36a3-4a0d-8eaa-1358fbcaeb52.png#averageHue=%23393838&clientId=uee04a6d2-97b6-4&from=drop&id=NEYUI&originHeight=342&originWidth=1154&originalType=binary&ratio=2&rotation=0&showTitle=false&size=287124&status=done&style=none&taskId=u0b48679b-2c83-4f03-bc31-94a6d5dfa42&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701506003270-629516e3-3b81-4d42-b82f-7fa45c46bac5.png#averageHue=%232b2d31&clientId=u3ece3606-6ad6-4&from=drop&id=u71feb3a3&originHeight=492&originWidth=1950&originalType=binary&ratio=2&rotation=0&showTitle=false&size=580195&status=done&style=none&taskId=u80776e64-ff6b-442d-b90d-55436421231&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701506094458-0cc8ea20-9f72-4a49-9642-a06e931ec53d.png#averageHue=%232b2c2f&clientId=u3ece3606-6ad6-4&from=drop&id=u54bf6a52&originHeight=844&originWidth=1364&originalType=binary&ratio=2&rotation=0&showTitle=false&size=768713&status=done&style=none&taskId=u0cac6804-5720-44a3-bbb7-19c340f3c36&title=">
+<meta property="article:published_time" content="2023-12-03T10:21:34.000Z">
+<meta property="article:modified_time" content="2023-12-03T10:26:26.740Z">
 <meta property="article:author" content="azraelxuemo">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701504164719-ab47118e-62cd-4542-a2eb-b0c9e4a962db.png#averageHue=%23050504&clientId=u3ece3606-6ad6-4&from=drop&id=uf2894488&originHeight=736&originWidth=1050&originalType=binary&ratio=2&rotation=0&showTitle=false&size=828491&status=done&style=none&taskId=ub2d7111e-5509-49c9-947a-40adf040f97&title=">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/favicon.ico">
     
-    <title>azraelxuemo&#39;s Studio</title>
+    <title>JNI · azraelxuemo&#39;s Studio</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -219,6 +229,8 @@
         }
     </script>
     
+        <body class="post-body">
+    
         <!-- header -->
         <header class="header header-mobile">
     <!-- top read progress line -->
@@ -248,6 +260,17 @@
     </div>
     <!-- toggle banner for post layout -->
     
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">azraelxuemo&#39;s Studio.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">JNI</a>
+            </div>
+        </div>
+    
 </header>
 
         <!-- fixed footer -->
@@ -274,24 +297,76 @@
 
 
 
+    height:50vh;
+
 ">
     
     <!-- 主页  -->
     
+        
+    <!-- 404页  -->
+    
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+                JNI
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+                
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
+    
+</div>
+
+                
+                <!-- 文章字数统计 -->
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2023/12/03</span>
+                    <!-- busuanzi -->
+                    
+                        <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                            <span class="iconfont-archer post-intro-busuanzi">&#xe602;</span>
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -421,116 +496,85 @@
 
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
-                <main class="main index-page">
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
-                
-                <span class="abstract-title-text">容器逃逸 All in One</span>
-            </a>
-            <div class="abstract-content">
-                前言容器逃逸技术没有一尘不变的，很多旧的方法会随着新的内核特性，新的标准而改变，同时新的标准也会带来新的逃逸思路，这篇文章可能称不上标题所说的all in one，实际环境也千变万化。希望这篇文章可以给大家带来思路，可能在某一天的容器环境里发现可以利用的点，然后escape。
-危险的Capabilityprivileged实验环境配置1docker run -it --privileged ubuntu:18.04
-实际利用如果查看CapEff为0000003fffffffff代表为特权容器，可以逃逸
-12cat /proc/1/status|grep CapEffCapEff:	000...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/13</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="云安全">云安全</a>
-    
-</div>
+                <main class="main post-page">
+    <article class="article-entry">
+        <p>Java是基于C实现的，Java底层的很多API都是通过JNI(Java Native Interface)来实现的。通过JNI接口C&#x2F;C++和Java可以互相调用。</p>
+<h1 id="加载动态链接库"><a href="#加载动态链接库" class="headerlink" title="加载动态链接库"></a>加载动态链接库</h1><p>JNI需要把c编写的动态链接库加载进来，然后进行调用，那么这里加载的时候可以在动态链接库里加上恶意代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line">__attribute__((destructor)) <span class="type">void</span> <span class="title function_">test</span><span class="params">()</span>&#123;</span><br><span class="line">        system(<span class="string">&quot;touch /tmp/xuemo.txt&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc evil.c --shared -fPIC -o evil.so</span><br></pre></td></tr></table></figure>
+<p>使用System.load加载,这里要使用绝对路径，运行完可以发现system命令成功执行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.load(<span class="string">&quot;/Users/xuemo/Desktop/java_project/untitled/src/main/java/evil.so&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>使用ClassLoader.loadLibrary0加载,这里也要绝对路径，也可以发现命令成功执行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">File libPath = new File(<span class="string">&quot;/Users/xuemo/Desktop/java_project/untitled/src/main/java/evil.so&quot;</span>);</span><br><span class="line">        Method loadLibrary0Method = ClassLoader.class.getDeclaredMethod(<span class="string">&quot;loadLibrary0&quot;</span>, Class.class, File.class);</span><br><span class="line">        loadLibrary0Method.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        loadLibrary0Method.invoke(ClassLoader.getSystemClassLoader(),null , libPath);</span><br></pre></td></tr></table></figure>
+<p>那么如果实际场景里限制了命令执行的话，没有限制动态链接库加载，那么我们可以通过加载动态链接库的方式进行RCE</p>
+<h1 id="JNI-demo"><a href="#JNI-demo" class="headerlink" title="JNI demo"></a>JNI demo</h1><p>上面的例子只是简单的加载，还没有涉及到JNI这方面，我们简单来个demo</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public class demo &#123;</span><br><span class="line">    public static native String exec(String cmd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>接下来就是生成对应的c文件头,进入到对应路径（这里我没有定义package，如果定义package了，就要相对应的修改一下参数）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">javac -cp . demo.java  #生成class</span><br><span class="line"> javah -d . -cp . demo #生成.h</span><br></pre></td></tr></table></figure>
+<p>可以看到，我们java里的exec函数就对应这里的Java_demo_exec,Java_是固定前缀，然后是完整包名，然后是函数名<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701504164719-ab47118e-62cd-4542-a2eb-b0c9e4a962db.png#averageHue=%23050504&clientId=u3ece3606-6ad6-4&from=drop&id=uf2894488&originHeight=736&originWidth=1050&originalType=binary&ratio=2&rotation=0&showTitle=false&size=828491&status=done&style=none&taskId=ub2d7111e-5509-49c9-947a-40adf040f97&title=" alt="截屏2023-12-02 16.02.40.png"><br>常用的话就注意字符串直接的转化<br>jstring转const char *：env-&gt;GetStringUTFChars(jstring str, jboolean <em>isCopy)<br>const char</em>转jstring: env-&gt;NewStringUTF(const char *utf)<br>如果用vscode编写时候，可以加一个include路径，对于mac来说，需要$JAVA_HOME&#x2F;include和$JAVA_HOME&#x2F;include&#x2F;darwin两个目录下面的，这里配置**可以递归搜索<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701479630624-bbe0a6e1-36a3-4a0d-8eaa-1358fbcaeb52.png#averageHue=%23393838&clientId=uee04a6d2-97b6-4&from=drop&id=NEYUI&originHeight=342&originWidth=1154&originalType=binary&ratio=2&rotation=0&showTitle=false&size=287124&status=done&style=none&taskId=u0b48679b-2c83-4f03-bc31-94a6d5dfa42&title=" alt="截屏2023-12-02 09.13.46.png"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;demo.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line">using namespace <span class="built_in">std</span>;</span><br><span class="line">JNIEXPORT jstring JNICALL <span class="title function_">Java_demo_exec</span></span><br><span class="line">  <span class="params">(JNIEnv *env, jclass jclass, jstring str )</span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (str != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        jboolean isCopy;</span><br><span class="line">       </span><br><span class="line">        <span class="type">const</span> <span class="type">char</span> *cmd = env-&gt;GetStringUTFChars(str, &amp;isCopy);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        FILE *fd  = popen(cmd, <span class="string">&quot;r&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (fd != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            </span><br><span class="line">            <span class="built_in">string</span> result;</span><br><span class="line"></span><br><span class="line">            <span class="type">char</span> buf[<span class="number">128</span>];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (fgets(buf, <span class="keyword">sizeof</span>(buf), fd) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">               result.append(buf);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            pclose(fd);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> env-&gt;NewStringUTF(result.c_str());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -fPIC -I&quot;$JAVA_HOME/include&quot; -I&quot;$JAVA_HOME/include/darwin&quot; -shared -o demo.so demo.cpp</span><br></pre></td></tr></table></figure>
+<p>直接调用会报错，因为毕竟我们还没有加载so<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701506003270-629516e3-3b81-4d42-b82f-7fa45c46bac5.png#averageHue=%232b2d31&clientId=u3ece3606-6ad6-4&from=drop&id=u71feb3a3&originHeight=492&originWidth=1950&originalType=binary&ratio=2&rotation=0&showTitle=false&size=580195&status=done&style=none&taskId=u80776e64-ff6b-442d-b90d-55436421231&title=" alt="截屏2023-12-02 16.33.16.png"><br>加载进来就可以执行啦<br>使用System.load</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.load(&quot;/Users/xuemo/Desktop/java_project/untitled/src/main/java/demo.so&quot;);</span><br><span class="line">        System.out.println(demo.exec(&quot;ifconfig&quot;));</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1701506094458-0cc8ea20-9f72-4a49-9642-a06e931ec53d.png#averageHue=%232b2c2f&clientId=u3ece3606-6ad6-4&from=drop&id=u54bf6a52&originHeight=844&originWidth=1364&originalType=binary&ratio=2&rotation=0&showTitle=false&size=768713&status=done&style=none&taskId=u0cac6804-5720-44a3-bbb7-19c340f3c36&title=" alt="截屏2023-12-02 16.34.50.png"><br>使用ClassLoader.loadLibrary0</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">File libPath = new File(&quot;/Users/xuemo/Desktop/java_project/untitled/src/main/java/demo.so&quot;);</span><br><span class="line">       Method loadLibrary0Method = ClassLoader.class.getDeclaredMethod(&quot;loadLibrary0&quot;, Class.class, File.class);</span><br><span class="line">       loadLibrary0Method.setAccessible(true);</span><br><span class="line">       loadLibrary0Method.invoke(ClassLoader.getSystemClassLoader(),demo.class , libPath);</span><br><span class="line">       System.out.println(demo.exec(&quot;ifconfig&quot;));</span><br></pre></td></tr></table></figure>
 
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">
-                
-                <span class="abstract-title-text">BUUCTF pwn刷题记录</span>
-            </a>
-            <div class="abstract-content">
-                爆破爆破算法iscc2018_final_pwn1最开始这个题目我也没太弄懂具体算法，那么我们就爆破
-12345678910111213141516171819ch=&quot;qagvCYiheXulrpszNLwMtodbVx&quot;ta=&quot;rqzzepiwMLepiwYsLYtpqpvzLsYeM&quot;tar=&quot;&quot;import itertoolsfor i in ta:    tar+=chr(ch.index(i)+97)for i in itertools.product(&quot;0123&quot;,repeat=7):    io...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/12</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="pwn">pwn</a>
-    
-</div>
 
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
+    </article>
+    <!-- license -->
     
-        
-        
-        
-        
+        <div class="license-wrapper">
+            <p>Author：<a href="https://azraelxuemo.github.io">azraelxuemo</a>
+            <p>Link：<a href="https://azraelxuemo.github.io/2023/12/03/JNI/">https://azraelxuemo.github.io/2023/12/03/JNI/</a>
+            <p>Publish date：<a href="https://azraelxuemo.github.io/2023/12/03/JNI/">December 3rd 2023, 6:21:34 pm</a>
+            <p>Update date：<a href="https://azraelxuemo.github.io/2023/12/03/JNI/">December 3rd 2023, 6:26:26 pm</a>
+            <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
             
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/index.html">
-                
-                <span class="abstract-title-text">Welcome</span>
-            </a>
-            <div class="abstract-content">
-                欢迎来到我的安全杂货铺
-一个来自AAA战队的退役老人旧的博客链接https://blog.csdn.net/azraelxuemo/
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/11/29/CVE-2022-21701%20yaml%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" title="CVE-2022-21701 yaml解析漏洞">
+                    <div class="prevTitle">CVE-2022-21701 yaml解析漏洞</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
 
-            </div>
-            <!-- read more -->
+
             
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/11</span>
-                </div>
-                <!-- tags -->
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
+
+            
+
+            
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+            
+
+        </div>
     
-    <!-- paginator  -->
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
     
-        <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/archives/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
-        </nav>
+    <!-- Mathjax -->
     
 </main>
 
@@ -621,6 +665,23 @@
 
         </div>
         <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93"><span class="toc-number">1.</span> <span class="toc-text">加载动态链接库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JNI-demo"><span class="toc-number">2.</span> <span class="toc-text">JNI demo</span></a></li></ol>
+            </div>
         
         <!-- sidebar -->
         <div class="sidebar sidebar-hide">
@@ -950,6 +1011,8 @@
         <!-- CNZZ -->
         
         <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20211217" async></script>
         
         <!-- mermaid -->
         

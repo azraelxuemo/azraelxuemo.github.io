@@ -430,6 +430,44 @@
             
         
         <article class="index-post">
+            <a class="abstract-title" href="/2023/12/03/JNI/">
+                
+                <span class="abstract-title-text">JNI</span>
+            </a>
+            <div class="abstract-content">
+                Java是基于C实现的，Java底层的很多API都是通过JNI(Java Native Interface)来实现的。通过JNI接口C&#x2F;C++和Java可以互相调用。
+加载动态链接库JNI需要把c编写的动态链接库加载进来，然后进行调用，那么这里加载的时候可以在动态链接库里加上恶意代码
+1234#include &lt;stdlib.h&gt;__attribute__((destructor)) void test()&#123;        system(&quot;touch /tmp/xuemo.txt&quot;);&#125;
+1gcc evil.c --share...
+            </div>
+            <!-- read more -->
+            
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date" title="Last updated: 2023/12/03">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/12/03</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+        
+            
+        
+        <article class="index-post">
             <a class="abstract-title" href="/2023/11/29/CVE-2022-21701%20yaml%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/">
                 
                 <span class="abstract-title-text">CVE-2022-21701 yaml解析漏洞</span>
@@ -768,44 +806,6 @@ NE...
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
-                
-                <span class="abstract-title-text">容器逃逸 All in One</span>
-            </a>
-            <div class="abstract-content">
-                前言容器逃逸技术没有一尘不变的，很多旧的方法会随着新的内核特性，新的标准而改变，同时新的标准也会带来新的逃逸思路，这篇文章可能称不上标题所说的all in one，实际环境也千变万化。希望这篇文章可以给大家带来思路，可能在某一天的容器环境里发现可以利用的点，然后escape。
-危险的Capabilityprivileged实验环境配置1docker run -it --privileged ubuntu:18.04
-实际利用如果查看CapEff为0000003fffffffff代表为特权容器，可以逃逸
-12cat /proc/1/status|grep CapEffCapEff:	000...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/13</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="云安全">云安全</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
@@ -973,7 +973,20 @@ NE...
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1048,7 +1061,7 @@ NE...
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 12
+        Total : 13
         </div>
         <!-- search  -->
         
@@ -1062,6 +1075,12 @@ NE...
             <div class="archive-year"> 2023 </div>
             <ul class="year-list">
             
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/03</span>
+            <a class="archive-post-title" href="/2023/12/03/JNI/">JNI</a>
+        </li>
+    
         
         <li class="archive-post-item">
             <span class="archive-post-date">11/29</span>

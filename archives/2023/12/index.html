@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://azraelxuemo.github.io/archives/page/2/index.html">
+<meta property="og:url" content="https://azraelxuemo.github.io/archives/2023/12/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="azraelxuemo">
@@ -430,107 +430,38 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2023/11/13/%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
+            <a class="abstract-title" href="/2023/12/03/JNI/">
                 
-                <span class="abstract-title-text">容器逃逸 All in One</span>
+                <span class="abstract-title-text">JNI</span>
             </a>
             <div class="abstract-content">
-                前言容器逃逸技术没有一尘不变的，很多旧的方法会随着新的内核特性，新的标准而改变，同时新的标准也会带来新的逃逸思路，这篇文章可能称不上标题所说的all in one，实际环境也千变万化。希望这篇文章可以给大家带来思路，可能在某一天的容器环境里发现可以利用的点，然后escape。
-危险的Capabilityprivileged实验环境配置1docker run -it --privileged ubuntu:18.04
-实际利用如果查看CapEff为0000003fffffffff代表为特权容器，可以逃逸
-12cat /proc/1/status|grep CapEffCapEff:	000...
+                Java是基于C实现的，Java底层的很多API都是通过JNI(Java Native Interface)来实现的。通过JNI接口C&#x2F;C++和Java可以互相调用。
+加载动态链接库JNI需要把c编写的动态链接库加载进来，然后进行调用，那么这里加载的时候可以在动态链接库里加上恶意代码
+1234#include &lt;stdlib.h&gt;__attribute__((destructor)) void test()&#123;        system(&quot;touch /tmp/xuemo.txt&quot;);&#125;
+1gcc evil.c --share...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/28">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/13</span>
+                <div class="abstract-date" title="Last updated: 2023/12/03">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/12/03</span>
                 </div>
                 <!-- tags -->
                 
                     <div class= abstract-tags >
     
     
-        <a class="post-tag" href="javascript:void(0);" data-tags="云安全">云安全</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
     
 </div>
 
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/">
-                
-                <span class="abstract-title-text">BUUCTF pwn刷题记录</span>
-            </a>
-            <div class="abstract-content">
-                爆破爆破算法iscc2018_final_pwn1最开始这个题目我也没太弄懂具体算法，那么我们就爆破
-12345678910111213141516171819ch=&quot;qagvCYiheXulrpszNLwMtodbVx&quot;ta=&quot;rqzzepiwMLepiwYsLYtpqpvzLsYeM&quot;tar=&quot;&quot;import itertoolsfor i in ta:    tar+=chr(ch.index(i)+97)for i in itertools.product(&quot;0123&quot;,repeat=7):    io...
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/12</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="pwn">pwn</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/index.html">
-                
-                <span class="abstract-title-text">Welcome</span>
-            </a>
-            <div class="abstract-content">
-                欢迎来到我的安全杂货铺
-一个来自AAA战队的退役老人旧的博客链接https://blog.csdn.net/azraelxuemo/
-
-            </div>
-            <!-- read more -->
-            
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date" title="Last updated: 2023/11/15">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2023/11/11</span>
-                </div>
-                <!-- tags -->
                 
             </div>
         </article>
         <div class="index-post-divider"></div>
     
     <!-- paginator  -->
-    
-        <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/archives/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
-        </nav>
     
 </main>
 
